@@ -67,7 +67,7 @@ var _hmt = _hmt || [];
 <meta property="og:description" content="This article describes the boot sequence of the RK3399, the SoC on which the ROCKPro64 single board computer, Pinebook Pro laptop and the PinePhone Pro are based. Boot ROM operationAfter a hardware re">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-04-07T07:53:43.000Z">
-<meta property="article:modified_time" content="2024-04-07T07:53:53.163Z">
+<meta property="article:modified_time" content="2024-04-07T08:17:38.434Z">
 <meta property="article:author" content="Neutionwei">
 <meta property="article:tag" content="rk3399">
 <meta name="twitter:card" content="summary">
@@ -193,6 +193,18 @@ var _hmt = _hmt || [];
       
 
 
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">Categories</h3>
+      <div class="category-box">
+            <a class="category-link" href="/categories/headphone/">
+                headphone
+                <div class="category-count">1</div>
+            </a>
+        </div>
+    </div>
+  </div>
+
 
     
       
@@ -310,8 +322,34 @@ var _hmt = _hmt || [];
 <p>idbloader.imgcontains TPL and SPL.u-boot.itbcontains TF-A and U-Boot.### Load offsets</p>
 <p>This section applies to BSP U-Boot. Mainline-based U-Boots pack TF-A into  <strong>u-boot.itb</strong> .</p>
 <p>There are 3 sections for the boot loader. They are in order, without gap, though their is no need to use all the space in each section.<br>Here are the details:</p>
-<p>| Start in<br>sectors | Size in</p>
-<p>sectors | Name              | Description             |<br>| —————— | —————– | ——————- | ————————- |<br>| 64               | 16320           | IDBLoader         | SoC initialization code |<br>| 16384            | 8192            | OS loader         | Generally U-Boot        |<br>| 24576            | 8192            | TrustedFirmware-A |                         |</p>
+<table>
+<thead>
+<tr>
+<th>Start in sectors</th>
+<th>Size in sectors</th>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>64</td>
+<td>16320</td>
+<td>IDBLoader</td>
+<td>SoC initialization code</td>
+</tr>
+<tr>
+<td>16384</td>
+<td>8192</td>
+<td>OS loader</td>
+<td>Generally U-Boot</td>
+</tr>
+<tr>
+<td>24576</td>
+<td>8192</td>
+<td>TrustedFirmware-A</td>
+<td></td>
+</tr>
+</tbody></table>
 <h3 id="General-maintenance"><a href="#General-maintenance" class="headerlink" title="General maintenance"></a>General maintenance</h3><p>If a new U-Boot is supplied, it is generally installed similar to this:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># dd if=/boot/idbloader.img conv=notrunc seek=64    of=/dev/mmcblkX</span><br><span class="line"># dd if=/boot/u-boot.itb    conv=notrunc seek=16384 of=/dev/mmcblkX</span><br></pre></td></tr></table></figure>
 
