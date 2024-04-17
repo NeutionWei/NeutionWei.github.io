@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+
+<html theme="dark" showBanner="true" hasBanner="true" > 
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet">
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=true"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'true');
+</script>
+<!-- End Google Analytics -->
+
+  
+<!-- Global site tag (gtag.js) - Baidu Analytics -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?true";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- End Baidu Analytics -->
+
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>Python中__main__和__init__的解析 | Systemcall Station</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="转载自：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;43421411  受限于题目字数要求。正确题目应该是Python中if name &#x3D;&#x3D; ‘main‘，__init__和self 的解析 。 也就是说，主要包括2部分内容，分别是if name &#x3D;&#x3D; ‘main‘的解析和__init__与self的解析。  1、if name &#x3D;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python中__main__和__init__的解析">
+<meta property="og:url" content="https://neutionwei.github.io/2024/04/17/python3/python3__main__&__init__/index.html">
+<meta property="og:site_name" content="Systemcall Station">
+<meta property="og:description" content="转载自：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;43421411  受限于题目字数要求。正确题目应该是Python中if name &#x3D;&#x3D; ‘main‘，__init__和self 的解析 。 也就是说，主要包括2部分内容，分别是if name &#x3D;&#x3D; ‘main‘的解析和__init__与self的解析。  1、if name &#x3D;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-843b1490c9022ce93d5b1947228da5e5_720w.webp">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-71b020572e9ceff5dd70298b5ce921b7_720w.webp">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-af252c1e9e23569645f1bc03936bd6ff_720w.webp">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-c648977bb3a7badacf0ff0ccf24e5033_720w.webp">
+<meta property="article:published_time" content="2024-04-17T01:25:43.000Z">
+<meta property="article:modified_time" content="2024-04-17T01:26:25.745Z">
+<meta property="article:author" content="Neutionwei">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic2.zhimg.com/80/v2-843b1490c9022ce93d5b1947228da5e5_720w.webp">
+  
+    <link rel="alternate" href="/atom.xml" title="Systemcall Station" type="application/atom+xml">
+  
+  
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: light)" href="/images/favicon-light-192.png" sizes="192x192">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-32.png" sizes="32x32">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-128.png" sizes="128x128">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-180.png" sizes="180x180">
+    <link rel="icon" media="(prefers-color-scheme: dark)" href="/images/favicon-dark-192.png" sizes="192x192">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="/images/banner/kirito.jpg" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>Systemcall Station </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS Feed">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">Home</a>
+    
+      <a class="nav-dropdown-link" href="/archives">Archives</a>
+    
+      <a class="nav-dropdown-link" href="/about">About</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS Feed">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=/images/avatar/kirito.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">Neutionwei </div>
+      <div class="dot"></div>
+      <div class="subtitle">An embedded geek </div>
+      <div class="link-list">
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://twitter.com" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://store.steampowered.com" title="Steam"><i class="fa-brands fa-steam"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/NeutionWei" title="GitHub"><i class="fa-brands fa-github"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+  <div class="sticky">
+    
+      
+
+
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">Categories</h3>
+      <div class="category-box">
+            <a class="category-link" href="/categories/headphone/">
+                headphone
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/linux/">
+                linux
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/rk3399/">
+                rk3399
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/python3/">
+                python3
+                <div class="category-count">2</div>
+            </a>
+        </div>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">Tags</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/boot/" rel="tag">boot</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/free/" rel="tag">free</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/headphone/" rel="tag">headphone</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/headphone-parameters/" rel="tag">headphone parameters</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/over-ear-headphone/" rel="tag">over-ear headphone</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rk3399/" rel="tag">rk3399</a></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-python3/python3__main__&amp;__init__" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        Python中__main__和__init__的解析
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2024-04-17T01:25:43.000Z" itemprop="datePublished">2024-04-17</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/python3/">python3</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            7k words 
+          </div>
+        </div>
+        
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <blockquote>
+<p>转载自：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/43421411">https://zhuanlan.zhihu.com/p/43421411</a></p>
+</blockquote>
+<p>受限于题目字数要求。正确题目应该是<strong>Python中if <strong>name</strong> &#x3D;&#x3D; ‘<strong>main</strong>‘，__init__和self 的解析</strong> 。</p>
+<p>也就是说，主要包括2部分内容，分别是if <strong>name</strong> &#x3D;&#x3D; ‘<strong>main</strong>‘的解析和__init__与self的解析。</p>
+<hr>
+<h2 id="1、if-name-‘main‘"><a href="#1、if-name-‘main‘" class="headerlink" title="1、if name &#x3D;&#x3D; ‘main‘"></a><strong>1、if <strong>name</strong> &#x3D;&#x3D; ‘<strong>main</strong>‘</strong></h2><p>⭐<strong>摘要</strong></p>
+<p>通俗的理解<code>__name__ == &#39;__main__&#39;</code>：假如你叫小明.py，在朋友眼中，你是小明<code>(__name__ == &#39;小明&#39;)</code>；在你自己眼中，你是你自己<code>(__name__ == &#39;__main__&#39;)</code>。</p>
+<p><code>if __name__ == &#39;__main__&#39;</code>的意思是：<strong>当.py文件被直接运行时，<code>if __name__ == &#39;__main__&#39;</code>之下的代码块将被运行；当.py文件以模块形式被导入时，<code>if __name__ == &#39;__main__&#39;</code>之下的代码块不被运行。</strong></p>
+<p>⭐<strong>程序入口</strong></p>
+<p>对于很多编程语言来说，程序都必须要有一个入口，比如C，C++，以及完全面向对象的编程语言Java，C#等。如果你接触过这些语言，对于程序入口这个概念应该很好理解，C，C++都需要有一个main函数作为程序的入口，也就是程序的运行会从main函数开始。同样，Java，C#必须要有一个包含Main方法的主类，作为程序入口。</p>
+<p>而Python则不同，它属于脚本语言，不像编译型语言那样先将程序编译成二进制再运行，而是动态的逐行解释运行。 <strong>也就是从脚本第一行开始运行，没有统一的入口</strong> 。</p>
+<p>一个Python源码文件（.py）除了可以被直接运行外，还可以作为模块（也就是库），被其他.py文件导入。不管是直接运行还是被导入，.py文件的最顶层代码都会被运行（Python用缩进来区分代码层次），而当一个.py文件作为模块被导入时，我们可能不希望一部分代码被运行。</p>
+<p>⭐⭐ 一个.py文件被其他.py文件引用</p>
+<p>假设我们有一个const.py文件，内容如下：</p>
+<p><img src="https://pic2.zhimg.com/80/v2-843b1490c9022ce93d5b1947228da5e5_720w.webp"></p>
+<p>现在，我们写一个用于计算圆面积的area.py文件，area.py文件需要用到const.py文件中的PI变量。从const.py中，我们把PI变量导入area.py：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-71b020572e9ceff5dd70298b5ce921b7_720w.webp"></p>
+<p>⭐⭐修改const.py，添加<code>if __name__ == &quot;__main__&quot;</code></p>
+<p>我们看到const.py中的main函数也被运行了，实际上我们不希望它被运行，因为const.py提供的main函数只是为了测试常量定义。这时<code>if __name__ == &#39;__main__&#39;</code>派上了用场，我们把const.py改一下，添加<code>if __name__ == &quot;__main__&quot;</code>：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-af252c1e9e23569645f1bc03936bd6ff_720w.webp"></p>
+<p>运行const.py，输出如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PI: 3.14</span><br></pre></td></tr></table></figure>
+
+<p>运行area.py，输出如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">round area:  12.56</span><br></pre></td></tr></table></figure>
+
+<p>如上，我们可以看到<code>if __name__ == &#39;__main__&#39;</code>相当于Python模拟的程序入口，Python本身并没有这么规定，这只是一种编码习惯。由于模块之间相互引用，不同模块可能有这样的定义，而程序入口只有一个。到底哪个程序入口被选中，这取决于<code>__name__</code>的值。</p>
+<hr>
+<h2 id="2、-init-与self"><a href="#2、-init-与self" class="headerlink" title="2、__init__与self"></a><strong>2、__init__与self</strong></h2><p>⭐<strong>Python中self的含义</strong></p>
+<p>self，英文单词意思很明显，表示自己，本身。python的self，是个对象（Object），是当前类的实例。</p>
+<p>⭐<strong>Python中为何要有self</strong></p>
+<p>那就是：</p>
+<p>在类的代码（函数）中，需要访问当前的实例中的变量和函数的，即，访问Instance中的：</p>
+<ul>
+<li>对应的变量（属性，property)：Instance.ProperyNam，去读取之前的值和写入新的值</li>
+<li>调用对应函数（function）：Instance.function()，即执行对应的动作</li>
+</ul>
+<p>-&gt; 而需要访问实例的变量和调用实例的函数，当然需要对应的实例Instance对象本身</p>
+<p>-&gt; 而Python中就规定好了，<strong>函数的第一个参数，就必须是实例对象本身，并且建议，约定俗成，把其名字写为self</strong></p>
+<p>-&gt; 所以，我们需要self</p>
+<p>而如果没有用到self，即代码中，去掉self后，那种写法所使用到的变量，实际上不是你所希望的，不是真正的实例中的变量和函数，而是的访问到了其他部分的变量和函数了。甚至会由于没有合适的初始化实例变量，而导致后续无法访问的错误。</p>
+<p>下面，就通过代码，来演示，如果去掉self，或者没有合理的使用self，会出现哪些错误。</p>
+<p>⭐<strong>首先来看一下__init__()和self对象</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"># Author: antcolonies</span><br><span class="line"> </span><br><span class="line">class Person(object):</span><br><span class="line">    def __init__(self, name, lang, website):</span><br><span class="line">        self.name = name</span><br><span class="line">        self.lang = lang</span><br><span class="line">        self.website = website</span><br><span class="line"> </span><br><span class="line">        print(&#x27;self: &#x27;, self)</span><br><span class="line">        print(&#x27;type of self: &#x27;, type(self))</span><br><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line">未实例化时，运行程序，构造方法没有运行</span><br><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line"> </span><br><span class="line">p = Person(&#x27;Tim&#x27;, &#x27;English&#x27;, &#x27;www.universal.com&#x27;)    </span><br><span class="line"> </span><br><span class="line">&#x27;&#x27;&#x27;实例化后运行的结果</span><br><span class="line">self:  &lt;__main__.Person object at 0x00000000021EAF98&gt;</span><br><span class="line">type of self:  &lt;class &#x27;__main__.Person&#x27;&gt;</span><br><span class="line">&#x27;&#x27;&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>可以看出self为实例变量p，是一个Person类型的对象。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class Dog(object):        </span><br><span class="line">    def __init__(self,name,dog_type):</span><br><span class="line">        self.name = name</span><br><span class="line">        self.type = dog_type</span><br><span class="line">   </span><br><span class="line">    def sayhi(self):</span><br><span class="line">        print(&quot;hello,I am a dog, my name is &quot;,self.name)</span><br><span class="line">   </span><br><span class="line">   </span><br><span class="line">d = Dog(&#x27;LiChuang&#x27;,&quot;京巴&quot;)            # 实例化</span><br><span class="line">d.sayhi()</span><br></pre></td></tr></table></figure>
+
+<p>以下是d &#x3D; Dog(‘LiChuang’,”京巴”)实例化的示意图：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-c648977bb3a7badacf0ff0ccf24e5033_720w.webp"></p>
+<p>⭐<strong>如果没有在__init__中初始化对应的实例变量的话，导致后续引用实例变量会出错</strong></p>
+<p>如下代码，完整的演示了，如果没有在类Class的最初的__init__函数中，正确的初始化实例变量，则会导致后续没有变量可用，因而出现AttributeError的错误：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="comment"># Author: antcolonies</span></span><br><span class="line"> </span><br><span class="line">name = <span class="string">&#x27;whole global name&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">注：此处全局的变量名，写成name，只是为了演示而用</span></span><br><span class="line"><span class="string">实际上，好的编程风格，应该写成gName之类的名字，</span></span><br><span class="line"><span class="string">以表示该变量是Global的变量</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, newPersonName</span>):</span><br><span class="line">        <span class="comment"># self.name = newPersonName</span></span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">        如果此处不写成self.name</span></span><br><span class="line"><span class="string">        那么此处的name，只是__init__函数中的局部临时变量name而已</span></span><br><span class="line"><span class="string">        和全局中的name，没有半毛钱关系</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br><span class="line">        name = newPersonName</span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">        此处只是为了代码演示，而使用了局部变量name，</span></span><br><span class="line"><span class="string">        不过需要注意的是，此处很明显，由于接下来的代码也没有利用到此处的局部变量name</span></span><br><span class="line"><span class="string">        则就导致了，此处的name变量，实际上被浪费了，根本没有利用到</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">sayYourName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">        此处由于找不到实例中的name变量，所以会报错：</span></span><br><span class="line"><span class="string">        AttributeError: Person instance has no attribute &#x27;name&#x27;</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;My name is %s&#x27;</span> %self.name)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">selfAndInitDemo</span>():</span><br><span class="line">    personInstance = Person(<span class="string">&#x27;Tim&#x27;</span>)</span><br><span class="line">    personInstance.sayYourName()</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    selfAndInitDemo()</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;  未使用self.name时抛异常</span></span><br><span class="line"><span class="string">Traceback (most recent call last):</span></span><br><span class="line"><span class="string">  File &quot;E:/python14_workspace/s14/day06/test_1.py&quot;, line 18, in &lt;module&gt;</span></span><br><span class="line"><span class="string">    selfAndInitDemo()</span></span><br><span class="line"><span class="string">  File &quot;E:/python14_workspace/s14/day06/test_1.py&quot;, line 15, in selfAndInitDemo</span></span><br><span class="line"><span class="string">    personInstance.sayYourName()</span></span><br><span class="line"><span class="string">  File &quot;E:/python14_workspace/s14/day06/test_1.py&quot;, line 11, in sayYourName</span></span><br><span class="line"><span class="string">    print(&#x27;My name is %s&#x27; %self.name)</span></span><br><span class="line"><span class="string">AttributeError: &#x27;Person&#x27; object has no attribute &#x27;name&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>从上述代码可见，由于在类的初始化（实例化）的__init__函数中，没有给self.name设置值，使得实例中，根本没有name这个变量，导致后续再去访问self.name，就会出现AttributeError的错误了。</p>
+<p>对应的，如果写成self.name，则意思就正确了，就是初始化的时候，给实例中新增加，并且正常设置了正确的值newPersionName了，所以后续再去通过self.name，就可以访问到，当前实例中正确的变量name了。</p>
+<p>相应的正确写法的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="comment"># Author: antcolonies</span></span><br><span class="line"> </span><br><span class="line">name = <span class="string">&#x27;whole global name&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">注：此处全局的变量名，写成name，只是为了演示而用</span></span><br><span class="line"><span class="string">实际上，好的编程风格，应该写成gName之类的名字，</span></span><br><span class="line"><span class="string">以表示该变量是Global的变量</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, newPersonName</span>):</span><br><span class="line">        self.name = newPersonName</span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">        此处正确的，通过访问self.name的形式，实现了：</span></span><br><span class="line"><span class="string">            1.给实例中，增加了name变量</span></span><br><span class="line"><span class="string">            2.并且给name赋了初值，为newPersionName</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">sayYourName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">        此处由于开始正确的初始化了self对象，使得其中有了name变量，</span></span><br><span class="line"><span class="string">        所以此处可以正确访问了name值了</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;My name is %s&#x27;</span> %self.name)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">selfAndInitDemo</span>():</span><br><span class="line">    personInstance = Person(<span class="string">&#x27;Tim&#x27;</span>)</span><br><span class="line">    personInstance.sayYourName()</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    selfAndInitDemo()</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;My name is Tim&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>⭐在函数中，使用对应的变量，虽然代码是可以运行的，但是实际上却是使用的，不是实例中的变量</p>
+<p>有时候，虽然你写的代码，可以运行，但是使用到的变量，由于没有加self，实际上是用到的不是实例的变量，而是其他的变量。</p>
+<p>此类问题，主要和Python中的变量的作用域有关，但是此处例子中，也和是否使用self有关：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="comment"># Author: antcolonies</span></span><br><span class="line"> </span><br><span class="line">name = <span class="string">&#x27;whole global name&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">注：此处全局的变量名，写成name，只是为了演示而用</span></span><br><span class="line"><span class="string">实际上，好的编程风格，应该写成gName之类的名字，</span></span><br><span class="line"><span class="string">以表示该变量是Global的变量</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    name = <span class="string">&#x27;class global name&#x27;</span></span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, newPersonName</span>):</span><br><span class="line">        <span class="comment"># self.name = newPersonName</span></span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">        此处，没有使用self.name</span></span><br><span class="line"><span class="string">        而使得此处的name，实际上仍是局部变量name</span></span><br><span class="line"><span class="string">        虽然此处赋值了，但是后面没有被利用到，属于被浪费了的局部变量name</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br><span class="line">        name = newPersonName</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">sayYourName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">        此处，之所以没有像之前一样出现：</span></span><br><span class="line"><span class="string">        AttributeError: Person instance has no attribute &#x27;name&#x27;</span></span><br><span class="line"><span class="string">        那是因为，虽然当前的实例self中，没有在__init__中初始化对应的name变量，实例self中没有对应的name变量</span></span><br><span class="line"><span class="string">        但是由于实例所对应的类Person，有对应的name变量,所以也是可以正常执行代码的</span></span><br><span class="line"><span class="string">        对应的，此处的self.name，实际上是Person.name</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;My name is %s&#x27;</span> %self.name)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Name within class Person is actually the global name: %s&#x27;</span> %name)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Only access Person&#x27;s name via Person.name = %s&quot;</span> %(Person.name))</span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">selfAndInitDemo</span>():</span><br><span class="line">    personInstance = Person(<span class="string">&#x27;Tim&#x27;</span>)</span><br><span class="line">    personInstance.sayYourName()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;whole global name is %s&#x27;</span> %name)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    selfAndInitDemo()</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">My name is class global name</span></span><br><span class="line"><span class="string">Name within class Person is actually the global name: whole global name</span></span><br><span class="line"><span class="string">Only access Person&#x27;s name via Person.name = class global name</span></span><br><span class="line"><span class="string">whole global name is whole global name</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>其中，可见，此处开始__init__中，没有给self实例初始化对应的name，</p>
+<p>而后面的函数sayYourName中，虽然可以调用到self.name而没有出现AttributeError错误，</p>
+<p>但是实际上此处的值，不是所期望的，传入的name，即”Tim”，而是类中的name的值，即”class global name”。</p>
+<hr>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a><strong>参考文献</strong></h2><p>【1】<a href="https://link.zhihu.com/?target=https://blog.csdn.net/yjk13703623757/article/details/77918633/">如何简单地理解Python中的if <strong>name</strong> &#x3D;&#x3D; &#39;<strong>main</strong>&#39;</a></p>
+<p>【2】<a href="https://link.zhihu.com/?target=https://www.cnblogs.com/ant-colonies/p/6718388.html">Python类中的__init__() 和 self 的解析</a></p>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left  disabled "
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/2024/04/16/python3/web_scraping_demo/"
+      title="Python3 web scraping demo"
+     >
+
+    <p class="title-text">
+      
+        Python3 web scraping demo
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+  <script src="https://cdn.staticfile.org/twikoo/1.6.26/twikoo.all.min.js"></script>
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">Comments </div>
+    </div>
+    <div id="tcomment"></div>
+  </div>
+  <script>
+      twikoo.init({
+          envId: '',
+          el: '#tcomment',
+          region: '',
+          path: 'location.pathname',
+          lang: '',
+      })
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2024 Neutionwei<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+</body>
+</html>
