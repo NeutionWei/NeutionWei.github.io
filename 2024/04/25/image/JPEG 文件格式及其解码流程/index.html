@@ -66,16 +66,16 @@ var _hmt = _hmt || [];
 <meta property="og:site_name" content="Systemcall Station">
 <meta property="og:description" content="转载自：https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_42139383&#x2F;article&#x2F;details&#x2F;114113493  jpeg是1992年发布的图片编码标准，20多年过去了，它在如今图片压缩领域仍然占据着重要地位。本文主要针对标准ISO&#x2F;IEC 10918-1 分析jpeg文件结构以及解码流程。 1.文件结构1.1 基本单元Jpeg文件由一个一">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://neutionwei.github.io/figures/20210226092528728.png">
-<meta property="og:image" content="https://neutionwei.github.io/figures/20210226095655124.png">
-<meta property="og:image" content="https://neutionwei.github.io/figures/20210226111940204.png">
-<meta property="og:image" content="https://neutionwei.github.io/figures/20210226112109950.png">
+<meta property="og:image" content="https://neutionwei.github.io/2024/04/25/image/JPEG%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%8F%8A%E5%85%B6%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/20210226092528728.png">
+<meta property="og:image" content="https://neutionwei.github.io/2024/04/25/image/JPEG%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%8F%8A%E5%85%B6%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/20210226095655124.png">
+<meta property="og:image" content="https://neutionwei.github.io/2024/04/25/image/JPEG%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%8F%8A%E5%85%B6%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/20210226111940204.png">
+<meta property="og:image" content="https://neutionwei.github.io/2024/04/25/image/JPEG%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%8F%8A%E5%85%B6%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/20210226112109950.png">
 <meta property="article:published_time" content="2024-04-25T02:38:43.000Z">
-<meta property="article:modified_time" content="2024-04-25T02:56:22.785Z">
+<meta property="article:modified_time" content="2024-04-25T08:01:58.340Z">
 <meta property="article:author" content="Neutionwei">
 <meta property="article:tag" content="jpeg">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://neutionwei.github.io/figures/20210226092528728.png">
+<meta name="twitter:image" content="https://neutionwei.github.io/2024/04/25/image/JPEG%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%8F%8A%E5%85%B6%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/20210226092528728.png">
   
     <link rel="alternate" href="/atom.xml" title="Systemcall Station" type="application/atom+xml">
   
@@ -202,13 +202,13 @@ var _hmt = _hmt || [];
     <div class="widget">
       <h3 class="widget-title">Categories</h3>
       <div class="category-box">
-            <a class="category-link" href="/categories/git/">
-                git
+            <a class="category-link" href="/categories/ai/">
+                ai
                 <div class="category-count">1</div>
             </a>
         
-            <a class="category-link" href="/categories/ai/">
-                ai
+            <a class="category-link" href="/categories/git/">
+                git
                 <div class="category-count">1</div>
             </a>
         
@@ -345,7 +345,8 @@ var _hmt = _hmt || [];
 <li>段与段之间可以存在很多ff数据，这些数据位填充字节</li>
 </ol>
 <p>jpeg文件关键结构如下图所示，包含如下几个关键段：  </p>
-<p><img src="/figures/20210226092528728.png"></p>
+<img src="/2024/04/25/image/JPEG%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%8F%8A%E5%85%B6%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/20210226092528728.png" class="">
+
 <h3 id="1-2-段类型"><a href="#1-2-段类型" class="headerlink" title="1.2 段类型"></a>1.2 段类型</h3><p>Jpeg的段类型有30多种，其中有10种是必须识别的，其他类型都可以忽略。</p>
 <ul>
 <li>1）SOI （start of image），标记码0xD8，表示Jpeg文件头</li>
@@ -639,9 +640,11 @@ var _hmt = _hmt || [];
 <p>一个frame由一个或多个scan组成。对于顺序模式编码的图片，一个scan包含一个或多个颜色通道。如图1所示，一个frame由三个scan组成，如果以非交错方式存放数据，每个scan只有一个通道的数据；如果以交错方式，则一个scan存放3个通道的数据。</p>
 <p>如果图片各颜色通道的分辨率不一样，如图2所示，B和C通道的宽是A通道的一半。其数据交错存放方式为途中所示。</p>
 <p>Jpeg编码的最小单元MCU（minimum coded unit），一个scan包含一个或多个MCU。MCU由一个或多个数据单元（data unit）构成，数据单元是8x8数据块。对于非交错存放方式，MCU是由一个数据单元构成；如果是交错存放方式，MCU由每个通道一个或多个数据单元组成。图1中交错方式的第一个MCU包括A1、B1、C1，图2中第一个MCU包含4个数据单元A1、A2、B1、C1.</p>
-<p><img src="/figures/20210226095655124.png"></p>
+<img src="/2024/04/25/image/JPEG%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%8F%8A%E5%85%B6%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/20210226095655124.png" class="">
+
 <p>表1 交错&#x2F;非交错编码顺序</p>
-<p><img src="/figures/20210226111940204.png"></p>
+<img src="/2024/04/25/image/JPEG%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%8F%8A%E5%85%B6%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/20210226111940204.png" class="">
+
 <p>表2</p>
 <h3 id="2-1-解码流程"><a href="#2-1-解码流程" class="headerlink" title="2.1 解码流程"></a>2.1 解码流程</h3><p>Jpeg解码流程如下图所示：</p>
 <ol>
@@ -652,7 +655,8 @@ var _hmt = _hmt || [];
 <li>重建图片数据</li>
 <li>解码结束</li>
 </ol>
-<p><img src="/figures/20210226112109950.png"></p>
+<img src="/2024/04/25/image/JPEG%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%8F%8A%E5%85%B6%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/20210226112109950.png" class="">
+
 <h3 id="2-2-重建图像数据"><a href="#2-2-重建图像数据" class="headerlink" title="2.2 重建图像数据"></a>2.2 重建图像数据</h3><p>Jpeg重建图像的基本单元时data unit（8x8数据块）。对于数据单元处理过程与mpeg1&#x2F;2的block解码类似。解码过程的输入为8x8数据块的压缩数据，输出为该数据块的重建值。因为最终数据经过了huffman熵编码压缩，所以解码过程依赖DHT解析的huffman表。</p>
 <ol>
 <li>通过DC huffman表解析块的DC系数，并加上DC预测值；</li>
