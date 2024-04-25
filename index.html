@@ -219,7 +219,7 @@ var _hmt = _hmt || [];
         
             <a class="category-link" href="/categories/image/">
                 image
-                <div class="category-count">1</div>
+                <div class="category-count">2</div>
             </a>
         
             <a class="category-link" href="/categories/ai/">
@@ -236,7 +236,7 @@ var _hmt = _hmt || [];
   <div class="widget-wrap">
     <div class="widget">
       <h3 class="widget-title">Tags</h3>
-      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/boot/" rel="tag">boot</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/chatgpt/" rel="tag">chatgpt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/free/" rel="tag">free</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/github/" rel="tag">github</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/headphone/" rel="tag">headphone</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/headphone-parameters/" rel="tag">headphone parameters</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/over-ear-headphone/" rel="tag">over-ear headphone</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rk3399/" rel="tag">rk3399</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/yuv/" rel="tag">yuv</a></li></ul>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/boot/" rel="tag">boot</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/chatgpt/" rel="tag">chatgpt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/free/" rel="tag">free</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/github/" rel="tag">github</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/headphone/" rel="tag">headphone</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/headphone-parameters/" rel="tag">headphone parameters</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/jpeg/" rel="tag">jpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/over-ear-headphone/" rel="tag">over-ear headphone</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rk3399/" rel="tag">rk3399</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/yuv/" rel="tag">yuv</a></li></ul>
     </div>
   </div>
 
@@ -247,6 +247,122 @@ var _hmt = _hmt || [];
     </div>
     <div id="content-body">
       
+   
+
+
+<article id="post-image/JPEG 文件格式及其解码流程" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 itemprop="name">
+        <a class="p-name article-title" href="/2024/04/25/image/JPEG%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%8F%8A%E5%85%B6%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/">JPEG 文件格式及其解码流程</a>
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2024-04-25T02:38:43.000Z" itemprop="datePublished">2024-04-25</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/image/">image</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            2.3k words 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jpeg/" rel="tag">jpeg</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <div class="truncate-text">
+            
+              
+转载自：https://blog.csdn.net/qq_42139383&#x2F;article&#x2F;details&#x2F;114113493
+
+jpeg是1992年发布的图片编码标准，20多年过去了，它在如今图片压缩领域仍然占据着重要地位。本文主要针对标准ISO&#x2F;IEC 10918-1 分析jpeg文件结构以及解码流程。
+1.文件结构1.1 基本单元Jpeg文件由一个一个段来存储。段的一般结构为：前两个字节为段标识（第一个字节为0xff，第二个字节对于不同段，这个值是不同的），后面紧跟两个字节为该段的长度，该长度不包含段标识的两个字节。
+
+
+
+名称
+字节数
+数据
+说明
+
+
+
+段标识
+1
+0xff
+每个段的开始标识
+
+
+段类型
+1
+
+段类型标记码
+
+
+段长度
+2
+
+包括段内容和段长度本身，不包含段标识和段类型
+
+
+段内容
+
+
+&lt;&#x3D;65533字节
+
+
+
+段长度按大端序存放，高位在前，低位在后
+有些段没有长度也没有段内容，只有段标识和段类型。如SOI、EOI
+段与段之间可以存在很多ff数据，这些数据位填充字节
+
+jpeg文件关键结构如下图所示...
+            
+          </div>
+        
+      </div>
+
+         
+    </div>
+    
+     
+    <a class="right-panel  non-pic  "
+      
+      href="/2024/04/25/image/JPEG%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%8F%8A%E5%85%B6%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/" 
+    >
+       
+      <i class="fa-solid fa-angle-right non-pic"></i>
+       
+    </a>
+     
+  </div>
+  
+</article>
+
+
+
+
+
+
    
 
 
@@ -975,89 +1091,19 @@ Basic OutputWhen you run the free command, it typically displays information in 
 
 
 
-   
 
-
-<article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-   
-  <div class="article-inner">
-    <div class="article-main">
-      <header class="article-header">
-        
-<div class="main-title-bar">
-  <div class="main-title-dot"></div>
-  
-    
-      <h1 itemprop="name">
-        <a class="p-name article-title" href="/2024/03/09/hello-world/">Hello World</a>
-      </h1>
-    
-  
-</div>
-
-        <div class='meta-info-bar'>
-          <div class="meta-info">
-  <time class="dt-published" datetime="2024-03-09T09:15:51.217Z" itemprop="datePublished">2024-03-09</time>
-</div>
-          <div class="need-seperator meta-info">
-            <div class="meta-cate-flex">
-  
-    Uncategorized 
-   
-</div>
-  
-          </div>
-          <div class="wordcount need-seperator meta-info">
-             words 
-          </div>
-        </div>
-        
-      </header>
-      <div class="e-content article-entry" itemprop="articleBody">
-        
-          <div class="truncate-text">
-            
-              Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick StartCreate a new post1$ hexo new &quot;My New Post&quot;
-
-More info: Writing
-Run server1$ hexo server
-
-More info: Server
-Generate static files1$ hexo generate
-
-More info: Generating
-Deploy to remote sites1$ hexo deploy
-
-More info: Deployment
-
-            
-          </div>
-        
-      </div>
-
-         
-    </div>
-    
-     
-    <a class="right-panel  non-pic  "
-      
-      href="/2024/03/09/hello-world/" 
-    >
-       
-      <i class="fa-solid fa-angle-right non-pic"></i>
-       
+  <nav id="page-nav">
+    <!-- 在第二页时 page.prev_link 不知为何无法返回正确的链接 -->
+    <a id="prev-btn" class="page-nav-btn disabled" href=" /  ">
+      <i class="fa-solid fa-angle-left"></i>
     </a>
-     
-  </div>
-  
-</article>
-
-
-
-
-
-
+    <div id="num-bar">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a>  
+    </div>
+    <a id="next-btn" class="page-nav-btn " href="/page/2/">
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+  </nav>
 
 
     </div>

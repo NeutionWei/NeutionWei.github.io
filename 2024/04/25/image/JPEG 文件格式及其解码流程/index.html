@@ -53,31 +53,29 @@ var _hmt = _hmt || [];
 
 
   
-  <title>GitHub 项目一步导入码云 Gitee | Systemcall Station</title>
+  <title>JPEG 文件格式及其解码流程 | Systemcall Station</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
   <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
 
-  <meta name="description" content="转载自：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;37719046  GitHub 项目一步导入 码云 Gitee方法一：登陆 码云 Gitee 账号，点击右上角的 + 号，点击“从 GitHub 导入项目”，在跳转的页面中授权 Gitee 访问。  之后就可以选择性的导入您的 Github 项目到  码云 Gitee 。  方法二：只需要在创建项目的时候，选择导入已有项目  如">
+  <meta name="description" content="转载自：https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_42139383&#x2F;article&#x2F;details&#x2F;114113493  jpeg是1992年发布的图片编码标准，20多年过去了，它在如今图片压缩领域仍然占据着重要地位。本文主要针对标准ISO&#x2F;IEC 10918-1 分析jpeg文件结构以及解码流程。 1.文件结构1.1 基本单元Jpeg文件由一个一">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GitHub 项目一步导入码云 Gitee">
-<meta property="og:url" content="https://neutionwei.github.io/2024/04/19/git/GitHub%20%E9%A1%B9%E7%9B%AE%E4%B8%80%E6%AD%A5%E5%AF%BC%E5%85%A5%E7%A0%81%E4%BA%91%20Gitee/index.html">
+<meta property="og:title" content="JPEG 文件格式及其解码流程">
+<meta property="og:url" content="https://neutionwei.github.io/2024/04/25/image/JPEG%20%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%8F%8A%E5%85%B6%E8%A7%A3%E7%A0%81%E6%B5%81%E7%A8%8B/index.html">
 <meta property="og:site_name" content="Systemcall Station">
-<meta property="og:description" content="转载自：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;37719046  GitHub 项目一步导入 码云 Gitee方法一：登陆 码云 Gitee 账号，点击右上角的 + 号，点击“从 GitHub 导入项目”，在跳转的页面中授权 Gitee 访问。  之后就可以选择性的导入您的 Github 项目到  码云 Gitee 。  方法二：只需要在创建项目的时候，选择导入已有项目  如">
+<meta property="og:description" content="转载自：https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_42139383&#x2F;article&#x2F;details&#x2F;114113493  jpeg是1992年发布的图片编码标准，20多年过去了，它在如今图片压缩领域仍然占据着重要地位。本文主要针对标准ISO&#x2F;IEC 10918-1 分析jpeg文件结构以及解码流程。 1.文件结构1.1 基本单元Jpeg文件由一个一">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://pic2.zhimg.com/80/v2-dd9b394bd52be7c72fda276530c09f7d_720w.webp">
-<meta property="og:image" content="https://pic3.zhimg.com/80/v2-3ba45c92f846a8be9fb92e214166c3d6_720w.webp">
-<meta property="og:image" content="https://pic1.zhimg.com/80/v2-8468e8914cabd2f81c51f76dbf2d7290_720w.webp">
-<meta property="og:image" content="https://pic4.zhimg.com/80/v2-5caee4c1963b4dbec61d1f89f6cb64cb_720w.webp">
-<meta property="og:image" content="https://pic1.zhimg.com/80/v2-90fe9db09b02880daacab75b793c9f94_720w.webp">
-<meta property="og:image" content="https://pic3.zhimg.com/80/v2-03ec1271df7746adf81fc2f405471836_720w.webp">
-<meta property="article:published_time" content="2024-04-19T06:06:43.000Z">
-<meta property="article:modified_time" content="2024-04-19T06:07:58.295Z">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210226092528728.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTM5Mzgz,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210226095655124.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTM5Mzgz,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210226111940204.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTM5Mzgz,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210226112109950.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTM5Mzgz,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2024-04-25T02:38:43.000Z">
+<meta property="article:modified_time" content="2024-04-25T02:43:53.179Z">
 <meta property="article:author" content="Neutionwei">
-<meta property="article:tag" content="github">
+<meta property="article:tag" content="jpeg">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://pic2.zhimg.com/80/v2-dd9b394bd52be7c72fda276530c09f7d_720w.webp">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210226092528728.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTM5Mzgz,size_16,color_FFFFFF,t_70">
   
     <link rel="alternate" href="/atom.xml" title="Systemcall Station" type="application/atom+xml">
   
@@ -261,7 +259,7 @@ var _hmt = _hmt || [];
        
 
 
-<article id="post-git/GitHub 项目一步导入码云 Gitee" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+<article id="post-image/JPEG 文件格式及其解码流程" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
     
    
@@ -274,7 +272,7 @@ var _hmt = _hmt || [];
   
     
       <h1 class="p-name article-title" itemprop="headline name">
-        GitHub 项目一步导入码云 Gitee
+        JPEG 文件格式及其解码流程
       </h1>
     
   
@@ -282,43 +280,382 @@ var _hmt = _hmt || [];
 
         <div class='meta-info-bar'>
           <div class="meta-info">
-  <time class="dt-published" datetime="2024-04-19T06:06:43.000Z" itemprop="datePublished">2024-04-19</time>
+  <time class="dt-published" datetime="2024-04-25T02:38:43.000Z" itemprop="datePublished">2024-04-25</time>
 </div>
           <div class="need-seperator meta-info">
             <div class="meta-cate-flex">
   
-  <a class="meta-cate-link" href="/categories/git/">git</a>
+  <a class="meta-cate-link" href="/categories/image/">image</a>
    
 </div>
   
           </div>
           <div class="wordcount need-seperator meta-info">
-            321 words 
+            2.3k words 
           </div>
         </div>
         
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/github/" rel="tag">github</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jpeg/" rel="tag">jpeg</a></li></ul>
 
       </header>
       <div class="e-content article-entry" itemprop="articleBody">
         
           <blockquote>
-<p>转载自：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/37719046">https://zhuanlan.zhihu.com/p/37719046</a></p>
+<p>转载自：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42139383/article/details/114113493">https://blog.csdn.net/qq_42139383&#x2F;article&#x2F;details&#x2F;114113493</a></p>
 </blockquote>
-<h2 id="GitHub-项目一步导入-码云-Gitee"><a href="#GitHub-项目一步导入-码云-Gitee" class="headerlink" title="GitHub 项目一步导入 码云 Gitee"></a>GitHub 项目一步导入 <strong><a href="https://link.zhihu.com/?target=https://gitee.com/?from=github_to_gitee">码云 Gitee</a></strong></h2><h2 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h2><p>登陆 <strong><a href="https://link.zhihu.com/?target=https://gitee.com/?from=github_to_gitee">码云 Gitee</a></strong> 账号，点击右上角的 + 号，点击“从 GitHub 导入项目”，在跳转的页面中授权 Gitee 访问。</p>
-<p><img src="https://pic2.zhimg.com/80/v2-dd9b394bd52be7c72fda276530c09f7d_720w.webp"></p>
-<p>之后就可以选择性的导入您的 Github 项目到 <strong><a href="https://link.zhihu.com/?target=https://gitee.com/?from=github_to_gitee"> 码云 Gitee</a></strong> 。</p>
-<p><img src="https://pic3.zhimg.com/80/v2-3ba45c92f846a8be9fb92e214166c3d6_720w.webp"></p>
-<h2 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h2><p>只需要在创建项目的时候，选择导入已有项目</p>
-<p><img src="https://pic1.zhimg.com/80/v2-8468e8914cabd2f81c51f76dbf2d7290_720w.webp"></p>
-<p>如果是私有项目将会需要输入 GitHub 的账号信息。</p>
-<p><img src="https://pic4.zhimg.com/80/v2-5caee4c1963b4dbec61d1f89f6cb64cb_720w.webp"></p>
-<h2 id="两种方法保持-码云-Gitee-和-Github-同步更新"><a href="#两种方法保持-码云-Gitee-和-Github-同步更新" class="headerlink" title="两种方法保持 码云 Gitee 和 Github 同步更新"></a>两种方法保持 <strong><a href="https://link.zhihu.com/?target=https://gitee.com/?from=github_to_gitee">码云 Gitee</a></strong> 和 Github 同步更新</h2><h2 id="方法一（推荐）："><a href="#方法一（推荐）：" class="headerlink" title="方法一（推荐）："></a>方法一（推荐）：</h2><p>如果是本地仓库，只在需要命令行添加用不同名称标识的 <strong><a href="https://link.zhihu.com/?target=https://gitee.com/?from=github_to_gitee">码云 Gitee</a></strong> 和 Github 远程库。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add 远程库名 远程库地址</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://pic1.zhimg.com/80/v2-90fe9db09b02880daacab75b793c9f94_720w.webp"></p>
-<h2 id="方法二：-1"><a href="#方法二：-1" class="headerlink" title="方法二："></a>方法二：</h2><p>在 <strong><a href="https://link.zhihu.com/?target=https://gitee.com/?from=github_to_gitee">码云 Gitee</a></strong> 项目主页点击同步更新按钮即可！</p>
-<p><img src="https://pic3.zhimg.com/80/v2-03ec1271df7746adf81fc2f405471836_720w.webp"></p>
+<p>jpeg是1992年发布的图片编码标准，20多年过去了，它在如今图片压缩领域仍然占据着重要地位。本文主要针对标准ISO&#x2F;IEC 10918-1 分析jpeg文件结构以及解码流程。</p>
+<h2 id="1-文件结构"><a href="#1-文件结构" class="headerlink" title="1.文件结构"></a>1.文件结构</h2><h3 id="1-1-基本单元"><a href="#1-1-基本单元" class="headerlink" title="1.1 基本单元"></a>1.1 基本单元</h3><p>Jpeg文件由一个一个段来存储。段的一般结构为：前两个字节为段标识（第一个字节为0xff，第二个字节对于不同段，这个值是不同的），后面紧跟两个字节为该段的长度，该长度不包含段标识的两个字节。</p>
+<table>
+<thead>
+<tr>
+<th align="left">名称</th>
+<th align="left">字节数</th>
+<th align="left">数据</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">段标识</td>
+<td align="left">1</td>
+<td align="left">0xff</td>
+<td align="left">每个段的开始标识</td>
+</tr>
+<tr>
+<td align="left">段类型</td>
+<td align="left">1</td>
+<td align="left"></td>
+<td align="left">段类型标记码</td>
+</tr>
+<tr>
+<td align="left">段长度</td>
+<td align="left">2</td>
+<td align="left"></td>
+<td align="left">包括段内容和段长度本身，不包含段标识和段类型</td>
+</tr>
+<tr>
+<td align="left">段内容</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">&lt;&#x3D;65533字节</td>
+</tr>
+</tbody></table>
+<ol>
+<li>段长度按大端序存放，高位在前，低位在后</li>
+<li>有些段没有长度也没有段内容，只有段标识和段类型。如SOI、EOI</li>
+<li>段与段之间可以存在很多ff数据，这些数据位填充字节</li>
+</ol>
+<p>jpeg文件关键结构如下图所示，包含如下几个关键段：<br><img src="https://img-blog.csdnimg.cn/20210226092528728.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTM5Mzgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="1-2-段类型"><a href="#1-2-段类型" class="headerlink" title="1.2 段类型"></a>1.2 段类型</h3><p>Jpeg的段类型有30多种，其中有10种是必须识别的，其他类型都可以忽略。</p>
+<ul>
+<li>1）SOI （start of image），标记码0xD8，表示Jpeg文件头</li>
+<li>2）EOI (end of image), 标记码0xD9</li>
+<li>3）DQT 定义量化表。标记码 0xDB</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">名称</th>
+<th align="left">Bits</th>
+<th align="left">数值</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">段标识</td>
+<td align="left">8</td>
+<td align="left">FF</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">段类型</td>
+<td align="left">8</td>
+<td align="left">DB</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">段长度</td>
+<td align="left">16</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">精度</td>
+<td align="left">4</td>
+<td align="left">0</td>
+<td align="left">表示8bit精度；1表示16bit精度</td>
+</tr>
+<tr>
+<td align="left">量化表id</td>
+<td align="left">4</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">量化表数据</td>
+<td align="left">64x数据精度（8或16）</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<ul>
+<li>4）SOF 图像头元素，标识码0xC0-0xCF</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">名称</th>
+<th align="left">Bits</th>
+<th align="left">数值</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">段标识</td>
+<td align="left">8</td>
+<td align="left">FF</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">段类型</td>
+<td align="left">8</td>
+<td align="left">C0-CF</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">段长度</td>
+<td align="left">16</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">像素精度</td>
+<td align="left">8</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">图片高</td>
+<td align="left">16</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">图片宽</td>
+<td align="left">16</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">通道数</td>
+<td align="left">8</td>
+<td align="left">1表示灰度图;3表示YCbCr;4表示CMYK</td>
+<td align="left">数值不能超过4</td>
+</tr>
+<tr>
+<td align="left">通道ID</td>
+<td align="left">8</td>
+<td align="left">1-Y;2-Cb;3-Cr;4-I;5-Q</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">水平采样系数</td>
+<td align="left">4</td>
+<td align="left">采样系数是实际采样方式与最高采样系数之比，而最高采样系数一般是0.5</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">垂直采样系数</td>
+<td align="left">4</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">选择量化表ID</td>
+<td align="left">8</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<ul>
+<li>5）DHT 定义huffman表，标识码C4</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">名称</th>
+<th align="left">Bits</th>
+<th align="left">数值</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">段标识</td>
+<td align="left">8</td>
+<td align="left">FF</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">段类型</td>
+<td align="left">8</td>
+<td align="left">C4</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">段长度</td>
+<td align="left">16</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">表类型</td>
+<td align="left">4</td>
+<td align="left">0表示DC表；1表示AC表</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">表ID</td>
+<td align="left">4</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">位表</td>
+<td align="left">16x8</td>
+<td align="left"></td>
+<td align="left">每种位长的编码再huffman树中的个数</td>
+</tr>
+<tr>
+<td align="left">Huffman表数据</td>
+<td align="left">Nx8（n表示位表16个数之和）</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<ol>
+<li>jpeg文件有两类huffman表：一类用于DC、一类用于AC。一般有4个表：亮度的DC和AC，色度的DC和AC。Huffman表总数不能超过6.</li>
+<li>一个DHT段可以包含多个huffman表，每个都有自己的信息</li>
+</ol>
+<ul>
+<li>6）SOS，标识码DA</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">名称</th>
+<th align="left">Bits</th>
+<th align="left">数值</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">段标识</td>
+<td align="left">8</td>
+<td align="left">FF</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">段类型</td>
+<td align="left">8</td>
+<td align="left">DA</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">段长度</td>
+<td align="left">16</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">该scan内通道数</td>
+<td align="left">8</td>
+<td align="left">必须在1-4范围内</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">通道ID</td>
+<td align="left">8</td>
+<td align="left"></td>
+<td align="left">如果有n个通道，这三个变量需要重复n次</td>
+</tr>
+<tr>
+<td align="left">DC系数解码使用的Huffman表ID</td>
+<td align="left">4</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">AC系数解码使用的Huffman表ID</td>
+<td align="left">4</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">24</td>
+<td align="left"></td>
+<td align="left">剩余三个字节忽略</td>
+</tr>
+</tbody></table>
+<ul>
+<li>7）DRI （定义复位间隔），标识码0xDD</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">名称</th>
+<th align="left">Bits</th>
+<th align="left">数值</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">段标识</td>
+<td align="left">8</td>
+<td align="left">FF</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">段类型</td>
+<td align="left">8</td>
+<td align="left">DA</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">段长度</td>
+<td align="left">16</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">复位间隔</td>
+<td align="left">8</td>
+<td align="left"></td>
+<td align="left">复位标记的间隔距离</td>
+</tr>
+</tbody></table>
+<p>1.复位间隔标识在压缩数据流中，每隔n个MCU块就有一个RST标记，RST标记将huffman的解码数据复位，DC也重新从0开始。<br>2.RST标记共有8个（RST0-RST7），冲RST0开始使用，按顺序到RST7，再从RST0开始。</p>
+<h2 id="2-解码过程"><a href="#2-解码过程" class="headerlink" title="2.解码过程"></a>2.解码过程</h2><p>Jpeg标准中，image、frame、scan几个概念的区别。<br>Image表示一个jpeg图片。对于顺序（sequential）模式和progressive编码图片，一个image只包含一个frame。Hierarchical模式的image包含多个frame。</p>
+<p>一个frame由一个或多个scan组成。对于顺序模式编码的图片，一个scan包含一个或多个颜色通道。如图1所示，一个frame由三个scan组成，如果以非交错方式存放数据，每个scan只有一个通道的数据；如果以交错方式，则一个scan存放3个通道的数据。</p>
+<p>如果图片各颜色通道的分辨率不一样，如图2所示，B和C通道的宽是A通道的一半。其数据交错存放方式为途中所示。</p>
+<p>Jpeg编码的最小单元MCU（minimum coded unit），一个scan包含一个或多个MCU。MCU由一个或多个数据单元（data unit）构成，数据单元是8x8数据块。对于非交错存放方式，MCU是由一个数据单元构成；如果是交错存放方式，MCU由每个通道一个或多个数据单元组成。图1中交错方式的第一个MCU包括A1、B1、C1，图2中第一个MCU包含4个数据单元A1、A2、B1、C1.</p>
+<p><img src="https://img-blog.csdnimg.cn/20210226095655124.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTM5Mzgz,size_16,color_FFFFFF,t_70" alt="表1"><br>表1 交错&#x2F;非交错编码顺序</p>
+<p><img src="https://img-blog.csdnimg.cn/20210226111940204.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTM5Mzgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>表2</p>
+<h3 id="2-1-解码流程"><a href="#2-1-解码流程" class="headerlink" title="2.1 解码流程"></a>2.1 解码流程</h3><p>Jpeg解码流程如下图所示：</p>
+<ol>
+<li>读取一个segment的标识符；如果该标识符为SOS进入步骤3，如果该标识符为EOI则进入步骤6；</li>
+<li>按照第一节所示关键segment语法解析元素；解析完后进入步骤1；</li>
+<li>解析SOS头部语法元素；</li>
+<li>解析SOS中的dc、ac系数；</li>
+<li>重建图片数据</li>
+<li>解码结束<br><img src="https://img-blog.csdnimg.cn/20210226112109950.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMTM5Mzgz,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+</ol>
+<h3 id="2-2-重建图像数据"><a href="#2-2-重建图像数据" class="headerlink" title="2.2 重建图像数据"></a>2.2 重建图像数据</h3><p>Jpeg重建图像的基本单元时data unit（8x8数据块）。对于数据单元处理过程与mpeg1&#x2F;2的block解码类似。解码过程的输入为8x8数据块的压缩数据，输出为该数据块的重建值。因为最终数据经过了huffman熵编码压缩，所以解码过程依赖DHT解析的huffman表。</p>
+<ol>
+<li>通过DC huffman表解析块的DC系数，并加上DC预测值；</li>
+<li>通过AC huffman表解析块的AC系数；</li>
+<li>反量化，DC、AC系数乘以量化值（由DQT解析）</li>
+<li>反变换后得到最终重建数据，IDCT变换与mpeg实现完全一致</li>
+</ol>
 
         
       </div>
@@ -331,27 +668,22 @@ var _hmt = _hmt || [];
   
     
 <nav id="article-nav">
-  <a class="article-nav-btn left "
-    
-      href="/2024/04/22/image/%E4%B8%80%E6%96%87%E8%AF%BB%E6%87%82%20YUV%20%E7%9A%84%E9%87%87%E6%A0%B7%E4%B8%8E%E6%A0%BC%E5%BC%8F/"
-      title="一文读懂 YUV 的采样与格式"
+  <a class="article-nav-btn left  disabled "
      >
     <i class="fa-solid fa-angle-left"></i>
     <p class="title-text">
-      
-        一文读懂 YUV 的采样与格式
         
     </p>
   </a>
   <a class="article-nav-btn right "
     
-      href="/2024/04/17/python3/Python%E4%B8%AD__main__%E5%92%8C__init__%E7%9A%84%E8%A7%A3%E6%9E%90/"
-      title="Python中__main__和__init__的解析"
+      href="/2024/04/22/ai/%E5%85%A8%E7%BD%91%E6%8F%AD%E7%A7%98%EF%BC%81ChatGPT%20%E7%BB%88%E6%9E%81%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97%EF%BC%8C%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%8E%A9%E8%BD%ACChatGPT/"
+      title="全网揭秘！ChatGPT 终极入门指南，从入门到精通玩转ChatGPT"
      >
 
     <p class="title-text">
       
-        Python中__main__和__init__的解析
+        全网揭秘！ChatGPT 终极入门指南，从入门到精通玩转ChatGPT
         
     </p>
     <i class="fa-solid fa-angle-right"></i>
