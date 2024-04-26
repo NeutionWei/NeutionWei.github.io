@@ -59,20 +59,18 @@ var _hmt = _hmt || [];
   <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
   <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
 
-  <meta name="description" content="转载自：https:&#x2F;&#x2F;www.ruanyifeng.com&#x2F;blog&#x2F;2020&#x2F;08&#x2F;rsync.html  一、简介rsync 是一个常用的 Linux 应用程序，用于文件同步。 它可以在本地计算机与远程计算机之间，或者两个本地目录之间同步文件（但不支持两台远程计算机之间的同步）。它也可以当作文件复制工具，替代cp和mv命令。  它名称里面的r指的是 remote，rsync 其实就是”远程">
+  <meta name="description" content="转载自：https:&#x2F;&#x2F;www.ruanyifeng.com&#x2F;blog&#x2F;2020&#x2F;08&#x2F;rsync.html  一、简介rsync 是一个常用的 Linux 应用程序，用于文件同步。 它可以在本地计算机与远程计算机之间，或者两个本地目录之间同步文件（但不支持两台远程计算机之间的同步）。它也可以当作文件复制工具，替代cp和mv命令。 它名称里面的r指的是 remote，rsync 其实就是”远程同">
 <meta property="og:type" content="article">
 <meta property="og:title" content="rsync 用法教程">
 <meta property="og:url" content="https://neutionwei.github.io/2024/04/25/linux/rsync%20%E7%94%A8%E6%B3%95%E6%95%99%E7%A8%8B/index.html">
 <meta property="og:site_name" content="Systemcall Station">
-<meta property="og:description" content="转载自：https:&#x2F;&#x2F;www.ruanyifeng.com&#x2F;blog&#x2F;2020&#x2F;08&#x2F;rsync.html  一、简介rsync 是一个常用的 Linux 应用程序，用于文件同步。 它可以在本地计算机与远程计算机之间，或者两个本地目录之间同步文件（但不支持两台远程计算机之间的同步）。它也可以当作文件复制工具，替代cp和mv命令。  它名称里面的r指的是 remote，rsync 其实就是”远程">
+<meta property="og:description" content="转载自：https:&#x2F;&#x2F;www.ruanyifeng.com&#x2F;blog&#x2F;2020&#x2F;08&#x2F;rsync.html  一、简介rsync 是一个常用的 Linux 应用程序，用于文件同步。 它可以在本地计算机与远程计算机之间，或者两个本地目录之间同步文件（但不支持两台远程计算机之间的同步）。它也可以当作文件复制工具，替代cp和mv命令。 它名称里面的r指的是 remote，rsync 其实就是”远程同">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://www.wangbase.com/blogimg/asset/202008/bg2020082602.jpg">
 <meta property="article:published_time" content="2024-04-25T09:48:43.000Z">
-<meta property="article:modified_time" content="2024-04-25T09:50:04.038Z">
+<meta property="article:modified_time" content="2024-04-26T01:16:47.996Z">
 <meta property="article:author" content="Neutionwei">
 <meta property="article:tag" content="rsync">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://www.wangbase.com/blogimg/asset/202008/bg2020082602.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Systemcall Station" type="application/atom+xml">
   
@@ -214,7 +212,7 @@ var _hmt = _hmt || [];
         
             <a class="category-link" href="/categories/linux/">
                 linux
-                <div class="category-count">2</div>
+                <div class="category-count">3</div>
             </a>
         
             <a class="category-link" href="/categories/python3/">
@@ -236,7 +234,7 @@ var _hmt = _hmt || [];
   <div class="widget-wrap">
     <div class="widget">
       <h3 class="widget-title">Tags</h3>
-      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/boot/" rel="tag">boot</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/chatgpt/" rel="tag">chatgpt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/free/" rel="tag">free</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/github/" rel="tag">github</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/headphone-parameters/" rel="tag">headphone parameters</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/jpeg/" rel="tag">jpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/over-ear-headphone/" rel="tag">over-ear headphone</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rsync/" rel="tag">rsync</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/yuv/" rel="tag">yuv</a></li></ul>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/boot/" rel="tag">boot</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/chatgpt/" rel="tag">chatgpt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/delayed-write/" rel="tag">delayed write</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/free/" rel="tag">free</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/github/" rel="tag">github</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/headphone-parameters/" rel="tag">headphone parameters</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/jpeg/" rel="tag">jpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/over-ear-headphone/" rel="tag">over-ear headphone</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rsync/" rel="tag">rsync</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/yuv/" rel="tag">yuv</a></li></ul>
     </div>
   </div>
 
@@ -295,113 +293,90 @@ var _hmt = _hmt || [];
 </blockquote>
 <h2 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h2><p>rsync 是一个常用的 Linux 应用程序，用于文件同步。</p>
 <p>它可以在本地计算机与远程计算机之间，或者两个本地目录之间同步文件（但不支持两台远程计算机之间的同步）。它也可以当作文件复制工具，替代<code>cp</code>和<code>mv</code>命令。</p>
-<p><img src="https://www.wangbase.com/blogimg/asset/202008/bg2020082602.jpg"></p>
 <p>它名称里面的<code>r</code>指的是 remote，rsync 其实就是”远程同步”（remote sync）的意思。与其他文件传输工具（如 FTP 或 scp）不同，rsync 的最大特点是会检查发送方和接收方已有的文件，仅传输有变动的部分（默认规则是文件大小或修改时间有变动）。</p>
 <h2 id="二、安装"><a href="#二、安装" class="headerlink" title="二、安装"></a>二、安装</h2><p>如果本机或者远程计算机没有安装 rsync，可以用下面的命令安装。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Debian</span></span><br><span class="line">$ sudo apt-get install rsync</span><br><span class="line"></span><br><span class="line"><span class="comment"># Red Hat</span></span><br><span class="line">$ sudo yum install rsync</span><br><span class="line"></span><br><span class="line"><span class="comment"># Arch Linux</span></span><br><span class="line">$ sudo pacman -S rsync</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>注意，传输的双方都必须安装 rsync。</p>
 <h2 id="三、基本用法"><a href="#三、基本用法" class="headerlink" title="三、基本用法"></a>三、基本用法</h2><h3 id="3-1-r-参数"><a href="#3-1-r-参数" class="headerlink" title="3.1 -r 参数"></a>3.1 <code>-r</code> 参数</h3><p>本机使用 rsync 命令时，可以作为<code>cp</code>和<code>mv</code>命令的替代方法，将源目录同步到目标目录。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -r <span class="built_in">source</span> destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>上面命令中，<code>-r</code>表示递归，即包含子目录。注意，<code>-r</code>是必须的，否则 rsync 运行不会成功。<code>source</code>目录表示源目录，<code>destination</code>表示目标目录。</p>
 <p>如果有多个文件或目录需要同步，可以写成下面这样。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -r source1 source2 destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>上面命令中，<code>source1</code>、<code>source2</code>都会被同步到<code>destination</code>目录。</p>
 <h3 id="3-2-a-参数"><a href="#3-2-a-参数" class="headerlink" title="3.2 -a 参数"></a>3.2 <code>-a</code> 参数</h3><p><code>-a</code>参数可以替代<code>-r</code>，除了可以递归同步以外，还可以同步元信息（比如修改时间、权限等）。由于 rsync 默认使用文件大小和修改时间决定文件是否需要更新，所以<code>-a</code>比<code>-r</code>更有用。下面的用法才是常见的写法。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -a <span class="built_in">source</span> destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>目标目录<code>destination</code>如果不存在，rsync 会自动创建。执行上面的命令后，源目录<code>source</code>被完整地复制到了目标目录<code>destination</code>下面，即形成了<code>destination/source</code>的目录结构。</p>
 <p>如果只想同步源目录<code>source</code>里面的内容到目标目录<code>destination</code>，则需要在源目录后面加上斜杠。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -a <span class="built_in">source</span>/ destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>上面命令执行后，<code>source</code>目录里面的内容，就都被复制到了<code>destination</code>目录里面，并不会在<code>destination</code>下面创建一个<code>source</code>子目录。</p>
 <h3 id="3-3-n-参数"><a href="#3-3-n-参数" class="headerlink" title="3.3 -n 参数"></a>3.3 <code>-n</code> 参数</h3><p>如果不确定 rsync 执行后会产生什么结果，可以先用<code>-n</code>或<code>--dry-run</code>参数模拟执行的结果。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -anv <span class="built_in">source</span>/ destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>上面命令中，<code>-n</code>参数模拟命令执行的结果，并不真的执行命令。<code>-v</code>参数则是将结果输出到终端，这样就可以看到哪些内容会被同步。</p>
 <h3 id="3-4-delete-参数"><a href="#3-4-delete-参数" class="headerlink" title="3.4 --delete 参数"></a>3.4 <code>--delete</code> 参数</h3><p>默认情况下，rsync 只确保源目录的所有内容（明确排除的文件除外）都复制到目标目录。它不会使两个目录保持相同，并且不会删除文件。如果要使得目标目录成为源目录的镜像副本，则必须使用<code>--delete</code>参数，这将删除只存在于目标目录、不存在于源目录的文件。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -av --delete <span class="built_in">source</span>/ destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>上面命令中，<code>--delete</code>参数会使得<code>destination</code>成为<code>source</code>的一个镜像。</p>
 <h2 id="四、排除文件"><a href="#四、排除文件" class="headerlink" title="四、排除文件"></a>四、排除文件</h2><h3 id="4-1-exclude-参数"><a href="#4-1-exclude-参数" class="headerlink" title="4.1 --exclude 参数"></a>4.1 <code>--exclude</code> 参数</h3><p>有时，我们希望同步时排除某些文件或目录，这时可以用<code>--exclude</code>参数指定排除模式。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -av --exclude=<span class="string">&#x27;*.txt&#x27;</span> <span class="built_in">source</span>/ destination</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">$ rsync -av --exclude <span class="string">&#x27;*.txt&#x27;</span> <span class="built_in">source</span>/ destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>上面命令排除了所有 TXT 文件。</p>
 <p>注意，rsync 会同步以”点”开头的隐藏文件，如果要排除隐藏文件，可以这样写<code>--exclude=&quot;.*&quot;</code>。</p>
 <p>如果要排除某个目录里面的所有文件，但不希望排除目录本身，可以写成下面这样。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -av --exclude <span class="string">&#x27;dir1/*&#x27;</span> <span class="built_in">source</span>/ destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>多个排除模式，可以用多个<code>--exclude</code>参数。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -av --exclude <span class="string">&#x27;file1.txt&#x27;</span> --exclude <span class="string">&#x27;dir1/*&#x27;</span> <span class="built_in">source</span>/ destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>多个排除模式也可以利用 Bash 的大扩号的扩展功能，只用一个<code>--exclude</code>参数。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -av --exclude=&#123;<span class="string">&#x27;file1.txt&#x27;</span>,<span class="string">&#x27;dir1/*&#x27;</span>&#125; <span class="built_in">source</span>/ destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>如果排除模式很多，可以将它们写入一个文件，每个模式一行，然后用<code>--exclude-from</code>参数指定这个文件。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -av --exclude-from=<span class="string">&#x27;exclude-file.txt&#x27;</span> <span class="built_in">source</span>/ destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <h3 id="4-2-include-参数"><a href="#4-2-include-参数" class="headerlink" title="4.2 --include 参数"></a>4.2 <code>--include</code> 参数</h3><p><code>--include</code>参数用来指定必须同步的文件模式，往往与<code>--exclude</code>结合使用。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -av --include=<span class="string">&quot;*.txt&quot;</span> --exclude=<span class="string">&#x27;*&#x27;</span> <span class="built_in">source</span>/ destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>上面命令指定同步时，排除所有文件，但是会包括 TXT 文件。</p>
 <h2 id="五、远程同步"><a href="#五、远程同步" class="headerlink" title="五、远程同步"></a>五、远程同步</h2><h3 id="5-1-SSH-协议"><a href="#5-1-SSH-协议" class="headerlink" title="5.1 SSH 协议"></a>5.1 SSH 协议</h3><p>rsync 除了支持本地两个目录之间的同步，也支持远程同步。它可以将本地内容，同步到远程服务器。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -av <span class="built_in">source</span>/ username@remote_host:destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>也可以将远程内容同步到本地。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -av username@remote_host:<span class="built_in">source</span>/ destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>rsync 默认使用 SSH 进行远程登录和数据传输。</p>
 <p>由于早期 rsync 不使用 SSH 协议，需要用<code>-e</code>参数指定协议，后来才改的。所以，下面<code>-e ssh</code>可以省略。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -av -e ssh <span class="built_in">source</span>/ user@remote_host:/destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>但是，如果 ssh 命令有附加的参数，则必须使用<code>-e</code>参数指定所要执行的 SSH 命令。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -av -e <span class="string">&#x27;ssh -p 2234&#x27;</span> <span class="built_in">source</span>/ user@remote_host:/destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>上面命令中，<code>-e</code>参数指定 SSH 使用2234端口。</p>
 <h3 id="5-2-rsync-协议"><a href="#5-2-rsync-协议" class="headerlink" title="5.2 rsync 协议"></a>5.2 rsync 协议</h3><p>除了使用 SSH，如果另一台服务器安装并运行了 rsync 守护程序，则也可以用<code>rsync://</code>协议（默认端口873）进行传输。具体写法是服务器与目标目录之间使用双冒号分隔<code>::</code>。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -av <span class="built_in">source</span>/ 192.168.122.32::module/destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>注意，上面地址中的<code>module</code>并不是实际路径名，而是 rsync 守护程序指定的一个资源名，由管理员分配。</p>
 <p>如果想知道 rsync 守护程序分配的所有 module 列表，可以执行下面命令。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync rsync://192.168.122.32</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>rsync 协议除了使用双冒号，也可以直接用<code>rsync://</code>协议指定地址。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -av <span class="built_in">source</span>/ rsync://192.168.122.32/module/destination</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <h2 id="六、增量备份"><a href="#六、增量备份" class="headerlink" title="六、增量备份"></a>六、增量备份</h2><p>rsync 的最大特点就是它可以完成增量备份，也就是默认只复制有变动的文件。</p>
 <p>除了源目录与目标目录直接比较，rsync 还支持使用基准目录，即将源目录与基准目录之间变动的部分，同步到目标目录。</p>
 <p>具体做法是，第一次同步是全量备份，所有文件在基准目录里面同步一份。以后每一次同步都是增量备份，只同步源目录与基准目录之间有变动的部分，将这部分保存在一个新的目标目录。这个新的目标目录之中，也是包含所有文件，但实际上，只有那些变动过的文件是存在于该目录，其他没有变动的文件都是指向基准目录文件的硬链接。</p>
 <p><code>--link-dest</code>参数用来指定同步时的基准目录。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -a --delete --link-dest /compare/path /source/path /target/path</span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>上面命令中，<code>--link-dest</code>参数指定基准目录<code>/compare/path</code>，然后源目录<code>/source/path</code>跟基准目录进行比较，找出变动的文件，将它们拷贝到目标目录<code>/target/path</code>。那些没变动的文件则会生成硬链接。这个命令的第一次备份时是全量备份，后面就都是增量备份了。</p>
 <p>下面是一个脚本示例，备份用户的主目录。</p>
-<blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># A script to perform incremental backups using rsync</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> -o errexit</span><br><span class="line"><span class="built_in">set</span> -o nounset</span><br><span class="line"><span class="built_in">set</span> -o pipefail</span><br><span class="line"></span><br><span class="line"><span class="built_in">readonly</span> SOURCE_DIR=<span class="string">&quot;<span class="variable">$&#123;HOME&#125;</span>&quot;</span></span><br><span class="line"><span class="built_in">readonly</span> BACKUP_DIR=<span class="string">&quot;/mnt/data/backups&quot;</span></span><br><span class="line"><span class="built_in">readonly</span> DATETIME=<span class="string">&quot;<span class="subst">$(date &#x27;+%Y-%m-%d_%H:%M:%S&#x27;)</span>&quot;</span></span><br><span class="line"><span class="built_in">readonly</span> BACKUP_PATH=<span class="string">&quot;<span class="variable">$&#123;BACKUP_DIR&#125;</span>/<span class="variable">$&#123;DATETIME&#125;</span>&quot;</span></span><br><span class="line"><span class="built_in">readonly</span> LATEST_LINK=<span class="string">&quot;<span class="variable">$&#123;BACKUP_DIR&#125;</span>/latest&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="string">&quot;<span class="variable">$&#123;BACKUP_DIR&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line">rsync -av --delete \</span><br><span class="line">  <span class="string">&quot;<span class="variable">$&#123;SOURCE_DIR&#125;</span>/&quot;</span> \</span><br><span class="line">  --link-dest <span class="string">&quot;<span class="variable">$&#123;LATEST_LINK&#125;</span>&quot;</span> \</span><br><span class="line">  --exclude=<span class="string">&quot;.cache&quot;</span> \</span><br><span class="line">  <span class="string">&quot;<span class="variable">$&#123;BACKUP_PATH&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">rm</span> -rf <span class="string">&quot;<span class="variable">$&#123;LATEST_LINK&#125;</span>&quot;</span></span><br><span class="line"><span class="built_in">ln</span> -s <span class="string">&quot;<span class="variable">$&#123;BACKUP_PATH&#125;</span>&quot;</span> <span class="string">&quot;<span class="variable">$&#123;LATEST_LINK&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
-</blockquote>
+
 <p>上面脚本中，每一次同步都会生成一个新目录<code>$&#123;BACKUP_DIR&#125;/$&#123;DATETIME&#125;</code>，并将软链接<code>$&#123;BACKUP_DIR&#125;/latest</code>指向这个目录。下一次备份时，就将<code>$&#123;BACKUP_DIR&#125;/latest</code>作为基准目录，生成新的备份目录。最后，再将软链接<code>$&#123;BACKUP_DIR&#125;/latest</code>指向新的备份目录。</p>
 <h2 id="七、配置项"><a href="#七、配置项" class="headerlink" title="七、配置项"></a>七、配置项</h2><p><code>-a</code>、<code>--archive</code>参数表示存档模式，保存所有的元数据，比如修改时间（modification time）、权限、所有者等，并且软链接也会同步过去。</p>
 <p><code>--append</code>参数指定文件接着上次中断的地方，继续传输。</p>
@@ -449,10 +424,15 @@ var _hmt = _hmt || [];
   
     
 <nav id="article-nav">
-  <a class="article-nav-btn left  disabled "
+  <a class="article-nav-btn left "
+    
+      href="/2024/04/26/linux/%5BChatGLM%5D%20Linux%20delayed%20write/"
+      title="Linux delayed write"
      >
     <i class="fa-solid fa-angle-left"></i>
     <p class="title-text">
+      
+        Linux delayed write
         
     </p>
   </a>
