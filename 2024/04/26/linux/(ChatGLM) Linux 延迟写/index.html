@@ -53,23 +53,23 @@ var _hmt = _hmt || [];
 
 
   
-  <title>How to use free command in Linux | Systemcall Station</title>
+  <title>(ChatGLM) Linux 延迟写 | Systemcall Station</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
   <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
 
-  <meta name="description" content="The free command in Linux and UNIX systems is used to display the current system’s memory usage. It provides detailed information about physical memory, swap space, and kernel buffers. Here is a detai">
+  <meta name="description" content="在Linux内核中，延迟写（deferred write）是一种优化机制，它允许系统将多个写操作聚集在一起，减少对存储设备的实际I&#x2F;O操作次数。这种机制可以提高系统的整体性能，因为它减少了磁盘I&#x2F;O的频率，并且可以更好地利用磁盘的顺序写性能。以下是Linux内核中延迟写的过程，以及五个主要场景的说明： 延迟写过程： 写操作发起：当应用程序执行写操作时，数据首先被写入到页缓存（p">
 <meta property="og:type" content="article">
-<meta property="og:title" content="How to use free command in Linux">
-<meta property="og:url" content="https://neutionwei.github.io/2024/03/27/linux/How%20to%20use%20free%20command%20in%20Linux/index.html">
+<meta property="og:title" content="(ChatGLM) Linux 延迟写">
+<meta property="og:url" content="https://neutionwei.github.io/2024/04/26/linux/(ChatGLM)%20Linux%20%E5%BB%B6%E8%BF%9F%E5%86%99/index.html">
 <meta property="og:site_name" content="Systemcall Station">
-<meta property="og:description" content="The free command in Linux and UNIX systems is used to display the current system’s memory usage. It provides detailed information about physical memory, swap space, and kernel buffers. Here is a detai">
+<meta property="og:description" content="在Linux内核中，延迟写（deferred write）是一种优化机制，它允许系统将多个写操作聚集在一起，减少对存储设备的实际I&#x2F;O操作次数。这种机制可以提高系统的整体性能，因为它减少了磁盘I&#x2F;O的频率，并且可以更好地利用磁盘的顺序写性能。以下是Linux内核中延迟写的过程，以及五个主要场景的说明： 延迟写过程： 写操作发起：当应用程序执行写操作时，数据首先被写入到页缓存（p">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-03-27T00:16:43.000Z">
-<meta property="article:modified_time" content="2024-04-07T09:52:14.174Z">
+<meta property="article:published_time" content="2024-04-26T03:13:43.000Z">
+<meta property="article:modified_time" content="2024-04-30T05:59:57.000Z">
 <meta property="article:author" content="Neutionwei">
-<meta property="article:tag" content="free">
+<meta property="article:tag" content="delayed write">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="Systemcall Station" type="application/atom+xml">
@@ -257,7 +257,7 @@ var _hmt = _hmt || [];
        
 
 
-<article id="post-linux/How to use free command in Linux" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+<article id="post-linux/(ChatGLM) Linux 延迟写" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
     
    
@@ -270,7 +270,7 @@ var _hmt = _hmt || [];
   
     
       <h1 class="p-name article-title" itemprop="headline name">
-        How to use free command in Linux
+        (ChatGLM) Linux 延迟写
       </h1>
     
   
@@ -278,7 +278,7 @@ var _hmt = _hmt || [];
 
         <div class='meta-info-bar'>
           <div class="meta-info">
-  <time class="dt-published" datetime="2024-03-27T00:16:43.000Z" itemprop="datePublished">2024-03-27</time>
+  <time class="dt-published" datetime="2024-04-26T03:13:43.000Z" itemprop="datePublished">2024-04-26</time>
 </div>
           <div class="need-seperator meta-info">
             <div class="meta-cate-flex">
@@ -289,91 +289,98 @@ var _hmt = _hmt || [];
   
           </div>
           <div class="wordcount need-seperator meta-info">
-            3.5k words 
+            3.4k words 
           </div>
         </div>
         
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/free/" rel="tag">free</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/delayed-write/" rel="tag">delayed write</a></li></ul>
 
       </header>
       <div class="e-content article-entry" itemprop="articleBody">
         
-          <p>The <code>free</code> command in Linux and UNIX systems is used to display the current system’s memory usage. It provides detailed information about physical memory, swap space, and kernel buffers. Here is a detailed explanation of the output of the <code>free</code> command:</p>
-<h3 id="Basic-Output"><a href="#Basic-Output" class="headerlink" title="Basic Output"></a>Basic Output</h3><p>When you run the <code>free</code> command, it typically displays information in the following format:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ free -hwt</span><br><span class="line">              total        used        free      shared     buffers       cache   available</span><br><span class="line">Mem:           15Gi       8.1Gi       221Mi       1.2Gi       328Mi       6.7Gi       5.7Gi</span><br><span class="line">Swap:          15Gi       3.6Gi        12Gi</span><br><span class="line">Total:         31Gi        11Gi        12Gi</span><br></pre></td></tr></table></figure>
-
-<p>The breakdown is as follows:</p>
-<ul>
-<li><p><strong>Total Memory (total)</strong>: The system has a total of 15GB of physical memory.</p>
-</li>
-<li><p><strong>Used Memory (used)</strong>: Currently, 8.1GB of physical memory is being used.</p>
-</li>
-<li><p><strong>Free Memory (free)</strong>: There are 221MB of physical memory that is free and unused.</p>
-</li>
-<li><p><strong>Shared Memory (shared)</strong>: There is 1.2GB of memory marked as shared, typically used by multiple processes.</p>
-</li>
-<li><p><strong>Buffers (buffers)</strong>: The system is using 328MB of memory for buffers, which is usually for file system buffering.</p>
-</li>
-<li><p><strong>Cache (cache)</strong>: The system is using 6.7GB of memory for cache, primarily for storing file system and other data to speed up access.</p>
-</li>
-<li><p><strong>Available Memory (available)</strong>: The system has 5.7GB of memory that is available, which includes free and cache memory that the system can use when needed.</p>
-</li>
-<li><p><strong>Swap Space (Swap)</strong>: The system has 15GB of swap space configured, with 3.6GB currently in use and 12GB available.</p>
-</li>
-<li><p><strong>Total (Total)</strong>: Combining physical memory and swap space, there is a total of 31GB of memory and swap space.</p>
-</li>
-<li><p><strong>Used Total (used)</strong>: The system has used 11GB of memory and swap space.</p>
-</li>
-<li><p><strong>Free Total (free)</strong>: There is 12GB of memory and swap space that is free.</p>
-</li>
+          <p>在Linux内核中，延迟写（deferred write）是一种优化机制，它允许系统将多个写操作聚集在一起，减少对存储设备的实际I&#x2F;O操作次数。这种机制可以提高系统的整体性能，因为它减少了磁盘I&#x2F;O的频率，并且可以更好地利用磁盘的顺序写性能。以下是Linux内核中延迟写的过程，以及五个主要场景的说明：</p>
+<h3 id="延迟写过程："><a href="#延迟写过程：" class="headerlink" title="延迟写过程："></a>延迟写过程：</h3><ol>
+<li><strong>写操作发起</strong>：当应用程序执行写操作时，数据首先被写入到页缓存（page cache）中，而不是立即写入磁盘。</li>
+<li><strong>脏页标记</strong>：写入页缓存的数据页被标记为“脏页”，表示它们在内存中的内容与磁盘上的内容不同。</li>
+<li><strong>回写触发</strong>：脏页在页缓存中积累一段时间后，或者当系统内存不足需要释放页面时，内核的回写机制（pdflush或flusher threads）会将脏页写入磁盘。</li>
+<li><strong>写回磁盘</strong>：回写进程将脏页写入磁盘，并更新相关的元数据。这个过程可以是同步的或异步的，取决于系统的配置和应用程序的需求。</li>
+<li><strong>脏页清理</strong>：一旦脏页被成功写入磁盘，它们就被标记为干净，页缓存中的这些页面可以被重新用于其他目的。</li>
+</ol>
+<h3 id="五个主要场景："><a href="#五个主要场景：" class="headerlink" title="五个主要场景："></a>五个主要场景：</h3><ol>
+<li><strong>文件系统缓存</strong>：当应用程序写入文件时，数据首先被缓存在内存中的页缓存中。这些数据在未来的某个时间点被回写到磁盘，可能是通过定期同步或当缓存达到一定阈值时。</li>
+<li><strong>日志文件系统</strong>：对于使用日志的文件系统（如ext3、ext4、XFS等），元数据和数据的更改首先被记录在日志中。这些更改在事务提交时被延迟写回磁盘，以提高文件系统的性能和可靠性。</li>
+<li><strong>数据库写操作</strong>：数据库管理系统（如MySQL、PostgreSQL）通常使用自己的缓冲池和写前日志（WAL）来优化写操作。这些系统会在合适的时机将数据从缓冲池延迟写回磁盘。</li>
+<li><strong>虚拟内存交换</strong>：当系统内存不足时，Linux内核可能会选择将不常访问的内存页交换到磁盘上。这个过程涉及到延迟写，因为交换页在被实际写入磁盘之前可能会在交换缓存中停留一段时间。</li>
+<li><strong>网络文件系统</strong>：在网络文件系统（如NFS）中，客户端可能会缓存对服务器的写操作，并在稍后某个时间点将它们发送到服务器。这减少了网络通信的次数，提高了性能。</li>
+</ol>
+<p>延迟写机制是Linux内核中一个重要的性能优化特性，它通过合理地管理数据写入磁盘的时机，减少了磁盘I&#x2F;O的负载，并提高了系统的吞吐量和响应速度。然而，这也意味着在系统崩溃时，可能会丢失在页缓存中尚未写入磁盘的数据，因此需要仔细配置同步和备份策略来保证数据的安全性。</p>
+<hr>
+<p>在Linux系统中，提供了多个接口用于执行同步写操作，以确保数据被立即写入磁盘。以下是一些常用的接口及其优缺点：</p>
+<ol>
+<li><strong>fsync()</strong><ul>
+<li><strong>描述</strong>：<code>fsync()</code>系统调用会同步一个文件的磁盘状态，确保所有对该文件的数据和元数据的更改都被写入磁盘。</li>
+<li><strong>优点</strong>：可以确保文件的所有更改被持久化，适合关键数据的同步。</li>
+<li><strong>缺点</strong>：每个<code>fsync()</code>调用都会触发磁盘I&#x2F;O，性能开销较大。</li>
 </ul>
-<h3 id="Physical-Memory-Space"><a href="#Physical-Memory-Space" class="headerlink" title="Physical Memory Space"></a>Physical Memory Space</h3><p>The columns are as follows:</p>
-<ul>
-<li><strong>total</strong>: The total amount of memory in the system.</li>
-<li><strong>used</strong>: The amount of memory currently in use, including buffers and cache.</li>
-<li><strong>free</strong>: The amount of completely free memory, excluding swap space.</li>
-<li><strong>shared</strong>: The total amount of memory shared by multiple processes, which is used by both physical memory and swap space.</li>
-<li><strong>buffers</strong>: The amount of memory used by the kernel for buffers, used for file system buffering.</li>
-<li><strong>cache</strong>: The amount of memory used by the kernel for caching, used for file system caching.</li>
+</li>
+<li><strong>fdatasync()</strong><ul>
+<li><strong>描述</strong>：<code>fdatasync()</code>类似于<code>fsync()</code>，但它只同步文件的数据部分，不强制更新文件的元数据，除非必要。</li>
+<li><strong>优点</strong>：如果文件元数据没有改变，可以减少不必要的磁盘I&#x2F;O。</li>
+<li><strong>缺点</strong>：如果文件元数据发生变化，<code>fdatasync()</code>的效果与<code>fsync()</code>相同。</li>
 </ul>
-<h3 id="Swap-Space"><a href="#Swap-Space" class="headerlink" title="Swap Space"></a>Swap Space</h3><ul>
-<li><strong>total</strong>: The total amount of swap space.</li>
-<li><strong>used</strong>: The amount of swap space currently in use.</li>
-<li><strong>free</strong>: The amount of unused swap space.</li>
+</li>
+<li><strong>sync()</strong><ul>
+<li><strong>描述</strong>：<code>sync()</code>系统调用会触发将所有脏页缓存（包括文件数据和元数据）写入磁盘的操作。</li>
+<li><strong>优点</strong>：可以一次性同步所有脏页，适合在关机或执行重要操作前使用。</li>
+<li><strong>缺点</strong>：<code>sync()</code>不会等待磁盘写操作完成，如果需要确保数据确实写入磁盘，需要跟随一个<code>fsync()</code>或<code>fdatasync()</code>调用。</li>
 </ul>
-<h3 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h3><h4 id="Display-Unit-Options"><a href="#Display-Unit-Options" class="headerlink" title="Display Unit Options"></a>Display Unit Options</h4><ul>
-<li><strong>-b, –bytes</strong>: Display memory usage in bytes.</li>
-<li><strong>–kilo</strong>: Display memory usage in kilobytes (KB).</li>
-<li><strong>–mega</strong>: Display memory usage in megabytes (MB).</li>
-<li><strong>–giga</strong>: Display memory usage in gigabytes (GB).</li>
-<li><strong>–tera</strong>: Display memory usage in terabytes (TB).</li>
-<li><strong>–peta</strong>: Display memory usage in petabytes (PB).</li>
-<li><strong>-k, –kibi</strong>: Display memory usage in kibibytes (KiB), 1 KiB &#x3D; 1024 bytes.</li>
-<li><strong>-m, –mebi</strong>: Display memory usage in mebibytes (MiB), 1 MiB &#x3D; 1024 KiB.</li>
-<li><strong>-g, –gibi</strong>: Display memory usage in gibibytes (GiB), 1 GiB &#x3D; 1024 MiB.</li>
-<li><strong>–tebi</strong>: Display memory usage in tebibytes (TiB), 1 TiB &#x3D; 1024 GiB.</li>
-<li><strong>–pebi</strong>: Display memory usage in pebibytes (PiB), 1 PiB &#x3D; 1024 TiB.</li>
+</li>
+<li><strong>syncfs()</strong><ul>
+<li><strong>描述</strong>：<code>syncfs()</code>系统调用会同步一个指定文件系统的磁盘状态，类似于<code>sync()</code>，但只影响指定的文件系统。</li>
+<li><strong>优点</strong>：可以针对特定文件系统进行同步，而不影响其他文件系统。</li>
+<li><strong>缺点</strong>：与<code>sync()</code>一样，不会等待磁盘写操作完成。</li>
 </ul>
-<h4 id="Display-Format-Options"><a href="#Display-Format-Options" class="headerlink" title="Display Format Options"></a>Display Format Options</h4><ul>
-<li><strong>-h, –human</strong>: Display memory usage in a human-readable format, such as “1.5G” instead of “1536M”.</li>
-<li><strong>–si</strong>: Use the International System of Units (powers of 1000) instead of the binary unit system (powers of 1024).</li>
+</li>
+<li><strong>open() 的 O_SYNC 标志</strong><ul>
+<li><strong>描述</strong>：在打开文件时使用<code>O_SYNC</code>标志，会使得所有对该文件的写操作都自动同步到磁盘。</li>
+<li><strong>优点</strong>：对于需要严格数据一致性的应用程序，可以保证每次写操作都是同步的。</li>
+<li><strong>缺点</strong>：会显著降低写操作的性能，因为每次写都需要等待磁盘确认。</li>
 </ul>
-<h4 id="Other-Options"><a href="#Other-Options" class="headerlink" title="Other Options"></a>Other Options</h4><ul>
-<li><strong>-l, –lohi</strong>: Display detailed low and high memory statistics.</li>
-<li><strong>-t, –total</strong>: Display the total of RAM and swap space.</li>
-<li><strong>-s N, –seconds N</strong>: Repeat printing memory usage every N seconds.</li>
-<li><strong>-c N, –count N</strong>: Repeat printing memory usage N times, then exit.</li>
-<li><strong>-w, –wide</strong>: Wide format output, without limiting the width of each column.</li>
+</li>
+<li><strong>pwrite() 的 SYNC_IO 标志</strong><ul>
+<li><strong>描述</strong>：在使用<code>pwrite()</code>系统调用进行写入时，如果指定了<code>SYNC_IO</code>标志，写操作会同步到磁盘。</li>
+<li><strong>优点</strong>：提供了细粒度的控制，可以在需要时选择性地执行同步写操作。</li>
+<li><strong>缺点</strong>：与<code>fsync()</code>类似，每个同步写操作都会带来性能开销。<br>这些接口在确保数据持久化方面各有优缺点，选择合适的接口取决于应用程序对数据一致性和性能的需求。通常，对于非关键数据，可以采用异步写操作以提高性能，而对于关键数据，则应使用同步写操作以确保数据的可靠性。</li>
 </ul>
-<h4 id="Help-and-Version-Information-Options"><a href="#Help-and-Version-Information-Options" class="headerlink" title="Help and Version Information Options"></a>Help and Version Information Options</h4><ul>
-<li><strong>–help</strong>: Display help information and exit.</li>
-<li><strong>-V, –version</strong>: Output version information and exit.</li>
+</li>
+</ol>
+<hr>
+<p>文件的元数据（Metadata）是指描述文件自身特征的信息，它不包含文件数据的内容，但提供了文件数据的管理和解释所需的信息。元数据通常由文件系统管理，并且在文件创建、修改或删除时自动更新。文件的元数据包括但不限于以下内容：</p>
+<ol>
+<li><strong>文件大小</strong>：文件占据的存储空间大小。</li>
+<li><strong>创建时间</strong>：文件被创建的日期和时间。</li>
+<li><strong>最后修改时间</strong>：文件最后被修改的日期和时间。</li>
+<li><strong>最后访问时间</strong>：文件最后被访问的日期和时间。</li>
+<li><strong>文件权限</strong>：定义了不同用户对文件的访问权限（读、写、执行）。</li>
+<li><strong>文件所有者</strong>：文件的所有者用户ID。</li>
+<li><strong>文件所属组</strong>：文件的所有者组ID。</li>
+<li><strong>文件类型</strong>：指示文件是常规文件、目录、符号链接等。</li>
+<li><strong>inode号码</strong>：文件系统分配给文件的唯一标识符。</li>
+<li><strong>链接计数</strong>：硬链接的数量，即有多少文件名指向这个inode。</li>
+<li><strong>文件块映射</strong>：文件数据存储在磁盘上的具体位置。</li>
+<li><strong>扩展属性</strong>：如安全性标签、额外的权限信息等。<br>元数据对于文件系统的正常运行至关重要，因为它允许操作系统和应用程序检索和管理文件。例如，文件权限元数据决定了哪些用户可以读取、写入或执行文件；文件大小和块映射信息允许快速定位文件内容；而时间戳则可以用于备份策略和文件版本控制。<br>在Linux系统中，可以通过<code>ls -l</code>、<code>stat</code>等命令查看文件的元数据。例如，使用<code>stat</code>命令可以查看文件的详细信息，包括大小、创建时间、修改时间、访问时间、权限等元数据。</li>
+</ol>
+<hr>
+<p><code>fflush</code>是C标准库函数，用于处理文件流（file streams）的缓冲区。在讨论<code>fflush</code>与前面提到的同步写接口（如<code>fsync</code>、<code>fdatasync</code>、<code>sync</code>等）的区别之前，需要明确文件流缓冲区和文件系统缓存（页缓存）的区别。</p>
+<h3 id="文件流缓冲区（File-Stream-Buffer）"><a href="#文件流缓冲区（File-Stream-Buffer）" class="headerlink" title="文件流缓冲区（File Stream Buffer）"></a>文件流缓冲区（File Stream Buffer）</h3><p>当程序使用标准I&#x2F;O库（如<code>stdio.h</code>中的函数）进行文件读写时，数据会首先被写入到文件流缓冲区中。这个缓冲区是用户空间的一部分，它是为了减少系统调用次数和磁盘I&#x2F;O操作而设计的。只有在特定情况下，缓冲区中的数据才会被刷新（flushed）到文件系统缓存中。</p>
+<h3 id="文件系统缓存（Page-Cache）"><a href="#文件系统缓存（Page-Cache）" class="headerlink" title="文件系统缓存（Page Cache）"></a>文件系统缓存（Page Cache）</h3><p>文件系统缓存是内核空间的一部分，它缓存了文件的数据和元数据。当应用程序写入数据时，数据可能会先被写入到这个缓存中，然后由内核决定何时将这些数据写入磁盘。</p>
+<h3 id="fflush函数"><a href="#fflush函数" class="headerlink" title="fflush函数"></a><code>fflush</code>函数</h3><p><code>fflush</code>函数的作用是强制将文件流缓冲区中的数据刷新到文件系统缓存中。调用<code>fflush</code>并不会立即触发数据写入磁盘，它只是确保数据已经从用户空间的缓冲区移动到了内核空间的文件系统缓存中。如果要确保数据确实写入磁盘，需要在<code>fflush</code>之后调用同步写接口（如<code>fsync</code>或<code>fdatasync</code>）。</p>
+<h3 id="同步写接口"><a href="#同步写接口" class="headerlink" title="同步写接口"></a>同步写接口</h3><p>同步写接口如<code>fsync</code>、<code>fdatasync</code>和<code>sync</code>是系统调用，它们的作用是确保文件系统缓存中的数据被写入磁盘。<code>fsync</code>和<code>fdatasync</code>针对特定文件或文件描述符，而<code>sync</code>则影响整个系统的文件系统缓存。</p>
+<h3 id="总结区别"><a href="#总结区别" class="headerlink" title="总结区别"></a>总结区别</h3><ul>
+<li><code>fflush</code>只是将文件流缓冲区中的数据移动到文件系统缓存，不保证数据写入磁盘。</li>
+<li>同步写接口（<code>fsync</code>、<code>fdatasync</code>、<code>sync</code>）确保文件系统缓存中的数据被写入磁盘，保证数据的持久化。</li>
 </ul>
-<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><p>For example, to display memory usage in MB and in a human-readable format, you can run:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">free -m -h</span><br></pre></td></tr></table></figure>
-
-<p>This will output memory usage with memory quantities displayed in MB and in a readable format (e.g., 1.5G).</p>
-<p>The <code>free</code> command is an essential tool for system administrators and users to monitor system memory usage. Regularly checking the output of the <code>free</code> command ensures that the system has enough available memory to run applications, thus avoiding performance issues.</p>
+<p>因此，如果你想要确保文件数据确实写入磁盘，你应该在调用<code>fflush</code>之后使用<code>fsync</code>或<code>fdatasync</code>。例如，一个典型的场景是在写入关键数据后调用<code>fflush(stdout)</code>，然后调用<code>fsync(fileno(stdout))</code>以确保数据安全地存储在磁盘上。</p>
 
         
       </div>
@@ -388,25 +395,25 @@ var _hmt = _hmt || [];
 <nav id="article-nav">
   <a class="article-nav-btn left "
     
-      href="/2024/04/07/headphone/What%20are%20the%20parameters%20of%20the%20over-ear%20headphone/"
-      title="What are the parameters of the over-ear headphone"
+      href="/2024/04/26/linux/Linux%20%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E2%80%94%E2%80%94pwrite/"
+      title="Linux 系统调用——pwrite"
      >
     <i class="fa-solid fa-angle-left"></i>
     <p class="title-text">
       
-        What are the parameters of the over-ear headphone
+        Linux 系统调用——pwrite
         
     </p>
   </a>
   <a class="article-nav-btn right "
     
-      href="/2024/03/09/hello-world/"
-      title="Hello World"
+      href="/2024/04/25/linux/rsync%20%E7%94%A8%E6%B3%95%E6%95%99%E7%A8%8B/"
+      title="rsync 用法教程"
      >
 
     <p class="title-text">
       
-        Hello World
+        rsync 用法教程
         
     </p>
     <i class="fa-solid fa-angle-right"></i>
