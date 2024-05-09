@@ -67,7 +67,7 @@ var _hmt = _hmt || [];
 <meta property="og:description" content="在Linux系统中，有时候我们需要快速创建一个大文件来进行某些测试或验证操作，传统的方式可能会消耗大量的时间。在这种情况下，fallocate命令就成了一把利器。本文将深入探讨fallocate命令的用法、特点及实际应用场景。  1. fallocate命令简介fallocate命令用于预分配或取消分配文件空间。不同于其他方法，这个命令可以快速为文件分配空间，而不需要实际写入任何数据。这一特性使">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-05-08T03:31:43.000Z">
-<meta property="article:modified_time" content="2024-05-08T03:42:52.272Z">
+<meta property="article:modified_time" content="2024-05-09T03:33:43.959Z">
 <meta property="article:author" content="Neutionwei">
 <meta property="article:tag" content="fallocate">
 <meta name="twitter:card" content="summary">
@@ -239,6 +239,11 @@ var _hmt = _hmt || [];
                 shell
                 <div class="category-count">1</div>
             </a>
+        
+            <a class="category-link" href="/categories/openwrt/">
+                openwrt
+                <div class="category-count">1</div>
+            </a>
         </div>
     </div>
   </div>
@@ -249,7 +254,7 @@ var _hmt = _hmt || [];
   <div class="widget-wrap">
     <div class="widget">
       <h3 class="widget-title">Tags</h3>
-      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/boot/" rel="tag">boot</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/chatgpt/" rel="tag">chatgpt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/delayed-write/" rel="tag">delayed write</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/fallocate/" rel="tag">fallocate</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/ffmpeg/" rel="tag">ffmpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/free/" rel="tag">free</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/github/" rel="tag">github</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/headphone-parameters/" rel="tag">headphone parameters</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/jpeg/" rel="tag">jpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/over-ear-headphone/" rel="tag">over-ear headphone</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/pwrite/" rel="tag">pwrite</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rk-mpp/" rel="tag">rk-mpp</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rsync/" rel="tag">rsync</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/shell/" rel="tag">shell</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/yuv/" rel="tag">yuv</a></li></ul>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/boot/" rel="tag">boot</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/chatgpt/" rel="tag">chatgpt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/delayed-write/" rel="tag">delayed write</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/fallocate/" rel="tag">fallocate</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/ffmpeg/" rel="tag">ffmpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/free/" rel="tag">free</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/github/" rel="tag">github</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/headphone-parameters/" rel="tag">headphone parameters</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/jpeg/" rel="tag">jpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/over-ear-headphone/" rel="tag">over-ear headphone</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/procd/" rel="tag">procd</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/pwrite/" rel="tag">pwrite</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rk-mpp/" rel="tag">rk-mpp</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rsync/" rel="tag">rsync</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/shell/" rel="tag">shell</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/yuv/" rel="tag">yuv</a></li></ul>
     </div>
   </div>
 
@@ -340,10 +345,15 @@ var _hmt = _hmt || [];
   
     
 <nav id="article-nav">
-  <a class="article-nav-btn left  disabled "
+  <a class="article-nav-btn left "
+    
+      href="/posts/2854974324/"
+      title="OpenWRT procd启动流程和脚本分析"
      >
     <i class="fa-solid fa-angle-left"></i>
     <p class="title-text">
+      
+        OpenWRT procd启动流程和脚本分析
         
     </p>
   </a>

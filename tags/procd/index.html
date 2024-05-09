@@ -53,23 +53,18 @@ var _hmt = _hmt || [];
 
 
   
-  <title>How to use free command in Linux | Systemcall Station</title>
+  <title>Tag: procd | Systemcall Station</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
   <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
 
-  <meta name="description" content="The free command in Linux and UNIX systems is used to display the current system’s memory usage. It provides detailed information about physical memory, swap space, and kernel buffers. Here is a detai">
-<meta property="og:type" content="article">
-<meta property="og:title" content="How to use free command in Linux">
-<meta property="og:url" content="https://neutionwei.github.io/posts/3800208386/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Systemcall Station">
+<meta property="og:url" content="https://neutionwei.github.io/tags/procd/index.html">
 <meta property="og:site_name" content="Systemcall Station">
-<meta property="og:description" content="The free command in Linux and UNIX systems is used to display the current system’s memory usage. It provides detailed information about physical memory, swap space, and kernel buffers. Here is a detai">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-03-27T00:16:43.000Z">
-<meta property="article:modified_time" content="2024-04-30T09:51:15.949Z">
 <meta property="article:author" content="Neutionwei">
-<meta property="article:tag" content="free">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="Systemcall Station" type="application/atom+xml">
@@ -266,189 +261,44 @@ var _hmt = _hmt || [];
     <div id="content-body">
        
 
-
-<article id="post-linux/How to use free command in Linux" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  
+<div class="archive-main-card">
+    <div class="archive-top">
+      <div class="main-title-bar">
+        <div class="main-title-dot"></div>
+        <h1 class="article-title">Archives</h1>
+      </div>    
+    </div>
     
-   
-  <div class="article-inner">
-    <div class="article-main">
-      <header class="article-header">
+    
+      
+      
         
-<div class="main-title-bar">
-  <div class="main-title-dot"></div>
-  
-    
-      <h1 class="p-name article-title" itemprop="headline name">
-        How to use free command in Linux
-      </h1>
-    
-  
-</div>
-
-        <div class='meta-info-bar'>
-          <div class="meta-info">
-  <time class="dt-published" datetime="2024-03-27T00:16:43.000Z" itemprop="datePublished">2024-03-27</time>
-</div>
-          <div class="need-seperator meta-info">
-            <div class="meta-cate-flex">
-  
-  <a class="meta-cate-link" href="/categories/linux/">linux</a>
-   
-</div>
-  
-          </div>
-          <div class="wordcount need-seperator meta-info">
-            3.5k words 
-          </div>
+        <div class="year-line">
+            <div class="year-num">2024</div>
+            <div class="dot-wrapper">
+                <div class="dot"></div>
+            </div>
+            <div class="article-count">1 article</div>
         </div>
-        
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/free/" rel="tag">free</a></li></ul>
-
-      </header>
-      <div class="e-content article-entry" itemprop="articleBody">
-        
-          <p>The <code>free</code> command in Linux and UNIX systems is used to display the current system’s memory usage. It provides detailed information about physical memory, swap space, and kernel buffers. Here is a detailed explanation of the output of the <code>free</code> command:</p>
-<h3 id="Basic-Output"><a href="#Basic-Output" class="headerlink" title="Basic Output"></a>Basic Output</h3><p>When you run the <code>free</code> command, it typically displays information in the following format:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ free -hwt</span><br><span class="line">              total        used        free      shared     buffers       cache   available</span><br><span class="line">Mem:           15Gi       8.1Gi       221Mi       1.2Gi       328Mi       6.7Gi       5.7Gi</span><br><span class="line">Swap:          15Gi       3.6Gi        12Gi</span><br><span class="line">Total:         31Gi        11Gi        12Gi</span><br></pre></td></tr></table></figure>
-
-<p>The breakdown is as follows:</p>
-<ul>
-<li><p><strong>Total Memory (total)</strong>: The system has a total of 15GB of physical memory.</p>
-</li>
-<li><p><strong>Used Memory (used)</strong>: Currently, 8.1GB of physical memory is being used.</p>
-</li>
-<li><p><strong>Free Memory (free)</strong>: There are 221MB of physical memory that is free and unused.</p>
-</li>
-<li><p><strong>Shared Memory (shared)</strong>: There is 1.2GB of memory marked as shared, typically used by multiple processes.</p>
-</li>
-<li><p><strong>Buffers (buffers)</strong>: The system is using 328MB of memory for buffers, which is usually for file system buffering.</p>
-</li>
-<li><p><strong>Cache (cache)</strong>: The system is using 6.7GB of memory for cache, primarily for storing file system and other data to speed up access.</p>
-</li>
-<li><p><strong>Available Memory (available)</strong>: The system has 5.7GB of memory that is available, which includes free and cache memory that the system can use when needed.</p>
-</li>
-<li><p><strong>Swap Space (Swap)</strong>: The system has 15GB of swap space configured, with 3.6GB currently in use and 12GB available.</p>
-</li>
-<li><p><strong>Total (Total)</strong>: Combining physical memory and swap space, there is a total of 31GB of memory and swap space.</p>
-</li>
-<li><p><strong>Used Total (used)</strong>: The system has used 11GB of memory and swap space.</p>
-</li>
-<li><p><strong>Free Total (free)</strong>: There is 12GB of memory and swap space that is free.</p>
-</li>
-</ul>
-<h3 id="Physical-Memory-Space"><a href="#Physical-Memory-Space" class="headerlink" title="Physical Memory Space"></a>Physical Memory Space</h3><p>The columns are as follows:</p>
-<ul>
-<li><strong>total</strong>: The total amount of memory in the system.</li>
-<li><strong>used</strong>: The amount of memory currently in use, including buffers and cache.</li>
-<li><strong>free</strong>: The amount of completely free memory, excluding swap space.</li>
-<li><strong>shared</strong>: The total amount of memory shared by multiple processes, which is used by both physical memory and swap space.</li>
-<li><strong>buffers</strong>: The amount of memory used by the kernel for buffers, used for file system buffering.</li>
-<li><strong>cache</strong>: The amount of memory used by the kernel for caching, used for file system caching.</li>
-</ul>
-<h3 id="Swap-Space"><a href="#Swap-Space" class="headerlink" title="Swap Space"></a>Swap Space</h3><ul>
-<li><strong>total</strong>: The total amount of swap space.</li>
-<li><strong>used</strong>: The amount of swap space currently in use.</li>
-<li><strong>free</strong>: The amount of unused swap space.</li>
-</ul>
-<h3 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h3><h4 id="Display-Unit-Options"><a href="#Display-Unit-Options" class="headerlink" title="Display Unit Options"></a>Display Unit Options</h4><ul>
-<li><strong>-b, –bytes</strong>: Display memory usage in bytes.</li>
-<li><strong>–kilo</strong>: Display memory usage in kilobytes (KB).</li>
-<li><strong>–mega</strong>: Display memory usage in megabytes (MB).</li>
-<li><strong>–giga</strong>: Display memory usage in gigabytes (GB).</li>
-<li><strong>–tera</strong>: Display memory usage in terabytes (TB).</li>
-<li><strong>–peta</strong>: Display memory usage in petabytes (PB).</li>
-<li><strong>-k, –kibi</strong>: Display memory usage in kibibytes (KiB), 1 KiB &#x3D; 1024 bytes.</li>
-<li><strong>-m, –mebi</strong>: Display memory usage in mebibytes (MiB), 1 MiB &#x3D; 1024 KiB.</li>
-<li><strong>-g, –gibi</strong>: Display memory usage in gibibytes (GiB), 1 GiB &#x3D; 1024 MiB.</li>
-<li><strong>–tebi</strong>: Display memory usage in tebibytes (TiB), 1 TiB &#x3D; 1024 GiB.</li>
-<li><strong>–pebi</strong>: Display memory usage in pebibytes (PiB), 1 PiB &#x3D; 1024 TiB.</li>
-</ul>
-<h4 id="Display-Format-Options"><a href="#Display-Format-Options" class="headerlink" title="Display Format Options"></a>Display Format Options</h4><ul>
-<li><strong>-h, –human</strong>: Display memory usage in a human-readable format, such as “1.5G” instead of “1536M”.</li>
-<li><strong>–si</strong>: Use the International System of Units (powers of 1000) instead of the binary unit system (powers of 1024).</li>
-</ul>
-<h4 id="Other-Options"><a href="#Other-Options" class="headerlink" title="Other Options"></a>Other Options</h4><ul>
-<li><strong>-l, –lohi</strong>: Display detailed low and high memory statistics.</li>
-<li><strong>-t, –total</strong>: Display the total of RAM and swap space.</li>
-<li><strong>-s N, –seconds N</strong>: Repeat printing memory usage every N seconds.</li>
-<li><strong>-c N, –count N</strong>: Repeat printing memory usage N times, then exit.</li>
-<li><strong>-w, –wide</strong>: Wide format output, without limiting the width of each column.</li>
-</ul>
-<h4 id="Help-and-Version-Information-Options"><a href="#Help-and-Version-Information-Options" class="headerlink" title="Help and Version Information Options"></a>Help and Version Information Options</h4><ul>
-<li><strong>–help</strong>: Display help information and exit.</li>
-<li><strong>-V, –version</strong>: Output version information and exit.</li>
-</ul>
-<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><p>For example, to display memory usage in MB and in a human-readable format, you can run:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">free -m -h</span><br></pre></td></tr></table></figure>
-
-<p>This will output memory usage with memory quantities displayed in MB and in a readable format (e.g., 1.5G).</p>
-<p>The <code>free</code> command is an essential tool for system administrators and users to monitor system memory usage. Regularly checking the output of the <code>free</code> command ensures that the system has enough available memory to run applications, thus avoiding performance issues.</p>
-
-        
-      </div>
-
-         
-    </div>
-    
-     
-  </div>
-  
-    
-<nav id="article-nav">
-  <a class="article-nav-btn left "
-    
-      href="/posts/3154893440/"
-      title="What are the parameters of the over-ear headphone"
-     >
-    <i class="fa-solid fa-angle-left"></i>
-    <p class="title-text">
       
-        What are the parameters of the over-ear headphone
-        
-    </p>
-  </a>
-  <a class="article-nav-btn right "
+      <a class="archive-article-link" href="/posts/2854974324/" title="OpenWRT procd启动流程和脚本分析">
+        <div class="date">05-09</div>
+        <div class="line">
+            <div class="dot"></div>
+        </div>
+        <div class="title">
+            <div class="title-inner">
+                
+                    OpenWRT procd启动流程和脚本分析
+                
+            </div>
+        </div>
+        <div class="tags">
+            #procd
+        </div>
+      </a>
     
-      href="/posts/1243066710/"
-      title="Hello World"
-     >
-
-    <p class="title-text">
-      
-        Hello World
-        
-    </p>
-    <i class="fa-solid fa-angle-right"></i>
-  </a>
-</nav>
-
-
-  
-</article>
-
-
-
-
-  <script src="https://cdn.staticfile.org/twikoo/1.6.26/twikoo.all.min.js"></script>
-  <div id="comment-card" class="comment-card">
-    <div class="main-title-bar">
-      <div class="main-title-dot"></div>
-      <div class="main-title">Comments </div>
-    </div>
-    <div id="tcomment"></div>
   </div>
-  <script>
-      twikoo.init({
-          envId: '',
-          el: '#tcomment',
-          region: '',
-          path: 'location.pathname',
-          lang: '',
-      })
-  </script>
-  
-
     </div>
     <div id="footer-wrapper">
       <footer id="footer">

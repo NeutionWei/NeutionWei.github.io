@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+
+
+<html theme="dark" showBanner="true" hasBanner="true" > 
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet">
+<link href="https://cdn.staticfile.org/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet">
+<script src="/js/color.global.min.js" ></script>
+<script src="/js/load-settings.js" ></script>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=true"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'true');
+</script>
+<!-- End Google Analytics -->
+
+  
+<!-- Global site tag (gtag.js) - Baidu Analytics -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?true";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- End Baidu Analytics -->
+
+  
+<!-- Gaug.es Analytics -->
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', 'true');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+<!-- End Gaug.es Analytics -->
+
+
+  
+  <title>OpenWRT procd启动流程和脚本分析 | Systemcall Station</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
+  <meta name="description" content="Linux内核执行start_kernel函数时会调用kernel_init来启动init进程，流程如下： 1start_kernel -&gt; rest_init -&gt; kernel_init -&gt; try_to_run_init_process  kernel_init部分代码如下： 123456789101112131415 994     if (execute_comman">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenWRT procd启动流程和脚本分析">
+<meta property="og:url" content="https://neutionwei.github.io/posts/2854974324/index.html">
+<meta property="og:site_name" content="Systemcall Station">
+<meta property="og:description" content="Linux内核执行start_kernel函数时会调用kernel_init来启动init进程，流程如下： 1start_kernel -&gt; rest_init -&gt; kernel_init -&gt; try_to_run_init_process  kernel_init部分代码如下： 123456789101112131415 994     if (execute_comman">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-05-09T07:17:43.000Z">
+<meta property="article:modified_time" content="2024-05-09T07:18:57.632Z">
+<meta property="article:author" content="Neutionwei">
+<meta property="article:tag" content="procd">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Systemcall Station" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon/music.png">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body>
+  
+  
+    
+<div id="banner" class="">
+  <img src="/images/banner/reona.jpg" itemprop="image">
+  <div id="banner-dim"></div>
+</div>
+ 
+   
+  <div id="main-grid" class="  ">
+    <div id="nav" class=""  >
+      <navbar id="navbar">
+  <nav id="title-nav">
+    <a href="/">
+      <div id="vivia-logo">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div>Systemcall Station </div>
+    </a>
+  </nav>
+  <nav id="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    <a id="theme-btn" class="nav-icon">
+      <span class="light-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M438.5-829.913v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-829.913Zm0 747.826v-48q0-17.452 11.963-29.476 11.964-12.024 29.326-12.024 17.363 0 29.537 12.024t12.174 29.476v48q0 17.452-11.963 29.476-11.964 12.024-29.326 12.024-17.363 0-29.537-12.024T438.5-82.087ZM877.913-438.5h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537t29.476-12.174h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T877.913-438.5Zm-747.826 0h-48q-17.452 0-29.476-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T82.087-521.5h48q17.452 0 29.476 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T130.087-438.5Zm660.174-290.87-34.239 32q-12.913 12.674-29.565 12.174-16.653-.5-29.327-13.174-12.674-12.673-12.554-28.826.12-16.152 12.794-28.826l33-35q12.913-12.674 30.454-12.674t30.163 12.847q12.709 12.846 12.328 30.826-.38 17.98-13.054 30.653ZM262.63-203.978l-32 34q-12.913 12.674-30.454 12.674t-30.163-12.847q-12.709-12.846-12.328-30.826.38-17.98 13.054-30.653l33.239-31q12.913-12.674 29.565-12.174 16.653.5 29.327 13.174 12.674 12.673 12.554 28.826-.12 16.152-12.794 28.826Zm466.74 33.239-32-33.239q-12.674-12.913-12.174-29.565.5-16.653 13.174-29.327 12.673-12.674 28.826-13.054 16.152-.38 28.826 12.294l35 33q12.674 12.913 12.674 30.454t-12.847 30.163q-12.846 12.709-30.826 12.328-17.98-.38-30.653-13.054ZM203.978-697.37l-34-33q-12.674-12.913-13.174-29.945-.5-17.033 12.174-29.707t31.326-13.293q18.653-.62 31.326 13.054l32 34.239q11.674 12.913 11.174 29.565-.5 16.653-13.174 29.327-12.673 12.674-28.826 12.554-16.152-.12-28.826-12.794ZM480-240q-100 0-170-70t-70-170q0-100 70-170t170-70q100 0 170 70t70 170q0 100-70 170t-170 70Zm-.247-82q65.703 0 111.475-46.272Q637-414.544 637-480.247t-45.525-111.228Q545.95-637 480.247-637t-111.475 45.525Q323-545.95 323-480.247t45.525 111.975Q414.05-322 479.753-322ZM481-481Z"/></svg></span>
+      <span class="dark-mode-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480.239-116.413q-152.63 0-258.228-105.478Q116.413-327.37 116.413-480q0-130.935 77.739-227.435t206.304-125.043q43.022-9.631 63.87 10.869t3.478 62.805q-8.891 22.043-14.315 44.463-5.424 22.42-5.424 46.689 0 91.694 64.326 155.879 64.325 64.186 156.218 64.186 24.369 0 46.978-4.946 22.609-4.945 44.413-14.076 42.826-17.369 62.967 1.142 20.142 18.511 10.511 61.054Q807.174-280 712.63-198.206q-94.543 81.793-232.391 81.793Zm0-95q79.783 0 143.337-40.217 63.554-40.218 95.793-108.283-15.608 4.044-31.097 5.326-15.49 1.283-31.859.805-123.706-4.066-210.777-90.539-87.071-86.473-91.614-212.092-.24-16.369.923-31.978 1.164-15.609 5.446-30.978-67.826 32.478-108.282 96.152Q211.652-559.543 211.652-480q0 111.929 78.329 190.258 78.329 78.329 190.258 78.329ZM466.13-465.891Z"/></svg></span>
+    </a>
+    
+      <a id="nav-rss-link" class="nav-icon mobile-hide" href="/atom.xml" title="RSS Feed">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M198-120q-25.846 0-44.23-18.384-18.384-18.385-18.384-44.23 0-25.846 18.384-44.23 18.384-18.385 44.23-18.385 25.846 0 44.23 18.385 18.384 18.384 18.384 44.23 0 25.845-18.384 44.23Q223.846-120 198-120Zm538.385 0q-18.846 0-32.923-13.769-14.076-13.769-15.922-33.23-8.692-100.616-51.077-188.654-42.385-88.039-109.885-155.539-67.5-67.501-155.539-109.885Q283-663.462 182.385-672.154q-19.461-1.846-33.23-16.23-13.769-14.385-13.769-33.846t14.076-32.922q14.077-13.461 32.923-12.23 120.076 8.692 226.038 58.768 105.961 50.077 185.73 129.846 79.769 79.769 129.846 185.731 50.077 105.961 58.769 226.038 1.231 18.846-12.538 32.922Q756.461-120 736.385-120Zm-252 0q-18.231 0-32.423-13.461t-18.653-33.538Q418.155-264.23 348.886-333.5q-69.27-69.27-166.501-84.423-20.077-4.462-33.538-18.961-13.461-14.5-13.461-33.346 0-19.076 13.884-33.23 13.884-14.153 33.115-10.922 136.769 15.384 234.384 112.999 97.615 97.615 112.999 234.384 3.231 19.23-10.538 33.115Q505.461-120 484.385-120Z"/></svg>
+      </a>
+    
+    <div id="nav-menu-btn" class="nav-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M177.37-252.282q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Zm0-186.218q-17.453 0-29.477-11.963-12.024-11.964-12.024-29.326 0-17.363 12.024-29.537T177.37-521.5h605.26q17.453 0 29.477 11.963 12.024 11.964 12.024 29.326 0 17.363-12.024 29.537T782.63-438.5H177.37Zm0-186.217q-17.453 0-29.477-11.964-12.024-11.963-12.024-29.326t12.024-29.537q12.024-12.174 29.477-12.174h605.26q17.453 0 29.477 11.964 12.024 11.963 12.024 29.326t-12.024 29.537q-12.024 12.174-29.477 12.174H177.37Z"/></svg>
+    </div>
+  </nav>
+</navbar>
+<div id="nav-dropdown" class="hidden">
+  <div id="dropdown-link-list">
+    
+      <a class="nav-dropdown-link" href="/">Home</a>
+    
+      <a class="nav-dropdown-link" href="/archives">Archives</a>
+    
+      <a class="nav-dropdown-link" href="/about">About</a>
+    
+    
+      <a class="nav-dropdown-link" href="/atom.xml" title="RSS Feed">RSS</a>
+     
+    </div>
+</div>
+<script>
+  let dropdownBtn = document.getElementById("nav-menu-btn");
+  let dropdownEle = document.getElementById("nav-dropdown");
+  dropdownBtn.onclick = function() {
+    dropdownEle.classList.toggle("hidden");
+  }
+</script>
+    </div>
+    <div id="sidebar-wrapper">
+      <sidebar id="sidebar">
+  
+    <div class="widget-wrap">
+  <div class="info-card">
+    <div class="avatar">
+      
+        <image src=/images/avatar/reona.jpg></image>
+      
+      <div class="img-dim"></div>
+    </div>
+    <div class="info">
+      <div class="username">Neutionwei </div>
+      <div class="dot"></div>
+      <div class="subtitle">An embedded geek & music enthusiast </div>
+      <div class="link-list">
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://twitter.com" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://blog.csdn.net/Neutionwei" title="CSDN"><i class="fa-solid fa-blog"></i></a>
+        
+          <a class="link-btn" target="_blank" rel="noopener" href="https://github.com/NeutionWei" title="GitHub"><i class="fa-brands fa-github"></i></a>
+         
+      </div>  
+    </div>
+  </div>
+</div>
+
+  
+  <div class="sticky">
+    
+      
+
+
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">Categories</h3>
+      <div class="category-box">
+            <a class="category-link" href="/categories/ai/">
+                ai
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/git/">
+                git
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/ffmpeg/">
+                ffmpeg
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/headphone/">
+                headphone
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/image/">
+                image
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/linux/">
+                linux
+                <div class="category-count">5</div>
+            </a>
+        
+            <a class="category-link" href="/categories/python3/">
+                python3
+                <div class="category-count">2</div>
+            </a>
+        
+            <a class="category-link" href="/categories/rk-mpp/">
+                rk-mpp
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/rk3399/">
+                rk3399
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/shell/">
+                shell
+                <div class="category-count">1</div>
+            </a>
+        
+            <a class="category-link" href="/categories/openwrt/">
+                openwrt
+                <div class="category-count">1</div>
+            </a>
+        </div>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap">
+    <div class="widget">
+      <h3 class="widget-title">Tags</h3>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/boot/" rel="tag">boot</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/chatgpt/" rel="tag">chatgpt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/delayed-write/" rel="tag">delayed write</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/fallocate/" rel="tag">fallocate</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/ffmpeg/" rel="tag">ffmpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/free/" rel="tag">free</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/github/" rel="tag">github</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/headphone-parameters/" rel="tag">headphone parameters</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/jpeg/" rel="tag">jpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/over-ear-headphone/" rel="tag">over-ear headphone</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/procd/" rel="tag">procd</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/pwrite/" rel="tag">pwrite</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rk-mpp/" rel="tag">rk-mpp</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rsync/" rel="tag">rsync</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/shell/" rel="tag">shell</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/yuv/" rel="tag">yuv</a></li></ul>
+    </div>
+  </div>
+
+
+    
+  </div>
+</sidebar>
+    </div>
+    <div id="content-body">
+       
+
+
+<article id="post-openwrt/OpenWRT procd启动流程和脚本分析" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+    
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 class="p-name article-title" itemprop="headline name">
+        OpenWRT procd启动流程和脚本分析
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2024-05-09T07:17:43.000Z" itemprop="datePublished">2024-05-09</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/openwrt/">openwrt</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            10k words 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/procd/" rel="tag">procd</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <p><strong>Linux</strong>内核执行<em>start_kernel</em>函数时会调用<em>kernel_init</em>来启动<strong>init</strong>进程，流程如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start_kernel -&gt; rest_init -&gt; kernel_init -&gt; try_to_run_init_process</span><br></pre></td></tr></table></figure>
+
+<p><em>kernel_init</em>部分代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> <span class="number">994</span>     <span class="keyword">if</span> (execute_command) &#123;</span><br><span class="line"> <span class="number">995</span>         ret = run_init_process(execute_command);</span><br><span class="line"> <span class="number">996</span>         <span class="keyword">if</span> (!ret)</span><br><span class="line"> <span class="number">997</span>             <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"> <span class="number">998</span>         panic(<span class="string">&quot;Requested init %s failed (error %d).&quot;</span>,</span><br><span class="line"> <span class="number">999</span>               execute_command, ret);</span><br><span class="line"><span class="number">1000</span>     &#125;</span><br><span class="line"><span class="number">1001</span>     <span class="keyword">if</span> (!try_to_run_init_process(<span class="string">&quot;/sbin/init&quot;</span>) ||</span><br><span class="line"><span class="number">1002</span>         !try_to_run_init_process(<span class="string">&quot;/etc/init&quot;</span>) ||</span><br><span class="line"><span class="number">1003</span>         !try_to_run_init_process(<span class="string">&quot;/bin/init&quot;</span>) ||</span><br><span class="line"><span class="number">1004</span>         !try_to_run_init_process(<span class="string">&quot;/bin/sh&quot;</span>))</span><br><span class="line"><span class="number">1005</span>         <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"><span class="number">1006</span></span><br><span class="line"><span class="number">1007</span>     panic(<span class="string">&quot;No working init found.  Try passing init= option to kernel. &quot;</span></span><br><span class="line"><span class="number">1008</span>           <span class="string">&quot;See Linux Documentation/init.txt for guidance.&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>接着分析<strong>openwrt</strong>中 <em>package&#x2F;system&#x2F;procd&#x2F;Makefile</em> ，这里将<strong>procd</strong>源码编译生成的可执行文件安装到文件系统的*&#x2F;sbin*目录中。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">define</span> Package/procd/install</span><br><span class="line">    <span class="variable">$(INSTALL_DIR)</span> $(1)/sbin $(1)/etc $(1)/lib/functions</span><br><span class="line"></span><br><span class="line">    <span class="variable">$(INSTALL_BIN)</span> <span class="variable">$(PKG_INSTALL_DIR)</span>/usr/sbin/&#123;init,procd,askfirst,udevtrigger&#125; $(1)/sbin/</span><br><span class="line">    <span class="variable">$(INSTALL_DATA)</span> <span class="variable">$(PKG_INSTALL_DIR)</span>/usr/lib/libsetlbf.so $(1)/lib</span><br><span class="line">    <span class="variable">$(INSTALL_BIN)</span> ./files/reload_config $(1)/sbin/</span><br><span class="line">    <span class="variable">$(INSTALL_DATA)</span> ./files/hotplug*.json $(1)/etc/</span><br><span class="line">    <span class="variable">$(INSTALL_DATA)</span> ./files/procd.sh $(1)/lib/functions/</span><br><span class="line"><span class="keyword">endef</span></span><br></pre></td></tr></table></figure>
+
+<p>查看<strong>procd</strong>源码目录的 <em>CMakeList.txt</em> ，以<strong>init</strong>为例，对应源码编译文件如下</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">56</span> <span class="keyword">IF</span>(DISABLE_INIT)</span><br><span class="line"><span class="number">57</span> <span class="keyword">ADD_DEFINITIONS</span>(-DDISABLE_INIT)</span><br><span class="line"><span class="number">58</span> <span class="keyword">ELSE</span>()</span><br><span class="line"><span class="number">59</span> <span class="keyword">ADD_EXECUTABLE</span>(init initd/init.c initd/early.c initd/preinit.c initd/mkdev.c watchdog.c</span><br><span class="line"><span class="number">60</span>     utils/utils.c <span class="variable">$&#123;SOURCES_ZRAM&#125;</span>)</span><br><span class="line"><span class="number">61</span> <span class="keyword">TARGET_LINK_LIBRARIES</span>(init <span class="variable">$&#123;LIBS&#125;</span>)</span><br><span class="line"><span class="number">62</span> <span class="keyword">INSTALL</span>(TARGETS init</span><br><span class="line"><span class="number">63</span>     RUNTIME DESTINATION <span class="variable">$&#123;CMAKE_INSTALL_SBINDIR&#125;</span></span><br><span class="line"><span class="number">64</span> )</span><br><span class="line"><span class="number">65</span></span><br><span class="line"><span class="number">66</span> <span class="keyword">ADD_EXECUTABLE</span>(udevtrigger plug/udevtrigger.c)</span><br><span class="line"><span class="number">67</span> <span class="keyword">INSTALL</span>(TARGETS udevtrigger</span><br><span class="line"><span class="number">68</span>     RUNTIME DESTINATION <span class="variable">$&#123;CMAKE_INSTALL_SBINDIR&#125;</span></span><br><span class="line"><span class="number">69</span> )</span><br><span class="line"><span class="number">70</span> <span class="keyword">ENDIF</span>()</span><br></pre></td></tr></table></figure>
+
+<p><em>main</em>函数入口位于<em>initd&#x2F;init.c</em></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">pid_t</span> pid;</span><br><span class="line"></span><br><span class="line">    ulog_open(ULOG_KMSG, LOG_DAEMON, <span class="string">&quot;init&quot;</span>);</span><br><span class="line"></span><br><span class="line">    sigaction(SIGTERM, &amp;sa_shutdown, <span class="literal">NULL</span>);</span><br><span class="line">    sigaction(SIGUSR1, &amp;sa_shutdown, <span class="literal">NULL</span>);</span><br><span class="line">    sigaction(SIGUSR2, &amp;sa_shutdown, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">	early();</span><br><span class="line">    </span><br><span class="line">	cmdline();</span><br><span class="line">    </span><br><span class="line">	watchdog_init(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">	pid = fork();</span><br><span class="line">    <span class="keyword">if</span> (!pid) &#123;</span><br><span class="line">        <span class="type">char</span> *kmod[] = &#123; <span class="string">&quot;/sbin/kmodloader&quot;</span>, <span class="string">&quot;/etc/modules-boot.d/&quot;</span>, <span class="literal">NULL</span> &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (debug &lt; <span class="number">3</span>)</span><br><span class="line">            patch_stdio(<span class="string">&quot;/dev/null&quot;</span>);</span><br><span class="line"></span><br><span class="line">        execvp(kmod[<span class="number">0</span>], kmod);</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to start kmodloader\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (pid &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to start kmodloader instance\n&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="type">int</span> i;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">1200</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (waitpid(pid, <span class="literal">NULL</span>, WNOHANG) &gt; <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            usleep(<span class="number">10</span> * <span class="number">1000</span>);</span><br><span class="line">            watchdog_ping();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	uloop_init();</span><br><span class="line">	preinit();</span><br><span class="line">    uloop_run();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><em>uloop_init</em>实现位于<strong>libubox</strong>源码<em>uloop.c</em></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">uloop_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (uloop_init_pollfd() &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (waker_init() &lt; <span class="number">0</span>) &#123;</span><br><span class="line">		uloop_done();</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">uloop_init_pollfd</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (poll_fd &gt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    poll_fd = epoll_create(<span class="number">32</span>);	</span><br><span class="line">    <span class="keyword">if</span> (poll_fd &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    fcntl(poll_fd, F_SETFD, fcntl(poll_fd, F_GETFD) | FD_CLOEXEC);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><em>preinit</em>实现位于<strong>procd</strong>源码文件<em>initd&#x2F;preinit.c</em></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">uloop_process</span> <span class="title">preinit_proc</span>;</span></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">uloop_process</span> <span class="title">plugd_proc</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span></span><br><span class="line"><span class="title function_">preinit</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> *init[] = &#123; <span class="string">&quot;/bin/sh&quot;</span>, <span class="string">&quot;/etc/preinit&quot;</span>, <span class="literal">NULL</span> &#125;;</span><br><span class="line">    <span class="type">char</span> *plug[] = &#123; <span class="string">&quot;/sbin/procd&quot;</span>, <span class="string">&quot;-h&quot;</span>, <span class="string">&quot;/etc/hotplug-preinit.json&quot;</span>, <span class="literal">NULL</span> &#125;;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line"></span><br><span class="line">    LOG(<span class="string">&quot;- preinit -\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    plugd_proc.cb = plugd_proc_cb;</span><br><span class="line">    plugd_proc.pid = fork();</span><br><span class="line">    <span class="keyword">if</span> (!plugd_proc.pid) &#123;</span><br><span class="line">        execvp(plug[<span class="number">0</span>], plug);</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to start plugd\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (plugd_proc.pid &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to start new plugd instance\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    uloop_process_add(&amp;plugd_proc);	</span><br><span class="line"></span><br><span class="line">    setenv(<span class="string">&quot;PREINIT&quot;</span>, <span class="string">&quot;1&quot;</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    fd = creat(<span class="string">&quot;/tmp/.preinit&quot;</span>, <span class="number">0600</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (fd &lt; <span class="number">0</span>)</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to create sentinel file\n&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        close(fd);</span><br><span class="line"></span><br><span class="line">    preinit_proc.cb = spawn_procd;</span><br><span class="line">    preinit_proc.pid = fork();</span><br><span class="line">    <span class="keyword">if</span> (!preinit_proc.pid) &#123;</span><br><span class="line">        execvp(init[<span class="number">0</span>], init);</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to start preinit\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (preinit_proc.pid &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to start new preinit instance\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    uloop_process_add(&amp;preinit_proc);</span><br><span class="line"></span><br><span class="line">    DEBUG(<span class="number">4</span>, <span class="string">&quot;Launched preinit instance, pid=%d\n&quot;</span>, (<span class="type">int</span>) preinit_proc.pid);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里fork出2个子进程，执行<em>procd</em>和 <em>&#x2F;etc&#x2F;preinit</em> ，</p>
+<ul>
+<li>首先看 <em>procd</em> ，因为带有参数 <em>“-h &#x2F;etc&#x2F;hotplug-preinit.json”</em> ，所以会执行<em>hotplug_run</em>函数。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ch;</span><br><span class="line">    <span class="type">char</span> *dbglvl = getenv(<span class="string">&quot;DBGLVL&quot;</span>);</span><br><span class="line">    <span class="type">int</span> ulog_channels = ULOG_KMSG;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dbglvl) &#123;</span><br><span class="line">        debug = atoi(dbglvl);</span><br><span class="line">        unsetenv(<span class="string">&quot;DBGLVL&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> ((ch = getopt(argc, argv, <span class="string">&quot;d:s:h:S&quot;</span>)) != <span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="keyword">switch</span> (ch) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;h&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> hotplug_run(optarg);</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;s&#x27;</span>:</span><br><span class="line">            ubus_socket = optarg;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;d&#x27;</span>:</span><br><span class="line">            debug = atoi(optarg);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;S&#x27;</span>:</span><br><span class="line">            ulog_channels = ULOG_STDIO;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span> usage(argv[<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ulog_open(ulog_channels, LOG_DAEMON, <span class="string">&quot;procd&quot;</span>);</span><br><span class="line"></span><br><span class="line">    setsid();</span><br><span class="line">    uloop_init();</span><br><span class="line">    procd_signal();</span><br><span class="line">    <span class="keyword">if</span> (getpid() != <span class="number">1</span>)</span><br><span class="line">        procd_connect_ubus();</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        procd_state_next();</span><br><span class="line">    uloop_run();</span><br><span class="line">    uloop_done();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><em>hotplug</em>实现如下，这里是建立<em>netlink</em>通信机制，完成用户层和内核的交互，监听内核的uevent事件。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">hotplug</span><span class="params">(<span class="type">char</span> *rules)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_nl</span> <span class="title">nls</span>;</span></span><br><span class="line">    <span class="type">int</span> nlbufsize = <span class="number">512</span> * <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line">    rule_file = strdup(rules);</span><br><span class="line">    <span class="built_in">memset</span>(&amp;nls,<span class="number">0</span>,<span class="keyword">sizeof</span>(<span class="keyword">struct</span> sockaddr_nl));</span><br><span class="line">    nls.nl_family = AF_NETLINK;</span><br><span class="line">    nls.nl_pid = getpid();</span><br><span class="line">    nls.nl_groups = <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((hotplug_fd.fd = socket(PF_NETLINK, SOCK_DGRAM | SOCK_CLOEXEC, NETLINK_KOBJECT_UEVENT)) == <span class="number">-1</span>) &#123;</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to open hotplug socket: %s\n&quot;</span>, strerror(errno));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (bind(hotplug_fd.fd, (<span class="type">void</span> *)&amp;nls, <span class="keyword">sizeof</span>(<span class="keyword">struct</span> sockaddr_nl))) &#123;</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to bind hotplug socket: %s\n&quot;</span>, strerror(errno));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (setsockopt(hotplug_fd.fd, SOL_SOCKET, SO_RCVBUFFORCE, &amp;nlbufsize, <span class="keyword">sizeof</span>(nlbufsize)))</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to resize receive buffer: %s\n&quot;</span>, strerror(errno));</span><br><span class="line"></span><br><span class="line">    json_script_init(&amp;jctx);</span><br><span class="line">    queue_proc.cb = queue_proc_cb;</span><br><span class="line">    uloop_fd_add(&amp;hotplug_fd, ULOOP_READ);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">hotplug_run</span><span class="params">(<span class="type">char</span> *rules)</span></span><br><span class="line">&#123;</span><br><span class="line">    uloop_init();</span><br><span class="line">    hotplug(rules);</span><br><span class="line">    uloop_run();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><em>&#x2F;etc&#x2F;preinit</em>脚本大致内容如下，先调用另外的shell脚本，获取函数定义</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">. /lib/functions.sh</span><br><span class="line">. /lib/functions/preinit.sh</span><br><span class="line">. /lib/functions/system.sh</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">初始化hook链</span></span><br><span class="line">boot_hook_init preinit_essential</span><br><span class="line">boot_hook_init preinit_main</span><br><span class="line">boot_hook_init failsafe</span><br><span class="line">boot_hook_init initramfs</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">依次执行/lib/preinit目录中的脚本，将函数调用添加到hook链中</span></span><br><span class="line">for pi_source_file in /lib/preinit/*; do</span><br><span class="line">    . $pi_source_file</span><br><span class="line">done</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">执行preinit_essential注册的hook链的所有函数</span></span><br><span class="line">boot_run_hook preinit_essential</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">执行preinit_main注册的hook链的所有函数</span></span><br><span class="line">boot_run_hook preinit_main</span><br></pre></td></tr></table></figure>
+
+<p><em>lib&#x2F;functions&#x2F;preinit.sh</em>中定义</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">boot_hook_init() &#123;</span><br><span class="line">    local hook=&quot;$&#123;1&#125;_hook&quot;</span><br><span class="line">    export -n &quot;PI_STACK_LIST=$&#123;PI_STACK_LIST:+$PI_STACK_LIST &#125;$hook&quot;</span><br><span class="line">    export -n &quot;$hook=&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><em>&#x2F;lib&#x2F;preinit&#x2F;10_sysinfo</em>中添加<em>hook</em>函数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">boot_hook_add preinit_main do_sysinfo_generic</span><br></pre></td></tr></table></figure>
+
+<p><em>&#x2F;etc&#x2F;preinit</em>脚本执行完成后，调用<em>spawn_procd</em></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span></span><br><span class="line"><span class="title function_">spawn_procd</span><span class="params">(<span class="keyword">struct</span> uloop_process *proc, <span class="type">int</span> ret)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> *wdt_fd = watchdog_fd();</span><br><span class="line">    <span class="type">char</span> *argv[] = &#123; <span class="string">&quot;/sbin/procd&quot;</span>, <span class="literal">NULL</span>&#125;;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">s</span>;</span></span><br><span class="line">    <span class="type">char</span> dbg[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (plugd_proc.pid &gt; <span class="number">0</span>)</span><br><span class="line">        kill(plugd_proc.pid, SIGKILL);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!stat(<span class="string">&quot;/tmp/sysupgrade&quot;</span>, &amp;s))</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>)</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    unsetenv(<span class="string">&quot;INITRAMFS&quot;</span>);</span><br><span class="line">    unsetenv(<span class="string">&quot;PREINIT&quot;</span>);</span><br><span class="line">    unlink(<span class="string">&quot;/tmp/.preinit&quot;</span>);</span><br><span class="line">    DEBUG(<span class="number">2</span>, <span class="string">&quot;Exec to real procd now\n&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (wdt_fd)</span><br><span class="line">        setenv(<span class="string">&quot;WDTFD&quot;</span>, wdt_fd, <span class="number">1</span>);</span><br><span class="line">    check_dbglvl();</span><br><span class="line">    <span class="keyword">if</span> (debug &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">snprintf</span>(dbg, <span class="number">2</span>, <span class="string">&quot;%d&quot;</span>, debug);</span><br><span class="line">        setenv(<span class="string">&quot;DBGLVL&quot;</span>, dbg, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//调用procd</span></span><br><span class="line">    execvp(argv[<span class="number">0</span>], argv);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时 <em>getpid()</em> 等于1，所以调用 <em>procd_state_next</em> ，进入到状态机处理中。</p>
+<p>对应的<em>procd log</em>如下，<em>procd state</em>不断迁移，包括 <strong>STATE_EARLY</strong> ， <strong>STATE_UBUS</strong> ，<strong>STATE_INIT</strong>等。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[    <span class="number">3.161338</span><span class="variable">@3</span>] <span class="symbol">init:</span> <span class="title class_">Console</span> is alive		</span><br><span class="line">[    <span class="number">3.173921</span><span class="variable">@3</span>] <span class="symbol">init:</span> <span class="title class_">Ping</span>		</span><br><span class="line">[    <span class="number">3.184207</span><span class="variable">@3</span>] <span class="symbol">init:</span> <span class="title class_">Ping</span></span><br><span class="line">[    <span class="number">3.192558</span><span class="variable">@1</span>] <span class="symbol">kmodloader:</span> loading kernel modules from /etc/modules-boot.d/*	</span><br><span class="line">[    <span class="number">3.194447</span><span class="variable">@3</span>] <span class="symbol">init:</span> <span class="title class_">Ping</span></span><br><span class="line">[    <span class="number">3.196209</span><span class="variable">@1</span>] <span class="symbol">kmodloader:</span> done loading kernel modules from /etc/modules-boot.d/*</span><br><span class="line">[    <span class="number">3.204716</span><span class="variable">@3</span>] <span class="symbol">init:</span> <span class="title class_">Ping</span></span><br><span class="line">[    <span class="number">3.206180</span><span class="variable">@3</span>] <span class="symbol">init:</span> - preinit -</span><br><span class="line">[    <span class="number">3.208671</span><span class="variable">@3</span>] <span class="symbol">init:</span> <span class="title class_">Launched</span> preinit instance, pid=<span class="number">1308</span></span><br><span class="line">[    <span class="number">3.302967</span><span class="variable">@3</span>] <span class="symbol">init:</span> <span class="title class_">Exec</span> to real procd now</span><br><span class="line">[    <span class="number">3.308865</span><span class="variable">@3</span>] <span class="symbol">procd:</span> - early -</span><br><span class="line">[    <span class="number">3.524654</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Finished</span> udevtrigger</span><br><span class="line">[    <span class="number">4.024929</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Coldplug</span> complete</span><br><span class="line">[    <span class="number">4.028061</span><span class="variable">@2</span>] <span class="symbol">procd:</span> - ubus -</span><br><span class="line">[    <span class="number">4.029198</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Create</span> service ubus</span><br><span class="line">[    <span class="number">4.030829</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Create</span> instance ubus::instance1</span><br><span class="line">[    <span class="number">4.032109</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Started</span> instance ubus::instance1[<span class="number">1554</span>]</span><br><span class="line">[    <span class="number">4.098895</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Connected</span> to ubus, id=459ede6c</span><br><span class="line">[    <span class="number">4.099092</span><span class="variable">@2</span>] <span class="symbol">procd:</span> - init -</span><br><span class="line">[    <span class="number">4.102474</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Launched</span> new askconsole action, pid=<span class="number">1555</span></span><br><span class="line">[    <span class="number">4.104142</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Launched</span> new askfirst action, pid=<span class="number">1556</span></span><br></pre></td></tr></table></figure>
+
+<p>以<strong>STATE_INIT</strong>为例，执行 <em>procd_inittab_run(“xxx”)</em> 会调用对应<em>handlers</em>的 <em>callback</em> ，对应所有的<em>init_action</em>是在 <em>procd_inittab()</em> 中添加的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> STATE_INIT:</span><br><span class="line">        LOG(<span class="string">&quot;- init -\n&quot;</span>);</span><br><span class="line">        procd_inittab();</span><br><span class="line">        procd_inittab_run(<span class="string">&quot;respawn&quot;</span>);</span><br><span class="line">        procd_inittab_run(<span class="string">&quot;askconsole&quot;</span>);</span><br><span class="line">        procd_inittab_run(<span class="string">&quot;askfirst&quot;</span>);</span><br><span class="line">        procd_inittab_run(<span class="string">&quot;sysinit&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">init_handler</span> <span class="title">handlers</span>[] =</span> &#123;</span><br><span class="line">    &#123;</span><br><span class="line">        .name = <span class="string">&quot;sysinit&quot;</span>,</span><br><span class="line">        .cb = runrc,</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">        .name = <span class="string">&quot;shutdown&quot;</span>,</span><br><span class="line">        .cb = runrc,</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">        .name = <span class="string">&quot;askfirst&quot;</span>,</span><br><span class="line">        .cb = askfirst,</span><br><span class="line">        .multi = <span class="number">1</span>,</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">        .name = <span class="string">&quot;askconsole&quot;</span>,</span><br><span class="line">        .cb = askconsole,</span><br><span class="line">        .multi = <span class="number">1</span>,</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">        .name = <span class="string">&quot;respawn&quot;</span>,</span><br><span class="line">        .cb = rcrespawn,</span><br><span class="line">        .multi = <span class="number">1</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">procd_inittab_run</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *handler)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">init_action</span> *<span class="title">a</span>;</span></span><br><span class="line"></span><br><span class="line">    list_for_each_entry(a, &amp;actions, <span class="built_in">list</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(a-&gt;handler-&gt;name, handler)) &#123;</span><br><span class="line">            <span class="keyword">if</span> (a-&gt;handler-&gt;multi) &#123;</span><br><span class="line">                a-&gt;handler-&gt;cb(a);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            a-&gt;handler-&gt;cb(a);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里来看<em>runrc</em>的实现，代码位于<em>inittab.c</em></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">runrc</span><span class="params">(<span class="keyword">struct</span> init_action *a)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (!a-&gt;argv[<span class="number">1</span>] || !a-&gt;argv[<span class="number">2</span>]) &#123;</span><br><span class="line">        ERROR(<span class="string">&quot;valid format is rcS &lt;S|K&gt; &lt;param&gt;\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* proceed even if no init or shutdown scripts run */</span></span><br><span class="line">    <span class="keyword">if</span> (rcS(a-&gt;argv[<span class="number">1</span>], a-&gt;argv[<span class="number">2</span>], rcdone)) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;---rcdone---\n&quot;</span>);</span><br><span class="line">        rcdone(<span class="literal">NULL</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;----rcdone error\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><em>rcS.c</em></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">rcS</span><span class="params">(<span class="type">char</span> *pattern, <span class="type">char</span> *param, <span class="type">void</span> (*q_empty)(<span class="keyword">struct</span> runqueue *))</span></span><br><span class="line">&#123;</span><br><span class="line">    runqueue_init(&amp;q);</span><br><span class="line">    q.empty_cb = q_empty;</span><br><span class="line">    q.max_running_tasks = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> _rc(&amp;q, <span class="string">&quot;/etc/rc.d&quot;</span>, pattern, <span class="string">&quot;*&quot;</span>, param);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行*&#x2F;etc&#x2F;rc.d*目录下<strong>S&#x2F;K</strong>开头的脚本</p>
+
+        
+      </div>
+
+         
+    </div>
+    
+     
+  </div>
+  
+    
+<nav id="article-nav">
+  <a class="article-nav-btn left  disabled "
+     >
+    <i class="fa-solid fa-angle-left"></i>
+    <p class="title-text">
+        
+    </p>
+  </a>
+  <a class="article-nav-btn right "
+    
+      href="/posts/240163024/"
+      title="fallocate 一般用法"
+     >
+
+    <p class="title-text">
+      
+        fallocate 一般用法
+        
+    </p>
+    <i class="fa-solid fa-angle-right"></i>
+  </a>
+</nav>
+
+
+  
+</article>
+
+
+
+
+  <script src="https://cdn.staticfile.org/twikoo/1.6.26/twikoo.all.min.js"></script>
+  <div id="comment-card" class="comment-card">
+    <div class="main-title-bar">
+      <div class="main-title-dot"></div>
+      <div class="main-title">Comments </div>
+    </div>
+    <div id="tcomment"></div>
+  </div>
+  <script>
+      twikoo.init({
+          envId: '',
+          el: '#tcomment',
+          region: '',
+          path: 'location.pathname',
+          lang: '',
+      })
+  </script>
+  
+
+    </div>
+    <div id="footer-wrapper">
+      <footer id="footer">
+  
+  <div id="footer-info" class="inner">
+    
+    &copy; 2024 Neutionwei<br>
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & Theme <a target="_blank" rel="noopener" href="https://github.com/saicaca/hexo-theme-vivia">Vivia</a>
+  </div>
+</footer>
+
+    </div>
+    <div class="back-to-top-wrapper">
+    <button id="back-to-top-btn" class="back-to-top-btn hide" onclick="topFunction()">
+        <i class="fa-solid fa-angle-up"></i>
+    </button>
+</div>
+
+<script>
+    function topFunction() {
+        window.scroll({ top: 0, behavior: 'smooth' });
+    }
+    let btn = document.getElementById('back-to-top-btn');
+    function scrollFunction() {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
+            btn.classList.remove('hide')
+        } else {
+            btn.classList.add('hide')
+        }
+    }
+    window.onscroll = function() {
+        scrollFunction();
+    }
+</script>
+
+  </div>
+  <script src="/js/light-dark-switch.js"></script>
+</body>
+</html>
