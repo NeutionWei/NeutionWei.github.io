@@ -53,24 +53,63 @@ var _hmt = _hmt || [];
 
 
   
-  <title>OpenWRT procd启动流程和脚本分析 | Systemcall Station</title>
+  <title>一文打尽UCI统一配置接口、UCI配置文件、UCI工具用法、UCI配置脚本、UCI API编程接口（Libubox库、UCI库） | Systemcall Station</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
   <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
 
-  <meta name="description" content="Linux内核执行start_kernel函数时会调用kernel_init来启动init进程，流程如下： 1start_kernel -&gt; rest_init -&gt; kernel_init -&gt; try_to_run_init_process  kernel_init部分代码如下： 123456789101112131415 994     if (execute_comman">
+  <meta name="description" content="转载自：https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_41453285&#x2F;article&#x2F;details&#x2F;102527800    接下来几篇文章首先讲述 UCI 配置及配置接口，接着讲述系统内核设置，最后还会讲述一些非 UCI 系统配置，这些配置通常不提供用户修改接口，但在系统运行时也是非常重要的。  一、UCI简介 MVC（Model-View-Control">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OpenWRT procd启动流程和脚本分析">
+<meta property="og:title" content="一文打尽UCI统一配置接口、UCI配置文件、UCI工具用法、UCI配置脚本、UCI API编程接口（Libubox库、UCI库）">
 <meta property="og:url" content="https://neutionwei.github.io/posts/2854974324/index.html">
 <meta property="og:site_name" content="Systemcall Station">
-<meta property="og:description" content="Linux内核执行start_kernel函数时会调用kernel_init来启动init进程，流程如下： 1start_kernel -&gt; rest_init -&gt; kernel_init -&gt; try_to_run_init_process  kernel_init部分代码如下： 123456789101112131415 994     if (execute_comman">
+<meta property="og:description" content="转载自：https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_41453285&#x2F;article&#x2F;details&#x2F;102527800    接下来几篇文章首先讲述 UCI 配置及配置接口，接着讲述系统内核设置，最后还会讲述一些非 UCI 系统配置，这些配置通常不提供用户修改接口，但在系统运行时也是非常重要的。  一、UCI简介 MVC（Model-View-Control">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191011113842904.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191012221249809.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191012222719953.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191012222732160.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013110815394.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013111128611.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013111230772.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013123056211.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013130025570.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019101312442763.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013124642891.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013124823242.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013125255130.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013125930125.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019101313042788.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013130951609.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013131006364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013131240215.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013131520159.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013131610328.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013131625782.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019101317170527.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013183923890.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013183959776.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013184016905.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013192841960.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013192848133.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191017104646720.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191017104713161.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013192705373.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013192721177.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013192945866.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013192933528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013192919740.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191017112234855.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191017104929526.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191017104957735.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013193003197.png">
 <meta property="article:published_time" content="2024-05-09T07:17:43.000Z">
-<meta property="article:modified_time" content="2024-05-09T07:18:57.632Z">
+<meta property="article:modified_time" content="2024-05-11T08:47:44.982Z">
 <meta property="article:author" content="Neutionwei">
-<meta property="article:tag" content="procd">
+<meta property="article:tag" content="uci">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20191011113842904.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
   
     <link rel="alternate" href="/atom.xml" title="Systemcall Station" type="application/atom+xml">
   
@@ -242,7 +281,7 @@ var _hmt = _hmt || [];
         
             <a class="category-link" href="/categories/openwrt/">
                 openwrt
-                <div class="category-count">1</div>
+                <div class="category-count">2</div>
             </a>
         </div>
     </div>
@@ -254,7 +293,7 @@ var _hmt = _hmt || [];
   <div class="widget-wrap">
     <div class="widget">
       <h3 class="widget-title">Tags</h3>
-      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/boot/" rel="tag">boot</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/chatgpt/" rel="tag">chatgpt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/delayed-write/" rel="tag">delayed write</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/fallocate/" rel="tag">fallocate</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/ffmpeg/" rel="tag">ffmpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/free/" rel="tag">free</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/github/" rel="tag">github</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/headphone-parameters/" rel="tag">headphone parameters</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/jpeg/" rel="tag">jpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/over-ear-headphone/" rel="tag">over-ear headphone</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/procd/" rel="tag">procd</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/pwrite/" rel="tag">pwrite</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rk-mpp/" rel="tag">rk-mpp</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rsync/" rel="tag">rsync</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/shell/" rel="tag">shell</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/yuv/" rel="tag">yuv</a></li></ul>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/boot/" rel="tag">boot</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/chatgpt/" rel="tag">chatgpt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/delayed-write/" rel="tag">delayed write</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/fallocate/" rel="tag">fallocate</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/ffmpeg/" rel="tag">ffmpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/free/" rel="tag">free</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/github/" rel="tag">github</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/headphone-parameters/" rel="tag">headphone parameters</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/jpeg/" rel="tag">jpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/over-ear-headphone/" rel="tag">over-ear headphone</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/procd/" rel="tag">procd</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/pwrite/" rel="tag">pwrite</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rk-mpp/" rel="tag">rk-mpp</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rsync/" rel="tag">rsync</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/shell/" rel="tag">shell</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/uci/" rel="tag">uci</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/yuv/" rel="tag">yuv</a></li></ul>
     </div>
   </div>
 
@@ -267,7 +306,7 @@ var _hmt = _hmt || [];
        
 
 
-<article id="post-openwrt/OpenWRT procd启动流程和脚本分析" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+<article id="post-openwrt/一文打尽UCI统一配置接口、UCI配置文件、UCI工具用法、UCI配置脚本、UCI API编程接口（Libubox库、UCI库）" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
     
    
@@ -280,7 +319,7 @@ var _hmt = _hmt || [];
   
     
       <h1 class="p-name article-title" itemprop="headline name">
-        OpenWRT procd启动流程和脚本分析
+        一文打尽UCI统一配置接口、UCI配置文件、UCI工具用法、UCI配置脚本、UCI API编程接口（Libubox库、UCI库）
       </h1>
     
   
@@ -299,75 +338,370 @@ var _hmt = _hmt || [];
   
           </div>
           <div class="wordcount need-seperator meta-info">
-            10k words 
+            11k words 
           </div>
         </div>
         
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/procd/" rel="tag">procd</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/uci/" rel="tag">uci</a></li></ul>
 
       </header>
       <div class="e-content article-entry" itemprop="articleBody">
         
-          <p><strong>Linux</strong>内核执行<em>start_kernel</em>函数时会调用<em>kernel_init</em>来启动<strong>init</strong>进程，流程如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start_kernel -&gt; rest_init -&gt; kernel_init -&gt; try_to_run_init_process</span><br></pre></td></tr></table></figure>
-
-<p><em>kernel_init</em>部分代码如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> <span class="number">994</span>     <span class="keyword">if</span> (execute_command) &#123;</span><br><span class="line"> <span class="number">995</span>         ret = run_init_process(execute_command);</span><br><span class="line"> <span class="number">996</span>         <span class="keyword">if</span> (!ret)</span><br><span class="line"> <span class="number">997</span>             <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"> <span class="number">998</span>         panic(<span class="string">&quot;Requested init %s failed (error %d).&quot;</span>,</span><br><span class="line"> <span class="number">999</span>               execute_command, ret);</span><br><span class="line"><span class="number">1000</span>     &#125;</span><br><span class="line"><span class="number">1001</span>     <span class="keyword">if</span> (!try_to_run_init_process(<span class="string">&quot;/sbin/init&quot;</span>) ||</span><br><span class="line"><span class="number">1002</span>         !try_to_run_init_process(<span class="string">&quot;/etc/init&quot;</span>) ||</span><br><span class="line"><span class="number">1003</span>         !try_to_run_init_process(<span class="string">&quot;/bin/init&quot;</span>) ||</span><br><span class="line"><span class="number">1004</span>         !try_to_run_init_process(<span class="string">&quot;/bin/sh&quot;</span>))</span><br><span class="line"><span class="number">1005</span>         <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"><span class="number">1006</span></span><br><span class="line"><span class="number">1007</span>     panic(<span class="string">&quot;No working init found.  Try passing init= option to kernel. &quot;</span></span><br><span class="line"><span class="number">1008</span>           <span class="string">&quot;See Linux Documentation/init.txt for guidance.&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<p>接着分析<strong>openwrt</strong>中 <em>package&#x2F;system&#x2F;procd&#x2F;Makefile</em> ，这里将<strong>procd</strong>源码编译生成的可执行文件安装到文件系统的*&#x2F;sbin*目录中。</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">define</span> Package/procd/install</span><br><span class="line">    <span class="variable">$(INSTALL_DIR)</span> $(1)/sbin $(1)/etc $(1)/lib/functions</span><br><span class="line"></span><br><span class="line">    <span class="variable">$(INSTALL_BIN)</span> <span class="variable">$(PKG_INSTALL_DIR)</span>/usr/sbin/&#123;init,procd,askfirst,udevtrigger&#125; $(1)/sbin/</span><br><span class="line">    <span class="variable">$(INSTALL_DATA)</span> <span class="variable">$(PKG_INSTALL_DIR)</span>/usr/lib/libsetlbf.so $(1)/lib</span><br><span class="line">    <span class="variable">$(INSTALL_BIN)</span> ./files/reload_config $(1)/sbin/</span><br><span class="line">    <span class="variable">$(INSTALL_DATA)</span> ./files/hotplug*.json $(1)/etc/</span><br><span class="line">    <span class="variable">$(INSTALL_DATA)</span> ./files/procd.sh $(1)/lib/functions/</span><br><span class="line"><span class="keyword">endef</span></span><br></pre></td></tr></table></figure>
-
-<p>查看<strong>procd</strong>源码目录的 <em>CMakeList.txt</em> ，以<strong>init</strong>为例，对应源码编译文件如下</p>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">56</span> <span class="keyword">IF</span>(DISABLE_INIT)</span><br><span class="line"><span class="number">57</span> <span class="keyword">ADD_DEFINITIONS</span>(-DDISABLE_INIT)</span><br><span class="line"><span class="number">58</span> <span class="keyword">ELSE</span>()</span><br><span class="line"><span class="number">59</span> <span class="keyword">ADD_EXECUTABLE</span>(init initd/init.c initd/early.c initd/preinit.c initd/mkdev.c watchdog.c</span><br><span class="line"><span class="number">60</span>     utils/utils.c <span class="variable">$&#123;SOURCES_ZRAM&#125;</span>)</span><br><span class="line"><span class="number">61</span> <span class="keyword">TARGET_LINK_LIBRARIES</span>(init <span class="variable">$&#123;LIBS&#125;</span>)</span><br><span class="line"><span class="number">62</span> <span class="keyword">INSTALL</span>(TARGETS init</span><br><span class="line"><span class="number">63</span>     RUNTIME DESTINATION <span class="variable">$&#123;CMAKE_INSTALL_SBINDIR&#125;</span></span><br><span class="line"><span class="number">64</span> )</span><br><span class="line"><span class="number">65</span></span><br><span class="line"><span class="number">66</span> <span class="keyword">ADD_EXECUTABLE</span>(udevtrigger plug/udevtrigger.c)</span><br><span class="line"><span class="number">67</span> <span class="keyword">INSTALL</span>(TARGETS udevtrigger</span><br><span class="line"><span class="number">68</span>     RUNTIME DESTINATION <span class="variable">$&#123;CMAKE_INSTALL_SBINDIR&#125;</span></span><br><span class="line"><span class="number">69</span> )</span><br><span class="line"><span class="number">70</span> <span class="keyword">ENDIF</span>()</span><br></pre></td></tr></table></figure>
-
-<p><em>main</em>函数入口位于<em>initd&#x2F;init.c</em></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">pid_t</span> pid;</span><br><span class="line"></span><br><span class="line">    ulog_open(ULOG_KMSG, LOG_DAEMON, <span class="string">&quot;init&quot;</span>);</span><br><span class="line"></span><br><span class="line">    sigaction(SIGTERM, &amp;sa_shutdown, <span class="literal">NULL</span>);</span><br><span class="line">    sigaction(SIGUSR1, &amp;sa_shutdown, <span class="literal">NULL</span>);</span><br><span class="line">    sigaction(SIGUSR2, &amp;sa_shutdown, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">	early();</span><br><span class="line">    </span><br><span class="line">	cmdline();</span><br><span class="line">    </span><br><span class="line">	watchdog_init(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">	pid = fork();</span><br><span class="line">    <span class="keyword">if</span> (!pid) &#123;</span><br><span class="line">        <span class="type">char</span> *kmod[] = &#123; <span class="string">&quot;/sbin/kmodloader&quot;</span>, <span class="string">&quot;/etc/modules-boot.d/&quot;</span>, <span class="literal">NULL</span> &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (debug &lt; <span class="number">3</span>)</span><br><span class="line">            patch_stdio(<span class="string">&quot;/dev/null&quot;</span>);</span><br><span class="line"></span><br><span class="line">        execvp(kmod[<span class="number">0</span>], kmod);</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to start kmodloader\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (pid &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to start kmodloader instance\n&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="type">int</span> i;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">1200</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (waitpid(pid, <span class="literal">NULL</span>, WNOHANG) &gt; <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            usleep(<span class="number">10</span> * <span class="number">1000</span>);</span><br><span class="line">            watchdog_ping();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	uloop_init();</span><br><span class="line">	preinit();</span><br><span class="line">    uloop_run();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><em>uloop_init</em>实现位于<strong>libubox</strong>源码<em>uloop.c</em></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">uloop_init</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (uloop_init_pollfd() &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (waker_init() &lt; <span class="number">0</span>) &#123;</span><br><span class="line">		uloop_done();</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">uloop_init_pollfd</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (poll_fd &gt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    poll_fd = epoll_create(<span class="number">32</span>);	</span><br><span class="line">    <span class="keyword">if</span> (poll_fd &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    fcntl(poll_fd, F_SETFD, fcntl(poll_fd, F_GETFD) | FD_CLOEXEC);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><em>preinit</em>实现位于<strong>procd</strong>源码文件<em>initd&#x2F;preinit.c</em></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">uloop_process</span> <span class="title">preinit_proc</span>;</span></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">uloop_process</span> <span class="title">plugd_proc</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span></span><br><span class="line"><span class="title function_">preinit</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> *init[] = &#123; <span class="string">&quot;/bin/sh&quot;</span>, <span class="string">&quot;/etc/preinit&quot;</span>, <span class="literal">NULL</span> &#125;;</span><br><span class="line">    <span class="type">char</span> *plug[] = &#123; <span class="string">&quot;/sbin/procd&quot;</span>, <span class="string">&quot;-h&quot;</span>, <span class="string">&quot;/etc/hotplug-preinit.json&quot;</span>, <span class="literal">NULL</span> &#125;;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line"></span><br><span class="line">    LOG(<span class="string">&quot;- preinit -\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    plugd_proc.cb = plugd_proc_cb;</span><br><span class="line">    plugd_proc.pid = fork();</span><br><span class="line">    <span class="keyword">if</span> (!plugd_proc.pid) &#123;</span><br><span class="line">        execvp(plug[<span class="number">0</span>], plug);</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to start plugd\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (plugd_proc.pid &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to start new plugd instance\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    uloop_process_add(&amp;plugd_proc);	</span><br><span class="line"></span><br><span class="line">    setenv(<span class="string">&quot;PREINIT&quot;</span>, <span class="string">&quot;1&quot;</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    fd = creat(<span class="string">&quot;/tmp/.preinit&quot;</span>, <span class="number">0600</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (fd &lt; <span class="number">0</span>)</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to create sentinel file\n&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        close(fd);</span><br><span class="line"></span><br><span class="line">    preinit_proc.cb = spawn_procd;</span><br><span class="line">    preinit_proc.pid = fork();</span><br><span class="line">    <span class="keyword">if</span> (!preinit_proc.pid) &#123;</span><br><span class="line">        execvp(init[<span class="number">0</span>], init);</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to start preinit\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (preinit_proc.pid &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to start new preinit instance\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    uloop_process_add(&amp;preinit_proc);</span><br><span class="line"></span><br><span class="line">    DEBUG(<span class="number">4</span>, <span class="string">&quot;Launched preinit instance, pid=%d\n&quot;</span>, (<span class="type">int</span>) preinit_proc.pid);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里fork出2个子进程，执行<em>procd</em>和 <em>&#x2F;etc&#x2F;preinit</em> ，</p>
+          <blockquote>
+<p>转载自：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41453285/article/details/102527800">https://blog.csdn.net/qq_41453285&#x2F;article&#x2F;details&#x2F;102527800</a></p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20191011113842904.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
 <ul>
-<li>首先看 <em>procd</em> ，因为带有参数 <em>“-h &#x2F;etc&#x2F;hotplug-preinit.json”</em> ，所以会执行<em>hotplug_run</em>函数。</li>
+<li>接下来几篇文章首先讲述 UCI 配置及配置接口，接着讲述系统内核设置，最后还会讲述一些非 UCI 系统配置，这些配置通常不提供用户修改接口，但在系统运行时也是非常重要的。</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ch;</span><br><span class="line">    <span class="type">char</span> *dbglvl = getenv(<span class="string">&quot;DBGLVL&quot;</span>);</span><br><span class="line">    <span class="type">int</span> ulog_channels = ULOG_KMSG;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dbglvl) &#123;</span><br><span class="line">        debug = atoi(dbglvl);</span><br><span class="line">        unsetenv(<span class="string">&quot;DBGLVL&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> ((ch = getopt(argc, argv, <span class="string">&quot;d:s:h:S&quot;</span>)) != <span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="keyword">switch</span> (ch) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;h&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> hotplug_run(optarg);</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;s&#x27;</span>:</span><br><span class="line">            ubus_socket = optarg;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;d&#x27;</span>:</span><br><span class="line">            debug = atoi(optarg);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;S&#x27;</span>:</span><br><span class="line">            ulog_channels = ULOG_STDIO;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span> usage(argv[<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ulog_open(ulog_channels, LOG_DAEMON, <span class="string">&quot;procd&quot;</span>);</span><br><span class="line"></span><br><span class="line">    setsid();</span><br><span class="line">    uloop_init();</span><br><span class="line">    procd_signal();</span><br><span class="line">    <span class="keyword">if</span> (getpid() != <span class="number">1</span>)</span><br><span class="line">        procd_connect_ubus();</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        procd_state_next();</span><br><span class="line">    uloop_run();</span><br><span class="line">    uloop_done();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="一、UCI简介"><a href="#一、UCI简介" class="headerlink" title="一、UCI简介"></a>一、UCI简介</h2><ul>
+<li><strong>MVC（Model-View-Control）模式</strong>是经典的Web开发编程模式，OpenWrt也采用该设 计模式。该设计模式为分层设计，模型层负责数据的持久化操作。OpenWrt 的模型层采用 统一配置接口（Unified Configuration Interface，UCI）。</li>
+<li>统一配置接口（Unified Configuration Interface，UCI），是OpenWrt成功的关键技 术之一，已经移植支持数千个软件。它采用纯文本文件来保存配置，并提供命令 行和 C 语言编程调用接口进行管理。</li>
+<li>UCI的<strong>目的在于集中OpenWrt系统的配置</strong>。这样每一个开发人员只需学习一次即可， 减少了学习成本。这是 OpenWrt 成功的关键原因之一。它成功地应用于 OpenWrt 的 WhiteRussian 之后的系列版本。</li>
+<li>UCI 可以看作OpenWrt系统中<strong>最重要系统设置的主要配置接口</strong>。通常情况下这些设置对设备的功能运转至关重要，例如网络接口的配置、DHCP 和防火墙设置等。</li>
+</ul>
+<h2 id="二、UCI配置文件格式"><a href="#二、UCI配置文件格式" class="headerlink" title="二、UCI配置文件格式"></a>二、UCI配置文件格式</h2><ul>
+<li>配置节（section），是UCI配置的一个独立配置单元。UCI配置文件是由一个或多个配置节组成。配置节有一个配置类型属性，是以“config”开头，并且有一个可选名称。配置节包含一个或多个配置选项语句。</li>
+<li><strong>格式：</strong>配置文件由<strong>配置节</strong>（section）组成，配置节由<strong>多个“name&#x2F;values”选项对</strong>（option）组成。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20191012221249809.png"></p>
+<ul>
+<li><strong>注意事项：</strong><ul>
+<li>每一个<strong>配置节</strong>（section）都需要有一个类型标识（type），但不一定需要名称（name）。</li>
+<li>每一个<strong>选项对</strong>（option）都有名称（name）和值（value），写在其所属于的配置节中。</li>
+<li><strong>UCI标识符和配置文件的名称只能</strong>包含字母 **a～z、0～9 和_**。例如连字符（-）是不允许的。</li>
+<li><strong>选项的值</strong>可以包含任何字符，但需要将它们正确地加上引号。</li>
+<li>没有名称标识的配置节称为<strong>匿名配置节。</strong></li>
+<li>类型（type）和选项（option）的含义均由应用程序来决定，类型一般用于应用程序决定如何处理配置节包含的配置选项。</li>
+<li>如果一个选项（type）是不存在的并且是必需的，那应用程序通常会触发一个异常或者记录一个异常的日志，然后程序退出。</li>
+<li>通常选项（option）在配置文件中都是使用空格或制表符缩进来标识，但这个并非是语法要求，仅仅是为了增加配置文件的可读性。</li>
+<li>option和list用来提高配置文件的可读性，并且在语法上也要求使用关键字来表示配置选项的开始。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<h4 id="引号的使用"><a href="#引号的使用" class="headerlink" title="引号的使用"></a>引号的使用</h4><ul>
+<li>通常不需要使用引号引上类型标识符（type）或值（value），引号只在<strong>封闭的值</strong>包含<strong>空格或制表符</strong>的情况下需要。它可以合法地使用双引号和单引号。</li>
+<li>下面是合法的UCI文件选项语法示例：</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20191012222719953.png"></p>
+<ul>
+<li>下面的例子是错误的UCI文件语法：</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20191012222732160.png"></p>
+</blockquote>
+<blockquote>
+<h4 id="演示案例"><a href="#演示案例" class="headerlink" title="演示案例"></a>演示案例</h4><ul>
+<li>下面是OpenWrt中的一个实际配置文件（&#x2F;etc&#x2F;config&#x2F;system）。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20191013110815394.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<ul>
+<li><strong>“config system”语句：</strong>定义了一个配置节的开始，配置类型为“system”，但没有名称。</li>
+<li><strong>选项“option hostname OpenWrt”和“option timezone UTC”两行：</strong>定义了“config system”配置节的两个简单配置。</li>
+<li><strong>“config timeserver ntp”语句：</strong>定义了另外一个配置节的开始，类型为“timeserver”，名称为“ntp”。</li>
+<li>在<strong>开始带有list关键字的选项</strong>，表示有多个值被定义，所有的语句有同一个选项名称“server”。在这个的例子中均为NTP服务器地址，组合为相同顺序的单链表来 处理。</li>
+</ul>
+</blockquote>
+<h2 id="三、UCI配置文件与UCI统一配置原理"><a href="#三、UCI配置文件与UCI统一配置原理" class="headerlink" title="三、UCI配置文件与UCI统一配置原理"></a>三、UCI配置文件与UCI统一配置原理</h2><ul>
+<li>OpenWrt有很多独立的第三方应用程序，大多数应用程序的软件包维护者已经制作了UCI兼容的配置文件，启动时<strong>由UCI配置文件转换为软件包的原始配置文件</strong>。这是在运行初始化脚本&#x2F;etc&#x2F;init.d&#x2F;中执行的。</li>
+<li>因此，当<strong>开始执行一 个UCI兼容的守护进程初始化脚本</strong>时，你应该意识到<strong>程序的原始配置文件被覆盖</strong>了。例如，在DNS代理服务器 dnsmasq进程启动的情况下，文件&#x2F;var&#x2F;etc&#x2F;dnsmasq.conf 是从 UCI 配置文件&#x2F;etc&#x2F;config&#x2F;dhcp生成并覆盖的，是运行&#x2F;etc&#x2F;init.d&#x2F;dnsmasq脚本进行配置文件转换的。</li>
+<li><strong>配置文件的存储：</strong>因为应用程序的配置文件是<strong>启动时通过UCI转换生成</strong>的，因此它<strong>不需要存储在非易失性存储器</strong>中，通常<strong>存储在内存中而不是在闪存中</strong>，而var目录为其内容在正常运行时不断变化的目录，因此将var目录创建为&#x2F;tmp目录的一个链接。</li>
+<li>OpenWrt的<strong>大多数配置都基于UCI文件</strong>，如果你想在软件原始的配置文件调整设置，可以通过禁用UCI方法来实现。</li>
+<li><strong>UCI配置文件的修改：</strong>OpenWrt系统的<strong>核心配置分成很多个文件</strong>，并且都位于&#x2F;etc&#x2F;config目录下。每个文件涉及系统配置的某一部分。你可以用一个<strong>文本编辑器修改，或用命令行实用程序UCI编辑配置文件</strong>。UCI的配置文件<strong>也可通过各种编程 API</strong>（如 shell、Lua和C等）来修改，这也是 Web 接口例如LuCI修改UCI文件的方式。</li>
+<li><strong>UCI配置文件修改后的重启：</strong>无论是通过一个文本编辑器还是命令行工具修改配置文件，在改变一个 UCI 的配置文 件后，受影响的服务或可执行程序必须由 init.d 进行重启，这样更新 UCI 配置才会真正生 效软件特定的配置文件。</li>
+<li><strong>init.d对配置文件的转换：</strong>许多程序是通过它们的初始化脚本与UCI配置兼容的。init.d将UCI配置转换为它们。init.d首先在该软件预期的位置生成这样的一个配置文件，它通过 重新启动可执行程序再次读入配置。注意：如果只是直接启动可执行文件，没有通过 init.d 调用，将不会将一个 UCI 配置文件更新到特定程序相应的配置文件位置，在&#x2F;etc&#x2F;config&#x2F;的 修改将不会对现有进程有任何影响。</li>
+<li>所有的UCI配置文件均默认保存在“&#x2F;etc&#x2F;config”目录下：</li>
+</ul>
+<table border="1" cellpadding="1" cellspacing="1"><tbody><tr><td style="width:173px;"><span style="color:#3399ea;"><strong>文 件 路 径</strong></span></td><td style="width:692px;"><span style="color:#3399ea;"><strong>含 义</strong></span></td></tr><tr><td style="width:173px;"><strong>/etc/config/dhcp</strong></td><td style="width:692px;">Dnsmasq 软件包配置，包含 DHCP 和 DNS 设置</td></tr><tr><td style="width:173px;"><strong>/etc/config/dropbear</strong></td><td style="width:692px;">SSH 服务器选项</td></tr><tr><td style="width:173px;"><strong>/etc/config/firewall</strong></td><td style="width:692px;">防火墙配置，包含网络地址转换、包过滤和端口转发等</td></tr><tr><td style="width:173px;"><strong>/etc/config/network</strong></td><td style="width:692px;">网络配置，包含桥接、接口和路由配置</td></tr><tr><td style="width:173px;"><strong>/etc/config/system</strong></td><td style="width:692px;">系统设置，包含主机名称，网络时间同步等</td></tr><tr><td style="width:173px;"><strong>/etc/config/timeserver</strong></td><td style="width:692px;">rdate 的时间服务列表</td></tr><tr><td style="width:173px;"><strong>/etc/config/luci</strong></td><td style="width:692px;">基本的 LuCI 配置</td></tr><tr><td style="width:173px;"><strong>/etc/config/wireless</strong></td><td style="width:692px;">无线设置和 Wi-Fi 网络定义</td></tr><tr><td style="width:173px;"><strong>/etc/config/uhttpd</strong></td><td style="width:692px;">Web 服务器选项配置</td></tr><tr><td style="width:173px;"><strong>/etc/config/upnpd</strong></td><td style="width:692px;">miniupnpd UPnP 服务设置</td></tr><tr><td style="width:173px;"><strong>/etc/config/qos</strong></td><td style="width:692px;">网络服务质量的配置文件定义</td></tr></tbody></table>
 
-<p><em>hotplug</em>实现如下，这里是建立<em>netlink</em>通信机制，完成用户层和内核的交互，监听内核的uevent事件。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">hotplug</span><span class="params">(<span class="type">char</span> *rules)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_nl</span> <span class="title">nls</span>;</span></span><br><span class="line">    <span class="type">int</span> nlbufsize = <span class="number">512</span> * <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line">    rule_file = strdup(rules);</span><br><span class="line">    <span class="built_in">memset</span>(&amp;nls,<span class="number">0</span>,<span class="keyword">sizeof</span>(<span class="keyword">struct</span> sockaddr_nl));</span><br><span class="line">    nls.nl_family = AF_NETLINK;</span><br><span class="line">    nls.nl_pid = getpid();</span><br><span class="line">    nls.nl_groups = <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((hotplug_fd.fd = socket(PF_NETLINK, SOCK_DGRAM | SOCK_CLOEXEC, NETLINK_KOBJECT_UEVENT)) == <span class="number">-1</span>) &#123;</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to open hotplug socket: %s\n&quot;</span>, strerror(errno));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (bind(hotplug_fd.fd, (<span class="type">void</span> *)&amp;nls, <span class="keyword">sizeof</span>(<span class="keyword">struct</span> sockaddr_nl))) &#123;</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to bind hotplug socket: %s\n&quot;</span>, strerror(errno));</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (setsockopt(hotplug_fd.fd, SOL_SOCKET, SO_RCVBUFFORCE, &amp;nlbufsize, <span class="keyword">sizeof</span>(nlbufsize)))</span><br><span class="line">        ERROR(<span class="string">&quot;Failed to resize receive buffer: %s\n&quot;</span>, strerror(errno));</span><br><span class="line"></span><br><span class="line">    json_script_init(&amp;jctx);</span><br><span class="line">    queue_proc.cb = queue_proc_cb;</span><br><span class="line">    uloop_fd_add(&amp;hotplug_fd, ULOOP_READ);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">hotplug_run</span><span class="params">(<span class="type">char</span> *rules)</span></span><br><span class="line">&#123;</span><br><span class="line">    uloop_init();</span><br><span class="line">    hotplug(rules);</span><br><span class="line">    uloop_run();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<h4 id="演示案例-1"><a href="#演示案例-1" class="headerlink" title="演示案例"></a>演示案例</h4><ul>
+<li>例如，在修改UCI配置文件时，如果你想将<strong>局域网网关IP地址</strong>从默认地址192.168.1.1修改为192.168.6.1，可以使用vi编辑器直接修改&#x2F;etc&#x2F;config&#x2F;network。但是此处我们使用uci命令来修改。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci set network.lan.ipaddr=192.168.6.1 uci commit network</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20191013111128611.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"><img src="https://img-blog.csdnimg.cn/20191013111230772.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<ul>
+<li>下一步通过运行以下命令使修改生效。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/network restart</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><em>&#x2F;etc&#x2F;preinit</em>脚本大致内容如下，先调用另外的shell脚本，获取函数定义</li>
+<li>在这种情况下，你需要使用新的IP地址来登录路由器设备。路由器常用功能配置文件。</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">. /lib/functions.sh</span><br><span class="line">. /lib/functions/preinit.sh</span><br><span class="line">. /lib/functions/system.sh</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">初始化hook链</span></span><br><span class="line">boot_hook_init preinit_essential</span><br><span class="line">boot_hook_init preinit_main</span><br><span class="line">boot_hook_init failsafe</span><br><span class="line">boot_hook_init initramfs</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">依次执行/lib/preinit目录中的脚本，将函数调用添加到hook链中</span></span><br><span class="line">for pi_source_file in /lib/preinit/*; do</span><br><span class="line">    . $pi_source_file</span><br><span class="line">done</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">执行preinit_essential注册的hook链的所有函数</span></span><br><span class="line">boot_run_hook preinit_essential</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">执行preinit_main注册的hook链的所有函数</span></span><br><span class="line">boot_run_hook preinit_main</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="四、UCI工具介绍"><a href="#四、UCI工具介绍" class="headerlink" title="四、UCI工具介绍"></a>四、UCI工具介绍</h2><ul>
+<li>在开发调整配置时，可以直接使用vi编辑器修改UCI配置文件。但是UCI统一配置文件的目的就是所有 OpenWrt 配置可以通过统一接口读取和修改。对于开发人员而言，如 果使用 awk 和 grep 工具来解析将是<strong>非常低效的</strong>，<strong>UCI实用工具</strong>提供了修改和分析UCI文件的脚本编程开发接口。</li>
+</ul>
+<blockquote>
+<h4 id="备注（重点）"><a href="#备注（重点）" class="headerlink" title="备注（重点）"></a>备注（重点）</h4><ul>
+<li>当使用UCI工具写入配置文件时，配置文件都是整个重写并且不需要确认命令。这意味着在文件中任何<strong>多余的注释行和空行均会被删除。</strong></li>
+<li>如果你有 UCI 类型的配置文件，<strong>想保存自己的注释和空行，那就不应该使用UCI命令</strong>行工具来编辑文件。</li>
+</ul>
+</blockquote>
+<h2 id="五、命令格式与选项"><a href="#五、命令格式与选项" class="headerlink" title="五、命令格式与选项"></a>五、命令格式与选项</h2><ul>
+<li><strong>命令格式：</strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci [&lt;options&gt;] &lt;command&gt; [&lt;arguments&gt;]</span><br></pre></td></tr></table></figure>
 
-<p><em>lib&#x2F;functions&#x2F;preinit.sh</em>中定义</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">boot_hook_init() &#123;</span><br><span class="line">    local hook=&quot;$&#123;1&#125;_hook&quot;</span><br><span class="line">    export -n &quot;PI_STACK_LIST=$&#123;PI_STACK_LIST:+$PI_STACK_LIST &#125;$hook&quot;</span><br><span class="line">    export -n &quot;$hook=&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>options如下：</strong><ul>
+<li>-c &lt;path&gt;：set the search path for config files (default: &#x2F;etc&#x2F;config)</li>
+<li>-d &lt;str&gt;：set the delimiter for list values in uci show</li>
+<li>-f &lt;file&gt;：use &lt;file&gt; as input instead of stdin</li>
+<li>-m：when importing, merge data into an existing package</li>
+<li>-n：name unnamed sections on export (default)</li>
+<li>-N：don’t name unnamed sections</li>
+<li>-p &lt;path&gt;：add a search path for config change files</li>
+<li>-P &lt;path&gt;：add a search path for config change files and use as default</li>
+<li>-q：quiet mode (don’t print error messages)</li>
+<li>-s：force strict mode (stop on parser errors, default)</li>
+<li>-S：disable strict mode</li>
+<li>-X：do not use extended syntax on ‘show’</li>
+</ul>
+</li>
+<li><strong>command如下：</strong></li>
+</ul>
+<table border="1" cellpadding="1" cellspacing="1"><tbody><tr><td style="width:181px;"><span style="color:#3399ea;"><strong>命 令</strong></span></td><td><span style="color:#3399ea;"><strong>含 义</strong></span></td></tr><tr><td style="width:181px;"><strong>add</strong></td><td>增加指定配置文件的类型为 section-type 的匿名区段。</td></tr><tr><td style="width:181px;"><strong>add_list</strong></td><td>对已存在的 list 选项增加字符串。</td></tr><tr><td style="width:181px;"><strong>commit</strong></td><td>对给定的配置文件写入修改，如果没有指定参数则将所有的配置文件写入文件系统。所 有的“uci set”“uci add”“uci rename”和“uci delete”命令将配置写入一个临时位置， 在运行“uci commit”时写入实际的存储位置。</td></tr><tr><td style="width:181px;"><strong>export</strong></td><td>导出一个机器可读格式的配置。它是作为操作配置文件的 shell 脚本而在内部使用，导 出配置内容时会在前面加“package”和文件名。</td></tr><tr><td style="width:181px;"><strong>import</strong></td><td>以 UCI 语法导入配置文件。</td></tr><tr><td style="width:181px;"><strong>changes</strong></td><td>列出配置文件分阶段修改的内容，即未使用“uci commit”提交的修改。如果没有指定 配置文件，则指所有的配置文件的修改部分。</td></tr><tr><td style="width:181px;"><strong>show</strong></td><td>显示指定的选项、配置节或配置文件。以精简的方式输出，即 key=value 的方式输出。</td></tr><tr><td style="width:181px;"><strong>get</strong></td><td>获取指定区段选项的值。</td></tr><tr><td style="width:181px;"><strong>set</strong></td><td>设置指定配置节选项的值，或者是增加一个配置节，类型设置为指定的值。</td></tr><tr><td style="width:181px;"><strong>delete</strong></td><td>删除指定的配置节或选项。</td></tr><tr><td style="width:181px;"><strong>rename</strong></td><td>对指定的选项或配置节重命名为指定的名字。</td></tr><tr><td style="width:181px;"><strong>revert</strong></td><td>恢复指定的选项，配置节或配置文件。</td></tr></tbody></table>
 
-<p><em>&#x2F;lib&#x2F;preinit&#x2F;10_sysinfo</em>中添加<em>hook</em>函数</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">boot_hook_add preinit_main do_sysinfo_generic</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20191013123056211.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<h2 id="六、-P选项（-var-state文件）"><a href="#六、-P选项（-var-state文件）" class="headerlink" title="六、-P选项（&#x2F;var&#x2F;state文件）"></a>六、-P选项（&#x2F;var&#x2F;state文件）</h2><ul>
+<li>有些运行中的状态值没有保存在&#x2F;etc&#x2F;config目录下，而是保存在&#x2F;var&#x2F;state下，这时可 以使用“-P”参数来查询当前状态值。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20191013130025570.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<h2 id="七、演示案例（修改IP地址）"><a href="#七、演示案例（修改IP地址）" class="headerlink" title="七、演示案例（修改IP地址）"></a>七、演示案例（修改IP地址）</h2><ul>
+<li>网络配置的相关信息存放在&#x2F;etc&#x2F;config&#x2F;network文件中。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/2019101312442763.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<ul>
+<li>下面我们修改“lan”这个网络接口的IP地址（修改完在下面图中可以看到“lan”这个网络接口的IP地址为我们设置的值）。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci set network.lan.ipaddr=192.168.0.50 uci commit network /etc/init.d/network restart</span><br></pre></td></tr></table></figure>
 
-<p><em>&#x2F;etc&#x2F;preinit</em>脚本执行完成后，调用<em>spawn_procd</em></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span></span><br><span class="line"><span class="title function_">spawn_procd</span><span class="params">(<span class="keyword">struct</span> uloop_process *proc, <span class="type">int</span> ret)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> *wdt_fd = watchdog_fd();</span><br><span class="line">    <span class="type">char</span> *argv[] = &#123; <span class="string">&quot;/sbin/procd&quot;</span>, <span class="literal">NULL</span>&#125;;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">s</span>;</span></span><br><span class="line">    <span class="type">char</span> dbg[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (plugd_proc.pid &gt; <span class="number">0</span>)</span><br><span class="line">        kill(plugd_proc.pid, SIGKILL);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!stat(<span class="string">&quot;/tmp/sysupgrade&quot;</span>, &amp;s))</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>)</span><br><span class="line">            sleep(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    unsetenv(<span class="string">&quot;INITRAMFS&quot;</span>);</span><br><span class="line">    unsetenv(<span class="string">&quot;PREINIT&quot;</span>);</span><br><span class="line">    unlink(<span class="string">&quot;/tmp/.preinit&quot;</span>);</span><br><span class="line">    DEBUG(<span class="number">2</span>, <span class="string">&quot;Exec to real procd now\n&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (wdt_fd)</span><br><span class="line">        setenv(<span class="string">&quot;WDTFD&quot;</span>, wdt_fd, <span class="number">1</span>);</span><br><span class="line">    check_dbglvl();</span><br><span class="line">    <span class="keyword">if</span> (debug &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">snprintf</span>(dbg, <span class="number">2</span>, <span class="string">&quot;%d&quot;</span>, debug);</span><br><span class="line">        setenv(<span class="string">&quot;DBGLVL&quot;</span>, dbg, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//调用procd</span></span><br><span class="line">    execvp(argv[<span class="number">0</span>], argv);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20191013124642891.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<ul>
+<li>删除上面我们设置的IP地址。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci delete network.lan.ipaddr uci commit network /etc/init.d/network restart</span><br></pre></td></tr></table></figure>
 
-<p>此时 <em>getpid()</em> 等于1，所以调用 <em>procd_state_next</em> ，进入到状态机处理中。</p>
-<p>对应的<em>procd log</em>如下，<em>procd state</em>不断迁移，包括 <strong>STATE_EARLY</strong> ， <strong>STATE_UBUS</strong> ，<strong>STATE_INIT</strong>等。</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[    <span class="number">3.161338</span><span class="variable">@3</span>] <span class="symbol">init:</span> <span class="title class_">Console</span> is alive		</span><br><span class="line">[    <span class="number">3.173921</span><span class="variable">@3</span>] <span class="symbol">init:</span> <span class="title class_">Ping</span>		</span><br><span class="line">[    <span class="number">3.184207</span><span class="variable">@3</span>] <span class="symbol">init:</span> <span class="title class_">Ping</span></span><br><span class="line">[    <span class="number">3.192558</span><span class="variable">@1</span>] <span class="symbol">kmodloader:</span> loading kernel modules from /etc/modules-boot.d/*	</span><br><span class="line">[    <span class="number">3.194447</span><span class="variable">@3</span>] <span class="symbol">init:</span> <span class="title class_">Ping</span></span><br><span class="line">[    <span class="number">3.196209</span><span class="variable">@1</span>] <span class="symbol">kmodloader:</span> done loading kernel modules from /etc/modules-boot.d/*</span><br><span class="line">[    <span class="number">3.204716</span><span class="variable">@3</span>] <span class="symbol">init:</span> <span class="title class_">Ping</span></span><br><span class="line">[    <span class="number">3.206180</span><span class="variable">@3</span>] <span class="symbol">init:</span> - preinit -</span><br><span class="line">[    <span class="number">3.208671</span><span class="variable">@3</span>] <span class="symbol">init:</span> <span class="title class_">Launched</span> preinit instance, pid=<span class="number">1308</span></span><br><span class="line">[    <span class="number">3.302967</span><span class="variable">@3</span>] <span class="symbol">init:</span> <span class="title class_">Exec</span> to real procd now</span><br><span class="line">[    <span class="number">3.308865</span><span class="variable">@3</span>] <span class="symbol">procd:</span> - early -</span><br><span class="line">[    <span class="number">3.524654</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Finished</span> udevtrigger</span><br><span class="line">[    <span class="number">4.024929</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Coldplug</span> complete</span><br><span class="line">[    <span class="number">4.028061</span><span class="variable">@2</span>] <span class="symbol">procd:</span> - ubus -</span><br><span class="line">[    <span class="number">4.029198</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Create</span> service ubus</span><br><span class="line">[    <span class="number">4.030829</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Create</span> instance ubus::instance1</span><br><span class="line">[    <span class="number">4.032109</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Started</span> instance ubus::instance1[<span class="number">1554</span>]</span><br><span class="line">[    <span class="number">4.098895</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Connected</span> to ubus, id=459ede6c</span><br><span class="line">[    <span class="number">4.099092</span><span class="variable">@2</span>] <span class="symbol">procd:</span> - init -</span><br><span class="line">[    <span class="number">4.102474</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Launched</span> new askconsole action, pid=<span class="number">1555</span></span><br><span class="line">[    <span class="number">4.104142</span><span class="variable">@2</span>] <span class="symbol">procd:</span> <span class="title class_">Launched</span> new askfirst action, pid=<span class="number">1556</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20191013124823242.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<h2 id="八、演示案例（修改多个配置节类型或匿名配置节）"><a href="#八、演示案例（修改多个配置节类型或匿名配置节）" class="headerlink" title="八、演示案例（修改多个配置节类型或匿名配置节）"></a>八、演示案例（修改多个配置节类型或匿名配置节）</h2><ul>
+<li><strong>概念：</strong>当有多个配置节类型相同或者为匿名配置节时，UCI使用<strong>数组数字引用它们。</strong></li>
+<li><strong>规则如下：</strong><ul>
+<li>①例如：OpenWrt 系统默认有 3 个网卡接口，可以通过<strong>network.@interface[0]</strong>来引用第一个，通过<strong>network.@ interface[1]</strong>来引用第二个，通过<strong>network.@interface[2]</strong>来引用第三个。</li>
+<li>②也可以使用<strong>负索引</strong>， 例如network.@interface[−1]，其中“−1”指的是最后一个，“−2”指的是倒数第二个，以此类推。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<h4 id="演示案例（获取各个网卡名称）"><a href="#演示案例（获取各个网卡名称）" class="headerlink" title="演示案例（获取各个网卡名称）"></a>演示案例（<strong>获取各个网卡名称</strong>）</h4><ul>
+<li>我这个OpenWrt系统中有两个网卡</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20191013125255130.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci get network.@interface[0].ifname   //获取第一个uci get network.@interface[1].ifname   //获取第二个 uci get network.loopback.ifname   //获取第一个uci get network.lan.ifname   //获取第二个 uci get network.@interface[-2].ifname   //获取第一个uci get network.@interface[-1].ifname   //获取第二个</span><br></pre></td></tr></table></figure>
 
-<p>以<strong>STATE_INIT</strong>为例，执行 <em>procd_inittab_run(“xxx”)</em> 会调用对应<em>handlers</em>的 <em>callback</em> ，对应所有的<em>init_action</em>是在 <em>procd_inittab()</em> 中添加的。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> STATE_INIT:</span><br><span class="line">        LOG(<span class="string">&quot;- init -\n&quot;</span>);</span><br><span class="line">        procd_inittab();</span><br><span class="line">        procd_inittab_run(<span class="string">&quot;respawn&quot;</span>);</span><br><span class="line">        procd_inittab_run(<span class="string">&quot;askconsole&quot;</span>);</span><br><span class="line">        procd_inittab_run(<span class="string">&quot;askfirst&quot;</span>);</span><br><span class="line">        procd_inittab_run(<span class="string">&quot;sysinit&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">init_handler</span> <span class="title">handlers</span>[] =</span> &#123;</span><br><span class="line">    &#123;</span><br><span class="line">        .name = <span class="string">&quot;sysinit&quot;</span>,</span><br><span class="line">        .cb = runrc,</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">        .name = <span class="string">&quot;shutdown&quot;</span>,</span><br><span class="line">        .cb = runrc,</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">        .name = <span class="string">&quot;askfirst&quot;</span>,</span><br><span class="line">        .cb = askfirst,</span><br><span class="line">        .multi = <span class="number">1</span>,</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">        .name = <span class="string">&quot;askconsole&quot;</span>,</span><br><span class="line">        .cb = askconsole,</span><br><span class="line">        .multi = <span class="number">1</span>,</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">        .name = <span class="string">&quot;respawn&quot;</span>,</span><br><span class="line">        .cb = rcrespawn,</span><br><span class="line">        .multi = <span class="number">1</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20191013125930125.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+</blockquote>
+<h2 id="九、演示案例（更改链表配置）"><a href="#九、演示案例（更改链表配置）" class="headerlink" title="九、演示案例（更改链表配置）"></a>九、演示案例（更改链表配置）</h2><ul>
+<li>当一个配置文件中的选项（option）为链表时，操作方法有所不同。</li>
+</ul>
+<blockquote>
+<h4 id="演示案例-2"><a href="#演示案例-2" class="headerlink" title="演示案例"></a>演示案例</h4><ul>
+<li>例如我们的&#x2F;etc&#x2F;config&#x2F;system配置文件中就有“list”形式的链表选项。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/2019101313042788.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<ul>
+<li>添加到链表中一个配置项：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci add_list system.ntp.server=&#x27;ntp.dongshao.net&#x27; uci commit system</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">procd_inittab_run</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *handler)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">init_action</span> *<span class="title">a</span>;</span></span><br><span class="line"></span><br><span class="line">    list_for_each_entry(a, &amp;actions, <span class="built_in">list</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(a-&gt;handler-&gt;name, handler)) &#123;</span><br><span class="line">            <span class="keyword">if</span> (a-&gt;handler-&gt;multi) &#123;</span><br><span class="line">                a-&gt;handler-&gt;cb(a);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            a-&gt;handler-&gt;cb(a);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> <img src="https://img-blog.csdnimg.cn/20191013130951609.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<ul>
+<li>删除链表中的一个配置项。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci del_list system.ntp.server<span class="operator">=</span><span class="string">&#x27;ntp.dongshao.net&#x27;</span> uci <span class="keyword">commit</span> <span class="keyword">system</span></span><br></pre></td></tr></table></figure>
 
-<p>这里来看<em>runrc</em>的实现，代码位于<em>inittab.c</em></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">runrc</span><span class="params">(<span class="keyword">struct</span> init_action *a)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (!a-&gt;argv[<span class="number">1</span>] || !a-&gt;argv[<span class="number">2</span>]) &#123;</span><br><span class="line">        ERROR(<span class="string">&quot;valid format is rcS &lt;S|K&gt; &lt;param&gt;\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* proceed even if no init or shutdown scripts run */</span></span><br><span class="line">    <span class="keyword">if</span> (rcS(a-&gt;argv[<span class="number">1</span>], a-&gt;argv[<span class="number">2</span>], rcdone)) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;---rcdone---\n&quot;</span>);</span><br><span class="line">        rcdone(<span class="literal">NULL</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;----rcdone error\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20191013131006364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<ul>
+<li>删除链表中的所有配置项。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci <span class="keyword">delete</span> system.ntp.server uci <span class="keyword">commit</span> <span class="keyword">system</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="十、自定义配置文件及修改"><a href="#十、自定义配置文件及修改" class="headerlink" title="十、自定义配置文件及修改"></a>十、自定义配置文件及修改</h2><ul>
+<li>下面我们创建一个helloRoute的配置。</li>
+<li><strong>第一步：</strong>先创建一个“hello”的配置文件</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch /etc/config/hello</span><br></pre></td></tr></table></figure>
 
-<p><em>rcS.c</em></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">rcS</span><span class="params">(<span class="type">char</span> *pattern, <span class="type">char</span> *param, <span class="type">void</span> (*q_empty)(<span class="keyword">struct</span> runqueue *))</span></span><br><span class="line">&#123;</span><br><span class="line">    runqueue_init(&amp;q);</span><br><span class="line">    q.empty_cb = q_empty;</span><br><span class="line">    q.max_running_tasks = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> _rc(&amp;q, <span class="string">&quot;/etc/rc.d&quot;</span>, pattern, <span class="string">&quot;*&quot;</span>, param);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20191013131240215.png"></p>
+<ul>
+<li><strong>第二步：</strong>首先通过命令行创建配置文件。像上面的配置一样，如果你想增加一个配置节，大多数人都会想到使用“uci add”命令，但实际上“uci add”仅可以创建匿名配置节，不能完 成创建命名配置的目标，要使用“uci set”命令来完成。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci <span class="keyword">set</span> hello.globe<span class="operator">=</span><span class="keyword">system</span></span><br></pre></td></tr></table></figure>
 
-<p>执行*&#x2F;etc&#x2F;rc.d*目录下<strong>S&#x2F;K</strong>开头的脚本</p>
+<p><img src="https://img-blog.csdnimg.cn/20191013131520159.png"></p>
+<ul>
+<li><strong>第三步：</strong>设置配置节的3个选项。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci set hello.globe.agent=dongshao                           //用户代理属性uci set hello.globe.url=&#x27;https://blog.csdn.net/qq_41453285&#x27;  //访问URLuci set hello.globe.delay=100                                //启动延迟时间 uci commit  //提交配置修改</span><br></pre></td></tr></table></figure>
+
+<p> <img src="https://img-blog.csdnimg.cn/20191013131610328.png"></p>
+<ul>
+<li>查看配置文件内容。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20191013131625782.png"></p>
+<h2 id="十一、-lib-config-uci-sh"><a href="#十一、-lib-config-uci-sh" class="headerlink" title="十一、&#x2F;lib&#x2F;config&#x2F;uci.sh"></a>十一、&#x2F;lib&#x2F;config&#x2F;uci.sh</h2><ul>
+<li><strong>脚本介绍：</strong>UCI模块提供了一个 shell 脚本（&#x2F;lib&#x2F;config&#x2F;uci.sh）并封装了UCI命令行工具的功能， 这样方便了其他软件包在将UCI配置文件转换为自己格式的配置文件时使用。</li>
+<li><strong>主要的函数如下所示：</strong>需要这些函数需要导入&#x2F;lib&#x2F;config&#x2F;uci.sh。</li>
+</ul>
+<table border="1" cellpadding="1" cellspacing="1"><tbody><tr><td><span style="color:#3399ea;"><strong>函 数 名 称</strong></span></td><td><span style="color:#3399ea;"><strong>含 义</strong></span></td></tr><tr><td><strong>uci_load</strong></td><td>从<strong>UCI文件中加载配置并设置到环境变量</strong>中，可以通过env命令来查看。该命令需要和 functions.sh 中的定义共同使用。</td></tr><tr><td><strong>uci_get</strong></td><td>从<strong>配置文件中获取值</strong>。至少需要一个参数，指明要获取的配置信息。例如获 取系统主机名称调用：uci_get system.@system[0].hostname。</td></tr><tr><td><strong>uci_get_state</strong></td><td>指定<strong>从/var/state中获取状态值。</strong></td></tr></tbody></table>
+
+<blockquote>
+<h4 id="uci-load函数的注意事项"><a href="#uci-load函数的注意事项" class="headerlink" title="uci_load函数的注意事项"></a><strong>uci_load函数的注意事项</strong></h4><ul>
+<li>在单独导入uci.sh时，uci_load函数<strong>并不能执行成功</strong>，因为 uci_load函数引用了&#x2F;lib&#x2F;functions.sh的一些函数定义，因此在使用 uci_load 函数时需要先导入functions.sh的函数定义。</li>
+<li>调用uci_load函数将配置设置到环境变量中时，uci_load函数又调用了 functions.sh 定义的 config()、option()、list()等函数。</li>
+</ul>
+</blockquote>
+<h2 id="十二、-lib-functions-sh"><a href="#十二、-lib-functions-sh" class="headerlink" title="十二、&#x2F;lib&#x2F;functions.sh"></a>十二、&#x2F;lib&#x2F;functions.sh</h2><ul>
+<li><strong>脚本介绍：</strong>functions.sh的主要原理是将配置文件中的配置选项<strong>设置到环境变量中</strong>，然后<strong>提供接口函数在环境变量中获取。</strong></li>
+<li>调用uci_load函数将配置设置到环境变量中时，uci_load函数又调用了 functions.sh 定义的 config()、option()、list()等函数。</li>
+<li>在使用这些函数时，以点开头来将这些函数加载到执行空间中，注意点和执行文件中间有 一个空格。例如：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">. /lib/functions.sh     //装载函数</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>主要的函数如下所示：</strong></li>
+</ul>
+<table border="1" cellpadding="1" cellspacing="1"><tbody><tr><td><span style="color:#3399ea;"><strong>函 数 名 称</strong></span></td><td><span style="color:#3399ea;"><strong>含 义</strong></span></td></tr><tr><td><strong>config</strong></td><td>供uci.sh调用，将配置节设置到环境变量中。</td></tr><tr><td><strong>option</strong></td><td>供uci.sh调用，将配置节中的选项设置到环境变量中。</td></tr><tr><td><strong>list</strong></td><td>供uci.sh调用，将配置节中的链表配置设置到环境变量中。</td></tr><tr><td><strong>config_load</strong></td><td>调用uci_load函数来从配置文件中读取配置选项，并设置到环境变量中。</td></tr><tr><td><strong>config_get</strong></td><td>从当前设置环境变量中获取配置值。</td></tr><tr><td><strong>config_get_bool</strong></td><td>从当前设置的环境变量中获取布尔值，并将它进行格式转换，如果为真，转换为1，否则转换为0。因为 UCI 的布尔值有多种类型均支持。on、true、enabled 和 1 表示真，off、false、disable 和0表示假。</td></tr><tr><td><strong>config_set</strong></td><td>将变量设置到环境变量中以便后续读取。注意：仅设置到环境变量中并没有设置到配置文件中。</td></tr><tr><td><strong>config_foreach</strong></td><td>对于未命名的配置进行遍历调用函数。共两个参数，第一个参数为回调函数，第 二个参数为配置节类型，这个函数适用于匿名配置节的转换处理。</td></tr></tbody></table>
+
+<blockquote>
+<h4 id="配置文件选项的写入与读取"><a href="#配置文件选项的写入与读取" class="headerlink" title="配置文件选项的写入与读取"></a>配置文件选项的写入与读取</h4><ul>
+<li>我们知道functions.sh的主要原理是将配置文件中的配置选项设置到环境变量中，然后提供接口函数在环境变量中获取，<strong>下面我们以config_load与config_get函数为例，介绍一下执行过程。</strong></li>
+<li>①首先通过调用config_load函数将UCI配置读入当前环境变量中，默认从&#x2F;etc&#x2F;config目录下读取配置，并设置到环境变量中。</li>
+<li>②然后使用config_get等函数进行读取和转换配置。</li>
+<li>③我们以config_get函数为例来说明执行流程。config_get函数从环境变量中读取配置值并赋值给变量。该函数至少要3个参数。<ul>
+<li>第1个参数为存储返回值的变量。</li>
+<li>第2个参数为所要读取的配置节的名称。</li>
+<li>第3个参数是所有读取的选项名称。</li>
+<li>第4个参数是为默认值，如果配置文件没有该选项则返回该默认值，是一个可选的参数。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h2 id="十三、“uci-”与“config-”函数的区别"><a href="#十三、“uci-”与“config-”函数的区别" class="headerlink" title="十三、“uci_”与“config_”函数的区别"></a>十三、“uci_”与“config_”函数的区别</h2><ul>
+<li>“uci_”开头的函数是&#x2F;lib&#x2F;config&#x2F;uci.sh脚本提供的，“config_”开头得函数是&#x2F;lib&#x2F;functions.sh脚本提供的。</li>
+</ul>
+<blockquote>
+<h4 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a>相同点</h4><ul>
+<li>以“uci_”开头的函数和以“config_”开头的函数大多数<strong>功能完全相同。</strong></li>
+</ul>
+</blockquote>
+<blockquote>
+<h4 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a><strong>不同点</strong></h4><ul>
+<li>“uci_get”等函数直接从文件中获取，而“config_get”函数从环境变量中读取。</li>
+<li><strong>性能差异：</strong>“config_get”函数使用“config_load”一次从配置文件中读取设置到环境变量中，以后均不再进行磁盘操作。而“uci_get”每次均从文件中读取。</li>
+<li>如果调用多次，两者性能差距就会显现，实际测试中两者相差10倍以上。因此在OpenWrt中大多使用以“config_”开头的“config_get”等函数进行配置文件转换。</li>
+</ul>
+</blockquote>
+<h2 id="十四、演示案例"><a href="#十四、演示案例" class="headerlink" title="十四、演示案例"></a>十四、演示案例</h2><ul>
+<li>下图所示为OpenWrt 12.09的一个实际代码，在启动时，从配置文件中获取主机名称，并设置到内核中。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/2019101317170527.png"></p>
+<h2 id="十五、UCI-API编程接口概述"><a href="#十五、UCI-API编程接口概述" class="headerlink" title="十五、UCI API编程接口概述"></a>十五、UCI API编程接口概述</h2><ul>
+<li>上面我们介绍了UCI的脚本提供的命令接口，UCI还提供了C语言调用接口。下面在<strong>操作系统Ubuntu</strong>下来说明API的使用。</li>
+<li>首先准备UCI编程接口的使用环境：UCI软件依赖Libubox，因此首先编译Libubox，Libubox库编译好之后，就可以再去编译UCI库了。</li>
+<li>等到UCI库编译好之后，我们就可以在编写C语言程序时使用UCI库了。</li>
+</ul>
+<h2 id="十六、Libubox库"><a href="#十六、Libubox库" class="headerlink" title="十六、Libubox库"></a>十六、Libubox库</h2><ul>
+<li><strong>Libubox库介绍：</strong>Libubox是OpenWrt的一个必备的基础库，包含大小端转换、链表、MD5等实用工具基础库，采用Cmake来编译。</li>
+</ul>
+<blockquote>
+<h4 id="安装Cmake"><a href="#安装Cmake" class="headerlink" title="安装Cmake"></a>安装Cmake</h4><ul>
+<li>。Cmake是跨平台的产生Makefile的命令行工具，它应用于在脚本文件中配置工程</li>
+<li><strong>-D选项：</strong>设置工程选项。</li>
+<li><strong>-i选项：</strong>打开交互提示来进行设置。</li>
+<li><strong>CmakeLists.txt：</strong>Cmake是一个跨平台的编译系统生成工具。通过平台独立Cmake的listfiles文件来指定构建过程。这个文件在每一个源码目录树目录下均有一个，文件名为CmakeLists.txt。</li>
+<li>安装Cmake命令如下：</li>
+</ul>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="keyword">get</span> install cmake</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<h4 id="编译、安装Libubox"><a href="#编译、安装Libubox" class="headerlink" title="编译、安装Libubox"></a>编译、安装Libubox</h4><ul>
+<li><strong>第一步：</strong>下载Libubox的软件包。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">got clone https://github.com/yubo/libubox.git</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20191013183923890.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/20191013183959776.png"></p>
+<ul>
+<li><strong>第二步：</strong>使用cmake生成Makefile。</li>
+<li>命令最后的一个点，代表当前路径。</li>
+<li>设置了两个编译开关（BUILD_LUA:BOOL、BUILD_EXAMPLES:BOLL）为 OFF，这两个分别是lua和使用示例，我们不进行编译，因此把编译选项关闭。</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -D <span class="variable constant_">BUILD_LUA</span><span class="symbol">:BOOL=OFF</span> -D <span class="variable constant_">BUILD_EXAMPLES</span><span class="symbol">:BOLL=OFF</span> .</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20191013184016905.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<ul>
+<li><strong>第三步：</strong> 进行编译（make）、安装（make install）。</li>
+<li>在进行编译时，编译过程中会输出编译进度百分比。</li>
+<li>编译完成之后进行安装，安装到系统目录中，需要使用管理员权限并输入密码，因此会加上sudo命令。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make</span>;sudo <span class="built_in">make</span> install;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20191013192841960.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/20191013192848133.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<ul>
+<li>安装内容包含头文件和动态链接库文件。<strong>头文件默认安装在&#x2F;usr&#x2F;local&#x2F;include&#x2F;libubox</strong>目录下，<strong>动态链接库libubox.so和 libubox.a</strong>安装在&#x2F;usr&#x2F;local&#x2F;lib&#x2F;目录下。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20191017104646720.png"><img src="https://img-blog.csdnimg.cn/20191017104713161.png"></p>
+</blockquote>
+<h2 id="十七、UCI库"><a href="#十七、UCI库" class="headerlink" title="十七、UCI库"></a>十七、UCI库</h2><ul>
+<li>Libubox安装完成后就可以编译安装UCI软件了。</li>
+</ul>
+<blockquote>
+<h4 id="编译、安装UCI库"><a href="#编译、安装UCI库" class="headerlink" title="编译、安装UCI库"></a>编译、安装UCI库</h4><ul>
+<li><strong>第一步：</strong>下载UCI软件包。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/jkjuopperi/uci.git</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20191013192705373.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/20191013192721177.png"></p>
+<ul>
+<li><strong>第二步：</strong>使用cmake生成Makefile。</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -D <span class="variable constant_">BUILD_LUA</span><span class="symbol">:BOOL=OFF</span> .</span><br></pre></td></tr></table></figure>
+
+<h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://img-blog.csdnimg.cn/20191013192945866.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></h2><ul>
+<li><strong>第三步：</strong>编译、安装UCI。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make</span> sudo <span class="built_in">make</span> install</span><br></pre></td></tr></table></figure>
+
+<h2 id="-1"><a href="#-1" class="headerlink" title=""></a><img src="https://img-blog.csdnimg.cn/20191013192933528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></h2><p><img src="https://img-blog.csdnimg.cn/20191013192919740.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<ul>
+<li>UCI库的头文件安装在&#x2F;usr&#x2F;local&#x2F;include目录下，动态链接库安装在&#x2F;usr&#x2F;local&#x2F;lib&#x2F; libuci.so，可执行程序为&#x2F;usr&#x2F;local&#x2F;bin&#x2F;uci。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20191017112234855.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/20191017104929526.png"><img src="https://img-blog.csdnimg.cn/20191017104957735.png"></p>
+<ul>
+<li><strong>第四步：</strong>因为系统还不知道动态链接库已经安装，运行该命令会告诉系统重新加载动态链接库，这样UCI动态链接库就可以使用了。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20191013193003197.png"></p>
+</blockquote>
+<ul>
+<li>UCI库编译好之后，就可以在C语言程序中使用UCI库了（-luci），例如下面使用gcc编译一个带有与UCI库的C程序。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc test.c -o test -luci</span><br></pre></td></tr></table></figure>
+
+<h2 id="十八、UCI-API接口"><a href="#十八、UCI-API接口" class="headerlink" title="十八、UCI API接口"></a>十八、UCI API接口</h2><ul>
+<li>UCI接口命名非常规范，统一以小写的uci开头并放在<strong>uci.h头文件中。</strong></li>
+<li>大多数函数的<strong>第一个参数均为uci_context的指针变量</strong>。这个变量在程序初始化时<strong>调用uci_alloc_context函数</strong>分配空间并设置初始值。在程序执行<strong>结束时调用uci_free_context函数</strong>释放空间。</li>
+<li>UCI接口有设置函数uci_set，但没有相应的获取函数uci_get，UCI<strong>使用uci_lookup_ptr来提供查询功</strong>能，如果查到则通过获取ptr变量的值来获取配置的值。</li>
+</ul>
+<table border="1" cellpadding="1" cellspacing="1"><tbody><tr><td><span style="color:#3399ea;"><strong>函 数</strong></span></td><td><span style="color:#3399ea;"><strong>含 义</strong></span></td></tr><tr><td><strong>uci_alloc_context</strong></td><td>分配UCI上下文环境对象。</td></tr><tr><td><strong>uci_free_context</strong></td><td>释放UCI上下文环境对象。</td></tr><tr><td><strong>uci_load</strong></td><td>解析UCI配置文件，并存储到UCI对象中。@name:配置文件名，相对于配置目录。@package:在这个变量中存储装载的配置包。</td></tr><tr><td><strong>uci_unload</strong></td><td>从UCI上下文环境对象中unload配置文件。</td></tr><tr><td><strong>uci_lookup_ptr</strong></td><td>分割字符串并查找。@ptr:查找的结果。@str:待查找的字符串，但 str 不能为常量， 因为将被修改赋值，在 ptr 变量内部会被使用到，因此 str 的寿命必须至少和 ptr 一样长。@extended 是否允许扩展查找。</td></tr><tr><td><strong>uci_set</strong></td><td>设置元素值，如果必要将创建一个元素。更新或创建的元素将存储在ptr-&gt; last中。</td></tr><tr><td><strong>uci_delete</strong></td><td>删除一个元素，配置节或选项。</td></tr><tr><td><strong>uci_save</strong></td><td>保存一个package修改的delta。</td></tr><tr><td><strong>uci_commit</strong></td><td>提交更改package，提交将重新加载整个uci_package。</td></tr><tr><td><strong>uci_set_confdir</strong></td><td>修改UCI配置文件的存储位置，默认为/etc/config。</td></tr></tbody></table>
+
+<h2 id="十九、演示案例"><a href="#十九、演示案例" class="headerlink" title="十九、演示案例"></a>十九、演示案例</h2><ul>
+<li>UCI API的使用案例，见文章：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41453285/article/details/102545618">https://blog.csdn.net/qq_41453285/article/details/102545618</a>。</li>
+</ul>
 
         
       </div>
@@ -380,10 +714,15 @@ var _hmt = _hmt || [];
   
     
 <nav id="article-nav">
-  <a class="article-nav-btn left  disabled "
+  <a class="article-nav-btn left "
+    
+      href="/posts/2854974324/"
+      title="OpenWRT procd启动流程和脚本分析"
      >
     <i class="fa-solid fa-angle-left"></i>
     <p class="title-text">
+      
+        OpenWRT procd启动流程和脚本分析
         
     </p>
   </a>

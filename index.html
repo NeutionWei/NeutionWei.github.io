@@ -237,7 +237,7 @@ var _hmt = _hmt || [];
         
             <a class="category-link" href="/categories/openwrt/">
                 openwrt
-                <div class="category-count">1</div>
+                <div class="category-count">2</div>
             </a>
         </div>
     </div>
@@ -249,7 +249,7 @@ var _hmt = _hmt || [];
   <div class="widget-wrap">
     <div class="widget">
       <h3 class="widget-title">Tags</h3>
-      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/boot/" rel="tag">boot</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/chatgpt/" rel="tag">chatgpt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/delayed-write/" rel="tag">delayed write</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/fallocate/" rel="tag">fallocate</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/ffmpeg/" rel="tag">ffmpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/free/" rel="tag">free</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/github/" rel="tag">github</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/headphone-parameters/" rel="tag">headphone parameters</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/jpeg/" rel="tag">jpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/over-ear-headphone/" rel="tag">over-ear headphone</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/procd/" rel="tag">procd</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/pwrite/" rel="tag">pwrite</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rk-mpp/" rel="tag">rk-mpp</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rsync/" rel="tag">rsync</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/shell/" rel="tag">shell</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/yuv/" rel="tag">yuv</a></li></ul>
+      <ul class="widget-tag-list" itemprop="keywords"><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/boot/" rel="tag">boot</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/chatgpt/" rel="tag">chatgpt</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/delayed-write/" rel="tag">delayed write</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/fallocate/" rel="tag">fallocate</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/ffmpeg/" rel="tag">ffmpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/free/" rel="tag">free</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/github/" rel="tag">github</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/headphone-parameters/" rel="tag">headphone parameters</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/jpeg/" rel="tag">jpeg</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/over-ear-headphone/" rel="tag">over-ear headphone</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/procd/" rel="tag">procd</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/pwrite/" rel="tag">pwrite</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rk-mpp/" rel="tag">rk-mpp</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/rsync/" rel="tag">rsync</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/shell/" rel="tag">shell</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/uci/" rel="tag">uci</a></li><li class="widget-tag-list-item"><a class="widget-tag-list-link" href="/tags/yuv/" rel="tag">yuv</a></li></ul>
     </div>
   </div>
 
@@ -309,6 +309,88 @@ var _hmt = _hmt || [];
 
 kernel_init部分代码如下：
 123456789101112131415 994     if (execute_command) &#123; 995         ret = run_init_process(execute_command); 996         if (!ret) 997             return 0; 998         panic(&quot;Requested init %s failed (error %d).&quot;, 999               execute_command, ret);1000     &#125;1001     if (!try_to_run_init_process(&quot;/sbin/init&quot;) |...
+            
+          </div>
+        
+      </div>
+
+         
+    </div>
+    
+     
+    <a class="right-panel  non-pic  "
+      
+      href="/posts/2854974324/" 
+    >
+       
+      <i class="fa-solid fa-angle-right non-pic"></i>
+       
+    </a>
+     
+  </div>
+  
+</article>
+
+
+
+
+
+
+   
+
+
+<article id="post-openwrt/一文打尽UCI统一配置接口、UCI配置文件、UCI工具用法、UCI配置脚本、UCI API编程接口（Libubox库、UCI库）" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+   
+  <div class="article-inner">
+    <div class="article-main">
+      <header class="article-header">
+        
+<div class="main-title-bar">
+  <div class="main-title-dot"></div>
+  
+    
+      <h1 itemprop="name">
+        <a class="p-name article-title" href="/posts/2854974324/">一文打尽UCI统一配置接口、UCI配置文件、UCI工具用法、UCI配置脚本、UCI API编程接口（Libubox库、UCI库）</a>
+      </h1>
+    
+  
+</div>
+
+        <div class='meta-info-bar'>
+          <div class="meta-info">
+  <time class="dt-published" datetime="2024-05-09T07:17:43.000Z" itemprop="datePublished">2024-05-09</time>
+</div>
+          <div class="need-seperator meta-info">
+            <div class="meta-cate-flex">
+  
+  <a class="meta-cate-link" href="/categories/openwrt/">openwrt</a>
+   
+</div>
+  
+          </div>
+          <div class="wordcount need-seperator meta-info">
+            11k words 
+          </div>
+        </div>
+        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/uci/" rel="tag">uci</a></li></ul>
+
+      </header>
+      <div class="e-content article-entry" itemprop="articleBody">
+        
+          <div class="truncate-text">
+            
+              
+转载自：https://blog.csdn.net/qq_41453285&#x2F;article&#x2F;details&#x2F;102527800
+
+
+
+接下来几篇文章首先讲述 UCI 配置及配置接口，接着讲述系统内核设置，最后还会讲述一些非 UCI 系统配置，这些配置通常不提供用户修改接口，但在系统运行时也是非常重要的。
+
+一、UCI简介
+MVC（Model-View-Control）模式是经典的Web开发编程模式，OpenWrt也采用该设 计模式。该设计模式为分层设计，模型层负责数据的持久化操作。OpenWrt 的模型层采用 统一配置接口（Unified Configuration Interface，UCI）。
+统一配置接口（Unified Configuration Interface，UCI），是OpenWrt成功的关键技 术之一，已经移植支持数千个软件。它采用纯文本文件来保存配置，并提供命令 行和 C 语言编程调用接口进行管理。
+UCI的目的在于集中OpenWrt系统的配置。这样每一个开发人员只需学习一次即可， 减少了学习成本。这是 OpenWrt 成功的...
             
           </div>
         
@@ -1029,93 +1111,6 @@ jpeg文件关键结构如下图所示...
     <a class="right-panel  non-pic  "
       
       href="/posts/167527658/" 
-    >
-       
-      <i class="fa-solid fa-angle-right non-pic"></i>
-       
-    </a>
-     
-  </div>
-  
-</article>
-
-
-
-
-
-
-   
-
-
-<article id="post-ai/全网揭秘！ChatGPT 终极入门指南，从入门到精通玩转ChatGPT" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-   
-  <div class="article-inner">
-    <div class="article-main">
-      <header class="article-header">
-        
-<div class="main-title-bar">
-  <div class="main-title-dot"></div>
-  
-    
-      <h1 itemprop="name">
-        <a class="p-name article-title" href="/posts/3242479001/">全网揭秘！ChatGPT 终极入门指南，从入门到精通玩转ChatGPT</a>
-      </h1>
-    
-  
-</div>
-
-        <div class='meta-info-bar'>
-          <div class="meta-info">
-  <time class="dt-published" datetime="2024-04-22T06:51:43.000Z" itemprop="datePublished">2024-04-22</time>
-</div>
-          <div class="need-seperator meta-info">
-            <div class="meta-cate-flex">
-  
-  <a class="meta-cate-link" href="/categories/ai/">ai</a>
-   
-</div>
-  
-          </div>
-          <div class="wordcount need-seperator meta-info">
-            10k words 
-          </div>
-        </div>
-        
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/chatgpt/" rel="tag">chatgpt</a></li></ul>
-
-      </header>
-      <div class="e-content article-entry" itemprop="articleBody">
-        
-          <div class="truncate-text">
-            
-              
-转载自：https://zhuanlan.zhihu.com/p/625771491
-
-ChatGPT 的横空出世，让很多人焦虑不已，不过，你完全不需要为此焦虑，因为 比 AI 更强大永远是驾驭 AI 为自己所用的人类 。
-而且** GPT 远没有各大商家炒作的那么玄乎，它应用逻辑也非常简单，你完全没必要为此去花钱报各种班学习。**
-今天我就用一篇文章带你掌握 GPT 的用法， 本文无废话，全程干货，全部都是实操 ，纯小白也能看懂。
-只要你能认真读完本文，我保证能让你对 GPT 的应用能力，超越 90% 的人！！！
-
-图片为AI生成
-那么，在正式开始前，我这里有必要说明一下：
-关于 GPT 的基本面介绍，以及怎么注册，这些搜索引擎一搜一大把的东西，我们这里不浪费口舌。
-PS：为了照顾一些无特殊环境的同学，文章最后也会提供一些国内直接访问的镜像网站，请注意发现彩蛋~
-所以，我们这里就直接围绕着 最关键的部分 ，也就是：你拿到 GPT 之后的两大痛点开始讲起….
-1为什么AI无法为你所用？
-很多同学拿到 GPT 后的 第一个痛点就是：  用的不好 。
-也就是说，你经常会感觉到 Ch...
-            
-          </div>
-        
-      </div>
-
-         
-    </div>
-    
-     
-    <a class="right-panel  non-pic  "
-      
-      href="/posts/3242479001/" 
     >
        
       <i class="fa-solid fa-angle-right non-pic"></i>
