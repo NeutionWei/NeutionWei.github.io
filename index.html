@@ -339,7 +339,7 @@ kernel_init部分代码如下：
    
 
 
-<article id="post-openwrt/一文打尽UCI统一配置接口、UCI配置文件、UCI工具用法、UCI配置脚本、UCI API编程接口（Libubox库、UCI库）" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+<article id="post-openwrt/一文打尽UCI" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
    
   <div class="article-inner">
     <div class="article-main">
@@ -385,12 +385,13 @@ kernel_init部分代码如下：
 
 
 
+
 接下来几篇文章首先讲述 UCI 配置及配置接口，接着讲述系统内核设置，最后还会讲述一些非 UCI 系统配置，这些配置通常不提供用户修改接口，但在系统运行时也是非常重要的。
 
 一、UCI简介
 MVC（Model-View-Control）模式是经典的Web开发编程模式，OpenWrt也采用该设 计模式。该设计模式为分层设计，模型层负责数据的持久化操作。OpenWrt 的模型层采用 统一配置接口（Unified Configuration Interface，UCI）。
 统一配置接口（Unified Configuration Interface，UCI），是OpenWrt成功的关键技 术之一，已经移植支持数千个软件。它采用纯文本文件来保存配置，并提供命令 行和 C 语言编程调用接口进行管理。
-UCI的目的在于集中OpenWrt系统的配置。这样每一个开发人员只需学习一次即可， 减少了学习成本。这是 OpenWrt 成功的...
+UCI的目的在于集中OpenWrt系统的配置。这样每一个开发人员只需学习一次即可， 减少了学习成本。这是 OpenWrt 成功...
             
           </div>
         

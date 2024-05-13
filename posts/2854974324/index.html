@@ -59,57 +59,57 @@ var _hmt = _hmt || [];
   <link rel="preload" href="/css/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
   <link rel="preload" href="/css/fonts/Roboto-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous">
 
-  <meta name="description" content="转载自：https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_41453285&#x2F;article&#x2F;details&#x2F;102527800    接下来几篇文章首先讲述 UCI 配置及配置接口，接着讲述系统内核设置，最后还会讲述一些非 UCI 系统配置，这些配置通常不提供用户修改接口，但在系统运行时也是非常重要的。  一、UCI简介 MVC（Model-View-Control">
+  <meta name="description" content="转载自：https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_41453285&#x2F;article&#x2F;details&#x2F;102527800     接下来几篇文章首先讲述 UCI 配置及配置接口，接着讲述系统内核设置，最后还会讲述一些非 UCI 系统配置，这些配置通常不提供用户修改接口，但在系统运行时也是非常重要的。  一、UCI简介 MVC（Model-View-Contro">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一文打尽UCI统一配置接口、UCI配置文件、UCI工具用法、UCI配置脚本、UCI API编程接口（Libubox库、UCI库）">
 <meta property="og:url" content="https://neutionwei.github.io/posts/2854974324/index.html">
 <meta property="og:site_name" content="Systemcall Station">
-<meta property="og:description" content="转载自：https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_41453285&#x2F;article&#x2F;details&#x2F;102527800    接下来几篇文章首先讲述 UCI 配置及配置接口，接着讲述系统内核设置，最后还会讲述一些非 UCI 系统配置，这些配置通常不提供用户修改接口，但在系统运行时也是非常重要的。  一、UCI简介 MVC（Model-View-Control">
+<meta property="og:description" content="转载自：https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_41453285&#x2F;article&#x2F;details&#x2F;102527800     接下来几篇文章首先讲述 UCI 配置及配置接口，接着讲述系统内核设置，最后还会讲述一些非 UCI 系统配置，这些配置通常不提供用户修改接口，但在系统运行时也是非常重要的。  一、UCI简介 MVC（Model-View-Contro">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191011113842904.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191012221249809.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191012222719953.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191012222732160.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013110815394.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191011113842904.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191011113842904.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191012222719953.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191012222732160.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013110815394.png">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20191013111128611.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20191013111230772.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013123056211.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013130025570.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/2019101312442763.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013124642891.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013124823242.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013125255130.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013125930125.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/2019101313042788.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013130951609.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013131006364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013131240215.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013131520159.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013131610328.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013131625782.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/2019101317170527.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013183923890.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013183959776.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013184016905.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013192841960.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013192848133.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191017104646720.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191017104713161.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013192705373.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013192721177.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013192945866.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013192933528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013192919740.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191017112234855.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013123056211.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013130025570.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/2019101312442763.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013124642891.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013124823242.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013125255130.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013125930125.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/2019101313042788.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013130951609.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013131006364.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013131240215.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013131520159.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013131610328.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013131625782.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/2019101317170527.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013183923890.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013183959776.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013184016905.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013192841960.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013192848133.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191017104646720.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191017104713161.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013192705373.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013192721177.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013192945866.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013192933528.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013192919740.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191017112234855.png">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20191017104929526.png">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20191017104957735.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20191013193003197.png">
+<meta property="og:image" content="https://neutionwei.github.io/posts/2854974324/20191013193003197.png">
 <meta property="article:published_time" content="2024-05-09T07:17:43.000Z">
-<meta property="article:modified_time" content="2024-05-11T08:47:44.982Z">
+<meta property="article:modified_time" content="2024-05-13T07:45:41.104Z">
 <meta property="article:author" content="Neutionwei">
 <meta property="article:tag" content="uci">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20191011113842904.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70">
+<meta name="twitter:image" content="https://neutionwei.github.io/posts/2854974324/20191011113842904.png">
   
     <link rel="alternate" href="/atom.xml" title="Systemcall Station" type="application/atom+xml">
   
@@ -306,7 +306,7 @@ var _hmt = _hmt || [];
        
 
 
-<article id="post-openwrt/一文打尽UCI统一配置接口、UCI配置文件、UCI工具用法、UCI配置脚本、UCI API编程接口（Libubox库、UCI库）" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+<article id="post-openwrt/一文打尽UCI" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
     
    
@@ -350,7 +350,8 @@ var _hmt = _hmt || [];
           <blockquote>
 <p>转载自：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41453285/article/details/102527800">https://blog.csdn.net/qq_41453285&#x2F;article&#x2F;details&#x2F;102527800</a></p>
 </blockquote>
-<p><img src="https://img-blog.csdnimg.cn/20191011113842904.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<img src="/posts/2854974324/20191011113842904.png" class="">
+
 <ul>
 <li>接下来几篇文章首先讲述 UCI 配置及配置接口，接着讲述系统内核设置，最后还会讲述一些非 UCI 系统配置，这些配置通常不提供用户修改接口，但在系统运行时也是非常重要的。</li>
 </ul>
@@ -364,7 +365,8 @@ var _hmt = _hmt || [];
 <li>配置节（section），是UCI配置的一个独立配置单元。UCI配置文件是由一个或多个配置节组成。配置节有一个配置类型属性，是以“config”开头，并且有一个可选名称。配置节包含一个或多个配置选项语句。</li>
 <li><strong>格式：</strong>配置文件由<strong>配置节</strong>（section）组成，配置节由<strong>多个“name&#x2F;values”选项对</strong>（option）组成。</li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/20191012221249809.png"></p>
+<img src="/posts/2854974324/20191011113842904.png" class="">
+
 <ul>
 <li><strong>注意事项：</strong><ul>
 <li>每一个<strong>配置节</strong>（section）都需要有一个类型标识（type），但不一定需要名称（name）。</li>
@@ -384,17 +386,19 @@ var _hmt = _hmt || [];
 <li>通常不需要使用引号引上类型标识符（type）或值（value），引号只在<strong>封闭的值</strong>包含<strong>空格或制表符</strong>的情况下需要。它可以合法地使用双引号和单引号。</li>
 <li>下面是合法的UCI文件选项语法示例：</li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/20191012222719953.png"></p>
+<img src="/posts/2854974324/20191012222719953.png" class="">
+
 <ul>
 <li>下面的例子是错误的UCI文件语法：</li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/20191012222732160.png"></p>
+<img src="/posts/2854974324/20191012222732160.png" class="">
 </blockquote>
 <blockquote>
 <h4 id="演示案例"><a href="#演示案例" class="headerlink" title="演示案例"></a>演示案例</h4><ul>
 <li>下面是OpenWrt中的一个实际配置文件（&#x2F;etc&#x2F;config&#x2F;system）。</li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/20191013110815394.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<img src="/posts/2854974324/20191013110815394.png" class="">
+
 <ul>
 <li><strong>“config system”语句：</strong>定义了一个配置节的开始，配置类型为“system”，但没有名称。</li>
 <li><strong>选项“option hostname OpenWrt”和“option timezone UTC”两行：</strong>定义了“config system”配置节的两个简单配置。</li>
@@ -464,27 +468,32 @@ var _hmt = _hmt || [];
 </ul>
 <table border="1" cellpadding="1" cellspacing="1"><tbody><tr><td style="width:181px;"><span style="color:#3399ea;"><strong>命 令</strong></span></td><td><span style="color:#3399ea;"><strong>含 义</strong></span></td></tr><tr><td style="width:181px;"><strong>add</strong></td><td>增加指定配置文件的类型为 section-type 的匿名区段。</td></tr><tr><td style="width:181px;"><strong>add_list</strong></td><td>对已存在的 list 选项增加字符串。</td></tr><tr><td style="width:181px;"><strong>commit</strong></td><td>对给定的配置文件写入修改，如果没有指定参数则将所有的配置文件写入文件系统。所 有的“uci set”“uci add”“uci rename”和“uci delete”命令将配置写入一个临时位置， 在运行“uci commit”时写入实际的存储位置。</td></tr><tr><td style="width:181px;"><strong>export</strong></td><td>导出一个机器可读格式的配置。它是作为操作配置文件的 shell 脚本而在内部使用，导 出配置内容时会在前面加“package”和文件名。</td></tr><tr><td style="width:181px;"><strong>import</strong></td><td>以 UCI 语法导入配置文件。</td></tr><tr><td style="width:181px;"><strong>changes</strong></td><td>列出配置文件分阶段修改的内容，即未使用“uci commit”提交的修改。如果没有指定 配置文件，则指所有的配置文件的修改部分。</td></tr><tr><td style="width:181px;"><strong>show</strong></td><td>显示指定的选项、配置节或配置文件。以精简的方式输出，即 key=value 的方式输出。</td></tr><tr><td style="width:181px;"><strong>get</strong></td><td>获取指定区段选项的值。</td></tr><tr><td style="width:181px;"><strong>set</strong></td><td>设置指定配置节选项的值，或者是增加一个配置节，类型设置为指定的值。</td></tr><tr><td style="width:181px;"><strong>delete</strong></td><td>删除指定的配置节或选项。</td></tr><tr><td style="width:181px;"><strong>rename</strong></td><td>对指定的选项或配置节重命名为指定的名字。</td></tr><tr><td style="width:181px;"><strong>revert</strong></td><td>恢复指定的选项，配置节或配置文件。</td></tr></tbody></table>
 
-<p><img src="https://img-blog.csdnimg.cn/20191013123056211.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<img src="/posts/2854974324/20191013123056211.png" class="">
+
 <h2 id="六、-P选项（-var-state文件）"><a href="#六、-P选项（-var-state文件）" class="headerlink" title="六、-P选项（&#x2F;var&#x2F;state文件）"></a>六、-P选项（&#x2F;var&#x2F;state文件）</h2><ul>
 <li>有些运行中的状态值没有保存在&#x2F;etc&#x2F;config目录下，而是保存在&#x2F;var&#x2F;state下，这时可 以使用“-P”参数来查询当前状态值。</li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/20191013130025570.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<img src="/posts/2854974324/20191013130025570.png" class="">
+
 <h2 id="七、演示案例（修改IP地址）"><a href="#七、演示案例（修改IP地址）" class="headerlink" title="七、演示案例（修改IP地址）"></a>七、演示案例（修改IP地址）</h2><ul>
 <li>网络配置的相关信息存放在&#x2F;etc&#x2F;config&#x2F;network文件中。</li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/2019101312442763.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<img src="/posts/2854974324/2019101312442763.png" class="">
+
 <ul>
 <li>下面我们修改“lan”这个网络接口的IP地址（修改完在下面图中可以看到“lan”这个网络接口的IP地址为我们设置的值）。</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci set network.lan.ipaddr=192.168.0.50 uci commit network /etc/init.d/network restart</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://img-blog.csdnimg.cn/20191013124642891.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<img src="/posts/2854974324/20191013124642891.png" class="">
+
 <ul>
 <li>删除上面我们设置的IP地址。</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci delete network.lan.ipaddr uci commit network /etc/init.d/network restart</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://img-blog.csdnimg.cn/20191013124823242.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<img src="/posts/2854974324/20191013124823242.png" class="">
+
 <h2 id="八、演示案例（修改多个配置节类型或匿名配置节）"><a href="#八、演示案例（修改多个配置节类型或匿名配置节）" class="headerlink" title="八、演示案例（修改多个配置节类型或匿名配置节）"></a>八、演示案例（修改多个配置节类型或匿名配置节）</h2><ul>
 <li><strong>概念：</strong>当有多个配置节类型相同或者为匿名配置节时，UCI使用<strong>数组数字引用它们。</strong></li>
 <li><strong>规则如下：</strong><ul>
@@ -497,10 +506,11 @@ var _hmt = _hmt || [];
 <h4 id="演示案例（获取各个网卡名称）"><a href="#演示案例（获取各个网卡名称）" class="headerlink" title="演示案例（获取各个网卡名称）"></a>演示案例（<strong>获取各个网卡名称</strong>）</h4><ul>
 <li>我这个OpenWrt系统中有两个网卡</li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/20191013125255130.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<img src="/posts/2854974324/20191013125255130.png" class="">
+
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci get network.@interface[0].ifname   //获取第一个uci get network.@interface[1].ifname   //获取第二个 uci get network.loopback.ifname   //获取第一个uci get network.lan.ifname   //获取第二个 uci get network.@interface[-2].ifname   //获取第一个uci get network.@interface[-1].ifname   //获取第二个</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://img-blog.csdnimg.cn/20191013125930125.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<img src="/posts/2854974324/20191013125930125.png" class="">
 </blockquote>
 <h2 id="九、演示案例（更改链表配置）"><a href="#九、演示案例（更改链表配置）" class="headerlink" title="九、演示案例（更改链表配置）"></a>九、演示案例（更改链表配置）</h2><ul>
 <li>当一个配置文件中的选项（option）为链表时，操作方法有所不同。</li>
@@ -509,19 +519,21 @@ var _hmt = _hmt || [];
 <h4 id="演示案例-2"><a href="#演示案例-2" class="headerlink" title="演示案例"></a>演示案例</h4><ul>
 <li>例如我们的&#x2F;etc&#x2F;config&#x2F;system配置文件中就有“list”形式的链表选项。</li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/2019101313042788.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<img src="/posts/2854974324/2019101313042788.png" class="">
+
 <ul>
 <li>添加到链表中一个配置项：</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci add_list system.ntp.server=&#x27;ntp.dongshao.net&#x27; uci commit system</span><br></pre></td></tr></table></figure>
 
-<p> <img src="https://img-blog.csdnimg.cn/20191013130951609.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<p> <img src="/posts/2854974324/20191013130951609.png" class=""></p>
 <ul>
 <li>删除链表中的一个配置项。</li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci del_list system.ntp.server<span class="operator">=</span><span class="string">&#x27;ntp.dongshao.net&#x27;</span> uci <span class="keyword">commit</span> <span class="keyword">system</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="https://img-blog.csdnimg.cn/20191013131006364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<img src="/posts/2854974324/20191013131006364.png" class="">
+
 <ul>
 <li>删除链表中的所有配置项。</li>
 </ul>
@@ -533,23 +545,26 @@ var _hmt = _hmt || [];
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch /etc/config/hello</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://img-blog.csdnimg.cn/20191013131240215.png"></p>
+<img src="/posts/2854974324/20191013131240215.png" class="">
+
 <ul>
 <li><strong>第二步：</strong>首先通过命令行创建配置文件。像上面的配置一样，如果你想增加一个配置节，大多数人都会想到使用“uci add”命令，但实际上“uci add”仅可以创建匿名配置节，不能完 成创建命名配置的目标，要使用“uci set”命令来完成。</li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci <span class="keyword">set</span> hello.globe<span class="operator">=</span><span class="keyword">system</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="https://img-blog.csdnimg.cn/20191013131520159.png"></p>
+<img src="/posts/2854974324/20191013131520159.png" class="">
+
 <ul>
 <li><strong>第三步：</strong>设置配置节的3个选项。</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uci set hello.globe.agent=dongshao                           //用户代理属性uci set hello.globe.url=&#x27;https://blog.csdn.net/qq_41453285&#x27;  //访问URLuci set hello.globe.delay=100                                //启动延迟时间 uci commit  //提交配置修改</span><br></pre></td></tr></table></figure>
 
-<p> <img src="https://img-blog.csdnimg.cn/20191013131610328.png"></p>
+<p> <img src="/posts/2854974324/20191013131610328.png" class=""></p>
 <ul>
 <li>查看配置文件内容。</li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/20191013131625782.png"></p>
+<img src="/posts/2854974324/20191013131625782.png" class="">
+
 <h2 id="十一、-lib-config-uci-sh"><a href="#十一、-lib-config-uci-sh" class="headerlink" title="十一、&#x2F;lib&#x2F;config&#x2F;uci.sh"></a>十一、&#x2F;lib&#x2F;config&#x2F;uci.sh</h2><ul>
 <li><strong>脚本介绍：</strong>UCI模块提供了一个 shell 脚本（&#x2F;lib&#x2F;config&#x2F;uci.sh）并封装了UCI命令行工具的功能， 这样方便了其他软件包在将UCI配置文件转换为自己格式的配置文件时使用。</li>
 <li><strong>主要的函数如下所示：</strong>需要这些函数需要导入&#x2F;lib&#x2F;config&#x2F;uci.sh。</li>
@@ -606,7 +621,8 @@ var _hmt = _hmt || [];
 <h2 id="十四、演示案例"><a href="#十四、演示案例" class="headerlink" title="十四、演示案例"></a>十四、演示案例</h2><ul>
 <li>下图所示为OpenWrt 12.09的一个实际代码，在启动时，从配置文件中获取主机名称，并设置到内核中。</li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/2019101317170527.png"></p>
+<img src="/posts/2854974324/2019101317170527.png" class="">
+
 <h2 id="十五、UCI-API编程接口概述"><a href="#十五、UCI-API编程接口概述" class="headerlink" title="十五、UCI API编程接口概述"></a>十五、UCI API编程接口概述</h2><ul>
 <li>上面我们介绍了UCI的脚本提供的命令接口，UCI还提供了C语言调用接口。下面在<strong>操作系统Ubuntu</strong>下来说明API的使用。</li>
 <li>首先准备UCI编程接口的使用环境：UCI软件依赖Libubox，因此首先编译Libubox，Libubox库编译好之后，就可以再去编译UCI库了。</li>
@@ -631,8 +647,10 @@ var _hmt = _hmt || [];
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">got clone https://github.com/yubo/libubox.git</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://img-blog.csdnimg.cn/20191013183923890.png"></p>
-<p><img src="https://img-blog.csdnimg.cn/20191013183959776.png"></p>
+<img src="/posts/2854974324/20191013183923890.png" class="">
+
+<img src="/posts/2854974324/20191013183959776.png" class="">
+
 <ul>
 <li><strong>第二步：</strong>使用cmake生成Makefile。</li>
 <li>命令最后的一个点，代表当前路径。</li>
@@ -640,7 +658,8 @@ var _hmt = _hmt || [];
 </ul>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -D <span class="variable constant_">BUILD_LUA</span><span class="symbol">:BOOL=OFF</span> -D <span class="variable constant_">BUILD_EXAMPLES</span><span class="symbol">:BOLL=OFF</span> .</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://img-blog.csdnimg.cn/20191013184016905.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<img src="/posts/2854974324/20191013184016905.png" class="">
+
 <ul>
 <li><strong>第三步：</strong> 进行编译（make）、安装（make install）。</li>
 <li>在进行编译时，编译过程中会输出编译进度百分比。</li>
@@ -648,12 +667,14 @@ var _hmt = _hmt || [];
 </ul>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make</span>;sudo <span class="built_in">make</span> install;</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://img-blog.csdnimg.cn/20191013192841960.png"></p>
-<p><img src="https://img-blog.csdnimg.cn/20191013192848133.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<img src="/posts/2854974324/20191013192841960.png" class="">
+
+<img src="/posts/2854974324/20191013192848133.png" class="">
+
 <ul>
 <li>安装内容包含头文件和动态链接库文件。<strong>头文件默认安装在&#x2F;usr&#x2F;local&#x2F;include&#x2F;libubox</strong>目录下，<strong>动态链接库libubox.so和 libubox.a</strong>安装在&#x2F;usr&#x2F;local&#x2F;lib&#x2F;目录下。</li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/20191017104646720.png"><img src="https://img-blog.csdnimg.cn/20191017104713161.png"></p>
+<img src="/posts/2854974324/20191017104646720.png" class=""><img src="/posts/2854974324/20191017104713161.png" class="">
 </blockquote>
 <h2 id="十七、UCI库"><a href="#十七、UCI库" class="headerlink" title="十七、UCI库"></a>十七、UCI库</h2><ul>
 <li>Libubox安装完成后就可以编译安装UCI软件了。</li>
@@ -664,28 +685,32 @@ var _hmt = _hmt || [];
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/jkjuopperi/uci.git</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://img-blog.csdnimg.cn/20191013192705373.png"></p>
-<p><img src="https://img-blog.csdnimg.cn/20191013192721177.png"></p>
+<img src="/posts/2854974324/20191013192705373.png" class="">
+
+<img src="/posts/2854974324/20191013192721177.png" class="">
+
 <ul>
 <li><strong>第二步：</strong>使用cmake生成Makefile。</li>
 </ul>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -D <span class="variable constant_">BUILD_LUA</span><span class="symbol">:BOOL=OFF</span> .</span><br></pre></td></tr></table></figure>
 
-<h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://img-blog.csdnimg.cn/20191013192945866.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></h2><ul>
+<h2 id=""><a href="#" class="headerlink" title=""></a><img src="/posts/2854974324/20191013192945866.png" class=""></h2><ul>
 <li><strong>第三步：</strong>编译、安装UCI。</li>
 </ul>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make</span> sudo <span class="built_in">make</span> install</span><br></pre></td></tr></table></figure>
 
-<h2 id="-1"><a href="#-1" class="headerlink" title=""></a><img src="https://img-blog.csdnimg.cn/20191013192933528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></h2><p><img src="https://img-blog.csdnimg.cn/20191013192919740.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNDUzMjg1,size_16,color_FFFFFF,t_70"></p>
+<h2 id="-1"><a href="#-1" class="headerlink" title=""></a><img src="/posts/2854974324/20191013192933528.png" class=""></h2><img src="/posts/2854974324/20191013192919740.png" class="">
+
 <ul>
 <li>UCI库的头文件安装在&#x2F;usr&#x2F;local&#x2F;include目录下，动态链接库安装在&#x2F;usr&#x2F;local&#x2F;lib&#x2F; libuci.so，可执行程序为&#x2F;usr&#x2F;local&#x2F;bin&#x2F;uci。</li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/20191017112234855.png"></p>
+<img src="/posts/2854974324/20191017112234855.png" class="">
+
 <p><img src="https://img-blog.csdnimg.cn/20191017104929526.png"><img src="https://img-blog.csdnimg.cn/20191017104957735.png"></p>
 <ul>
 <li><strong>第四步：</strong>因为系统还不知道动态链接库已经安装，运行该命令会告诉系统重新加载动态链接库，这样UCI动态链接库就可以使用了。</li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/20191013193003197.png"></p>
+<img src="/posts/2854974324/20191013193003197.png" class="">
 </blockquote>
 <ul>
 <li>UCI库编译好之后，就可以在C语言程序中使用UCI库了（-luci），例如下面使用gcc编译一个带有与UCI库的C程序。</li>
